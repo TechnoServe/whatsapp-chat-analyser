@@ -1,0 +1,40 @@
+{
+  "name": "tns_chat_analyser",
+  "description": "Dependancies for the TNS chat analyser system",
+  "version": "0.0.1",
+  "license": "MIT",
+  "author": {
+    "name": "Wangoru Kihara",
+    "email": "wangoru.kihara@badili.co.ke",
+    "url": "https://badili.co.ke"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/badili/chat_analyser"
+  },
+  "dependencies": {
+    "@mdi/font": "*",
+    "bootstrap": "4.3.1",
+    "bootstrap-calendar": "0.2.4",
+    "bootstrap-notify": "git+https://github.com/mouse0270/bootstrap-notify.git",
+    "bootstrap-table": "1.12.1",
+    "daterangepicker": "3.1.0",
+    "font-awesome": "4.7.0",
+    "highcharts": "8.2.0",
+    "jquery-countto": "1.2.0",
+    "jquery-form": "4.3.0",
+    "jquery-validation": "1.19.2",
+    "material-design-lite": "1.3.0",
+    "micromodal": "0.4.6",
+    "parsleyjs": "2.9.2",
+    "popper.js": "1.14.7",
+    "sprintf-js": "1.1.2",
+    "svg-gauge": "^1.0.6",
+    "toastr": "2.1.4",
+    "svg-gauge": "1.0.6"
+  },
+  "devDependencies": {
+    "jquery": "^3.5.1",
+    "less": "3.9.0"
+  }
+}

@@ -1,0 +1,184 @@
+{% extends "base_dashboard.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ static('node_modules/material-design-lite/material.min.css') }}" />
+<link rel="stylesheet" href="{{ static('node_modules/parsleyjs/src/parsley.css') }}" />
+<link rel="stylesheet" href="{{ static('node_modules/font-awesome/css/font-awesome.min.css') }}">
+
+<link rel="stylesheet" href="{{ static('css/data_table.css') }}">
+{% endblock %}
+
+{% block main_content %}
+
+<!-- section header -->
+<div class="bg-white rounded clearfix p-3 mb-4">
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb breadcrumb-sublime fs--13 pb-2">
+        <li class="breadcrumb-item active" aria-current="page">
+          SYSTEM USERS
+        </li>
+      </ol>
+    </nav>
+
+</div>
+<!-- /section header -->
+
+<div class="app-main__inner">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <table id='sys_users' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp'>
+                <thead>
+                    <tr>
+                        <th data-name='selector'>#</th>
+                        <th data-name='first_name'>First Name</th>
+                        <th data-name='last_name'>Surname</th>
+                        <th data-name='username'>Username</th>
+                        <th data-name='email'>Email</th>
+                        <th data-name='tel'>Telephone</th>
+                        <th data-name='designation'>Designation</th>
+                        <th data-name='is_active'>Is Active</th>
+                        <th data-name='actions'>Actions</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 buttons">
+            <button class='add_user btn btn-primary btn-pill mb-1' data-toggle="modal" data-target="#newUser" data-object_type='user' data-action='add'>Add a User</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block modals %}
+<div class="modal fade" id="newUser" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add a new user</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form name='add_user'>
+          <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
+          <div class="form-row">
+            <div class="col">
+              
+              <div class="form-group form-inline">
+                <label for="first_name">First Name</label>
+                <input type="text" class="form-control form-control-sm" name='first_name' id="first_name" placeholder="First Name" required>
+              </div>
+
+            </div>
+            <div class="col">
+              
+              <div class="form-group form-inline">
+                <label for="surname">Surname</label>
+                <input type="text" class="form-control form-control-sm" id="surname" name='surname' placeholder="Surname" required>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col">
+              
+              <div class="form-group form-inline">
+                <label for="username">Username</label>
+                <input type="text" class="form-control form-control-sm" id="username" name='username' placeholder="Username" required>
+              </div>
+
+            </div>
+            <div class="col">
+
+              <div class="form-group form-inline">
+                <label for="email">Email</label>
+                <input type="text" class="form-control form-control-sm" id="email" name='email' placeholder="Email" required>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col">
+              
+              <div class="form-group form-inline">
+                <label for="tel">Telephone</label>
+                <input type="text" class="form-control form-control-sm" id="tel" name='tel' placeholder="+254 720 123456" required>
+              </div>
+
+            </div>
+            <div class="col">
+
+              <div class="form-group">
+                <label for="designation">Designation</label>
+                
+                <select class="form-control-sm form-control" id="designation" name="designation" required>
+                  <option selected>Choose...</option>
+                  {% for ut in user_types %}
+                    <option value="{{ ut[0] }}">{{ ut[1] }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal">Cancel</button>
+        <button id='confirm_save' type="button" class="btn btn-outline-success btn-sm">Save User</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modal_title">...</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id='modal_message'>
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal">Close</button>
+        <button id='confirm' type="button" class="btn btn-outline-success btn-sm">...</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script type='text/javascript' src="{{ static('plugins/datatables/datatables.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/material-design-lite/material.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/parsleyjs/dist/parsley.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/micromodal/dist/micromodal.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/jquery-form/dist/jquery.form.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/jquery-validation/dist/jquery.validate.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/bootstrap-notify/bootstrap-notify.js') }}"></script>
+
+<script>
+    $(document).ready(function(){
+        
+        // add regex validation
+        $.validator.addMethod(
+            "regex",
+            function(value, element, regexp) {
+                var re = new RegExp(regexp);
+                return this.optional(element) || re.test(value);
+            },
+            "Please check your input."
+        );
+        analyser.initiatePages();
+    });
+</script>
+
+{% endblock %}

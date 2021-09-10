@@ -1,0 +1,58 @@
+version: '3.7'
+services:
+  nginx:
+    restart: unless-stopped
+    build:
+      context: ./docker/nginx
+      dockerfile: nginx_dockerfile
+    command: [nginx-debug, '-g', 'daemon off;']
+    depends_on:
+      - tafiti
+    ports:
+      # change this port for a new instance
+      - 127.0.0.1:9038:80
+    volumes:
+      - ./docker/nginx/docker_default.conf:/etc/nginx/conf.d/default.conf
+      - static-folder:/opt/tafiti/static
+
+  db:
+    build:
+      context: .
+      dockerfile: ./docker/db/Dockerfile
+    restart: unless-stopped
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --init-connect='SET NAMES utf8mb4;' --innodb-flush-log-at-trx-commit=0
+    env_file:
+      - 'variables.env'
+    volumes:
+      - ./db_data:/var/lib/mysql:rw
+      - ./docker/db/tafiti.cnf:/etc/mysql/conf.d/tafiti.cnf
+
+  tafiti:
+    restart: unless-stopped
+    image: registry.gitlab.com/badili/tns-tafiti:latest
+    command: bash -c "./docker/wait-for-it.sh db:3306 --timeout=400 --strict -- ./docker/docker-entrypoint.sh"
+    env_file:
+      - 'variables.env'
+    configs:
+      - client_secrets
+      - mycreds
+    volumes:
+      # bind these 2 folders to propagate changes during development
+      - templates/:/opt/tns_tafiti/templates:rw
+
+      # bind these 2 folders to manage static files during production
+      - static-folder:/opt/tns_tafiti/static:rw
+    depends_on:
+      - db
+    links:
+      - db
+
+volumes:
+  static-folder:
+  templates:
+
+configs:
+  client_secrets:
+    file: ./client_secrets.json
+  mycreds:
+    file: ./mycreds.txt

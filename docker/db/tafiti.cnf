@@ -1,0 +1,8 @@
+[mysqld]
+; Disable ONLY_FULL_GROUP_BY for this repo. It was developed without 
+sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION
+
+; we are processing unicode including 4 character unicode
+innodb_file_per_table=ON
+innodb-large-prefix=ON
+innodb_file_format=barracuda

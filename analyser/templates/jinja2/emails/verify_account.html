@@ -1,0 +1,69 @@
+{% extends "emails/base_email.html" %}
+{% block main_content %}
+    <tr>
+        <td width="100%" align="center" valign="top">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" align="center" class="container top-header-left">
+                <tr>
+                    <td class="high-top" height="40"></td>
+                </tr>
+        <td>
+            <table width="800" border="0" align="center" cellpadding="0" cellspacing="0" class="mainContent">
+                <!-- /logo -->
+                <tr align="center">
+                    <td><a href="{{ site_url }}" style="display:block;"><img src="https://tns-tafiti.s3.eu-west-2.amazonaws.com/static/images/tafiti_logo.png" alt="" border="0" height="100px" width="auto"></a></td>
+                </tr>
+                <!-- //logo -->
+        <td class="high-top" height="20"></td>
+        <!-- verify -->
+    <tr>
+        <td class="h-t" align="center" mc:edit="title1" class="main-header" style="color: #1E2171; font-size:2em;font-weight:bold;">
+            {{ title }}
+        </td>
+    </tr>
+    <!-- //verify -->
+    <td height="40"></td>
+    <!-- border -->
+    <tr>
+        <td style="border-bottom: 2px solid #eee;" class="notho"></td>
+    </tr>
+    <!-- //border -->
+    <tr><td height="40"></td></tr>
+    <!-- verify text -->
+    <tr>
+        <td class="sub-ht" align="center" class="main-header" style="color: #333;font-size:1.4em;">
+            <h3>{{ message_sub_heading }}</h3>
+
+            <div>{{ message }}</div>
+        </td>
+    </tr>
+    <!-- //verify  text -->
+    <tr>
+        <td height="40"></td>
+    </tr>
+    <!-- button -->
+    <tr align="center">
+        <td class="scale-btn" style="text-align:center;"><a class="learn" href="{{ verification_link }}" style="text-transform:uppercase;display:inline-block;border:2px solid #1E2171;color: #FFFFFF;padding:14px 30px;  border-radius: 30px; -webkit-border-radius: 30px; -o-border-radius: 30px; -moz-border-radius: 30px; -ms-border-radius: 30px; max-width:300px!important;text-decoration: none; background:#1E2171;text-align:center;letter-spacing:2px;">
+                <!-- Edit Button Text -->
+                Create New Password
+            </a></td>
+    </tr>
+    <!-- //button -->
+    <tr>
+        <td height="30"></td>
+    </tr>
+    <!-- browser -->
+    <tr>
+        <td mc:edit="text1" class="main-subheader" style="color: #555; font-size:1em;text-align:center; font-weight: normal; line-height: 2em;">
+            Or paste this link into your browser: <a href="{{ verification_link }}">{{ verification_link }}</a>
+        </td>
+    </tr>
+    <tr>
+        <td height="40"></td>
+    </tr>
+    <tr>
+        <td class="main-subheader" style="color: #555; font-size:1em;text-align:center; font-weight: normal; line-height: 2em;">
+            If this wasn't you, please <a href="#">Click here</a>
+        </td>
+    </tr>
+    <!-- //browser -->
+{% endblock %}

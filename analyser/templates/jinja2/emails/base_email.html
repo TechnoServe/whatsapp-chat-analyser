@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }}</title>
+        <!-- Responsive Styles and Valid Styles -->
+        <link rel="stylesheet" href="https://badili-assets.s3.eu-west-2.amazonaws.com/email_styling/css/main.css">
+        
+        <style type="text/css">
+            body { width: 100%; vertical-align: top; background: #fff; margin: 0; }
+            html {
+                font-family: -apple-system, BlinkMacSystemFont, Arial, Calibri, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+                width: 100%;
+            }
+
+            table { font-size: 14px; border: 0; box-sizing: border-box; }
+            .left_align,ul.left_align>li{ text-align:left; }
+            h1,h2,h3,h4,h5{color: #6e4ff6;}
+
+            /* Responsive */
+            @media only screen and (max-width:768px) {
+                .mainContent { width: 90%; }
+                td.h-t { font-size: 2.5em !important; }
+                td.sub-ht { font-size: 1.35em !important; }
+                a.learn { font-size: 0.9em !important; }
+            }
+
+            @media only screen and (max-width:600px) {
+                .mainContent { width: 90%; }
+                td.h-t { font-size: 2.3em !important; }
+                td.sub-ht { font-size: 1.2em !important; }
+                a.learn { font-size: 0.8em !important; }
+            }
+
+            @media only screen and (max-width:568px) {
+                table.agile_banner_bottom1_left_fig { width: 100%; }
+                table.agile_banner_bottom1_left { width: 100%; }
+            }
+
+            /** Table styling */
+            @font-face{font-family:OpenSans-Regular;src:url(../fonts/OpenSans/OpenSans-Regular.ttf)}.limiter{width:100%;margin:0 auto}.container-table100{width:100%;min-height:100vh;background:#c850c0;background:-webkit-linear-gradient(45deg,#4158d0,#c850c0);background:-o-linear-gradient(45deg,#4158d0,#c850c0);background:-moz-linear-gradient(45deg,#4158d0,#c850c0);background:linear-gradient(45deg,#4158d0,#c850c0);display:-webkit-box;display:-webkit-flex;display:-moz-box;display:-ms-flexbox;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;padding:33px 30px}.wrap-table100{width:1170px}table.content{border-spacing:1;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden;width:100%;margin:0 auto;position:relative}table.content *{position:relative}table.content td,table.content th{padding-left:8px}table.content thead tr{height:60px;background:#6e4ff615}table.content tbody tr{height:50px}table.content tbody tr:last-child{border:0}table.content td,table.content th{text-align:left}table.content td.l,table.content th.l{text-align:right}table.content td.c,table.content th.c{text-align:center}table.content td.r,table.content th.r{text-align:center}.table100-head th{font-family:OpenSans-Regular;font-size:18px;color:#fff;line-height:1.2;font-weight:unset}.content tbody tr:nth-child(even){background-color:#f5f5f5}.content tbody tr{font-family:OpenSans-Regular;font-size:15px;color:grey;line-height:1.2;font-weight:unset}.content tbody tr:hover{color:#555;background-color:#f5f5f5;cursor:pointer}@media screen and (max-width:992px){table.content{display:block}table.content td,table.content th,table.content tr,table.content>*{display:block}table.content thead{display:none}table.content tbody tr{height:auto;padding:37px 0}table.content tbody tr td{padding-left:40%!important;margin-bottom:10px}table.content tbody tr td:last-child{margin-bottom:0}table.content tbody tr td:before{font-family:OpenSans-Regular;font-size:14px;color:#999;line-height:1.2;font-weight:unset;position:absolute;width:40%;left:30px;top:0}.content tbody tr{font-size:14px}}@media (max-width:576px){.container-table100{padding-left:15px;padding-right:15px}}
+
+        </style>
+    </head>
+
+    <body>
+        <table border="0" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+                <td height="20"></td>
+            </tr>
+            <!-- /main content -->
+            {% block main_content %}
+            {% endblock %}
+            <tr>
+                <td height="50"></td>
+            </tr>
+            <tr>
+                <td style="border-bottom: 2px solid #eee;" class="notho"></td>
+            </tr>
+            <tr>
+                <td height="40"></td>
+            </tr>
+
+            <!-- footer-->
+            <tr>
+                <td bgcolor="f7f7f7">
+                    <!-- logo-left-->
+                    <table class="agile_banner_bottom1_left_fig" width="200" border="0" align="left" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td height="20" valign="top">
+                                    <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tbody>
+                                            <tr>
+                                                <td align="center" style="padding:1em;"><a href="http://{{ site_url }}"><img src="https://tns-tafiti.s3.eu-west-2.amazonaws.com/static/images/mspark_logo.png" alt="{{ site_name }}" height="60px" class="figure_png"></a></td>
+                                                <td align="center" style="padding:1em;"><a href="http://{{ site_url }}"><img src="https://tns-tafiti.s3.eu-west-2.amazonaws.com/static/images/tafiti_logo.png" alt="{{ site_name }}" height="60px" class="figure_png"></a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                    <!-- //logo-left-->
+
+                    <!-- social-icons-right-->
+                    <table class="agile_banner_bottom1_left" width="290" border="0" align="right" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td height="20" valign="top">
+                                    <table align="center" width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tbody>
+                                            <tr>
+                                                <td height="20"></td>
+                                            </tr>
+                                            <tr align="center">
+                                                <td style="color:#555;font-size:1em;line-height:2em;text-align:center;">
+                                                    &copy; {{ site_name }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td height="20"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- //social-icons-right-->
+                </td>
+            </tr>
+            <!-- //footer-->
+
+        </table>
+        </td>
+        <tr>
+            <td class="high-top" height="80"></td>
+        </tr>
+        <!--//welcome-->
+
+        </table>
+        </td>
+        </tr>
+        </table>
+    </body>
+
+</html>

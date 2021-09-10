@@ -1,0 +1,159 @@
+{% extends "base_dashboard.html" %}
+
+{% block main_content %}
+
+<!-- section header -->
+<div class="bg-white rounded clearfix p-3 mb-4">
+    <h5 class='title'>
+        <span class=''><i class="fi fi-layers"></i></span>&nbsp;&nbsp;<span class='text-primary'>{{ site_name }}</span> 
+    </h5>
+
+    {% if error %}
+        <div class="portlet-header border-bottom text-danger">
+        {{ message }}
+        </div>
+    {% elif stats.info_message %}
+        <div class="portlet-header border-bottom text-primary">
+        {{ stats.info_message }}
+        </div>
+    {% endif %}
+</div>
+<!-- /section header -->
+
+<!-- Main dashboard panel -->
+<div class="app-main__inner">
+    <div class="row gutters-sm">
+        
+        {% if has_data %}
+        <!-- COLUMN 1 -->
+        <div class="col-4 col-xl-4 mb-4 small_col">
+            <div class="position-relative reveal-item bg-white shadow-lg rounded-xl p-5 p-md-3 py-xl-5 p-4-xs z-index-2">
+                <h6 class="text-muted text-center font-weight-normal">
+                    PROCESSED CHAT FILES
+                </h6>
+
+                <div class="text-center m-3">
+
+                    <!-- chart -->
+                    <div class="easypie d-inline-block position-relative z-index-1">
+                        <div id="processing_progress" class="gauge-container"></div>
+                    </div>
+                    <!-- /chart -->
+
+                    <p class="text-gray-500 fs--15 m-2">Processed Files</p>
+                    <p class="lead font-weight-normal mb-0 text-success">
+                    <span data-toggle="count" data-count-to="{{ stats.file_status.processed }}" data-count-duration="10" class="js-count-completed">{{ stats.file_status.processed }}</span>
+                    </p>
+
+                    <!-- 2 cols -->
+                    <div class="d-flex mt-4 fs--15">
+                        <div class="flex-fill"><!-- col 1 -->
+                            <p class="text-gray m-0">Pending</p>
+                            <p class="text-secondary m-0 font-weight-medium">{{ stats.file_status.pending|int + stats.file_status.to_reprocess|int }}</p>
+                        </div>
+                        
+                        <div class="flex-fill"><!-- col 2 -->
+                            <p class="text-gray m-0">Errors</p>
+                            <p class="text-danger m-0 font-weight-medium">{{ stats.file_status.failed|int + stats.file_status.failed_preprocessing|int }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /COLUMN 1 -->
+        
+        <!-- COLUMN 2 -->
+        <div class="col-8 col-xl-8 mb-4 small_col">
+            <div class="row gutters-sm">
+                <div class="col-6 col-xl-6 mb-4 small_col">
+                    <div class="clearfix bg-white shadow-lg rounded-xl p-4 p-md-4 py-xl-4 p-4-xs z-index-2">
+                        <div class="badge badge-success badge-soft float-start fs--45 w--100 h--100 badge-pill rounded-circle"><i class="fi fi-chat mt-1"></i></div>
+                        <div class="pl-5 mt-1 text-center pt-2">
+                            <h3 class='text-success'>
+                                <span data-toggle="count" data-count-from="0" data-count-to="{{ stats.no_groups }}" data-count-speed="10" class="js-count-completed">{{ stats.no_groups }}</span>
+                            </h3>
+                            <p class="d-block text-muted lead">WhatsApp Groups</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-xl-6 mb-4 small_col">
+                    <div class="clearfix bg-white shadow-lg rounded-xl p-4 p-md-4 py-xl-4 p-4-xs z-index-2">
+                        <div class="badge badge-soft badge-primary float-start fs--45 w--100 h--100 badge-pill rounded-circle"><i class="fi fi-users mt-1"></i></div>
+                        <div class="pl-5 mt-1 text-center pt-2">
+                            <h3 class='text-primary'>
+                                <span data-toggle="count" data-count-from="0" data-count-to="{{ stats.no_users }}" data-count-speed="1500" class="js-count-completed">{{ stats.no_users }}</span>
+                            </h3>
+                            <p class="d-block text-muted lead">Users Engaged</p>
+                        </div>
+                    </div>
+                
+                </div><div class="col-6 col-xl-6 mb-4 small_col">
+                    <div class="clearfix bg-white shadow-lg rounded-xl p-4 p-md-4 py-xl-4 p-4-xs z-index-2">
+                        <div class="badge badge-soft badge-danger float-start fs--45 w--100 h--100 badge-pill rounded-circle"><i class="fi fi-envelope mt-1"></i></div>
+                        <div class="pl-5 mt-1 text-center pt-2">
+                            <h3 class='text-danger'>
+                                <span data-toggle="count" data-count-from="0" data-count-to="{{ stats.no_messages }}" data-count-speed="10500" class="js-count-completed">{{ stats.no_messages }}</span>
+                            </h3>
+                            <p class="d-block text-muted lead">Sent Messages</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-xl-6 mb-4 small_col">
+                    <div class="clearfix bg-white shadow-lg rounded-xl p-4 p-md-4 py-xl-4 p-4-xs z-index-2">
+                        <div class="badge badge-soft badge-warning float-start fs--45 w--100 h--100 badge-pill rounded-circle"><i class="fi fi-emoji-happy mt-1"></i></div>
+                        <div class="pl-5 mt-1 text-center pt-2">
+                            <h3 class='text-warning'>
+                                <span data-toggle="count" data-count-from="0" data-count-to="{{ stats.no_emojis }}" data-count-speed="4500" class="js-count-completed">{{ stats.no_emojis }}</span>
+                            </h3>
+                            <p class="d-block text-muted lead">Emojis Sent</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-xl-6 mb-4 small_col">
+                    <div class="clearfix bg-white shadow-lg rounded-xl p-4 p-md-4 py-xl-4 p-4-xs z-index-2">
+                        <div class="badge badge-soft badge-secondary float-start fs--45 w--100 h--100 badge-pill rounded-circle"><i class="fi fi-image mt-1"></i></div>
+                        <div class="pl-5 mt-1 text-center pt-2">
+                            <h3 class='text-secondary'>
+                                <span data-toggle="count" data-count-from="0" data-count-to="{{ stats.no_images }}" data-count-speed="500" class="js-count-completed">{{ stats.no_images }}</span>
+                            </h3>
+                            <p class="d-block text-muted lead">Media Shared</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-xl-6 mb-4 small_col">
+                    <div class="clearfix bg-white shadow-lg rounded-xl p-4 p-md-4 py-xl-4 p-4-xs z-index-2">
+                        <div class="badge badge-soft badge-indigo float-start fs--45 w--100 h--100 badge-pill rounded-circle"><i class="fi fi-link mt-1"></i></div>
+                        <div class="pl-5 mt-1 text-center pt-2">
+                            <h3 class='text-indigo'>
+                                <span data-toggle="count" data-count-from="0" data-count-to="{{ stats.no_links }}" data-count-speed="1000" class="js-count-completed">{{ stats.no_links }}</span>
+                            </h3>
+                            <p class="d-block text-muted lead">Links</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /COLUMN 2 -->
+        {% endif %}
+
+    </div>
+</div>
+<!-- /Main dashboard panel -->
+
+{% endblock %}
+
+{% block javascript %}
+<script type='text/javascript' src="{{ static('node_modules/svg-gauge/dist/gauge.min.js') }}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        analyser.stats = {{ stats | safe }};
+        analyser.initiatePages();
+        $('.js-count-completed').countTo();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,53 @@
+version: '3.7'
+services:
+  nginx:
+    restart: unless-stopped
+    build:
+      context: ./docker/nginx
+      dockerfile: nginx_dockerfile
+    command: [nginx-debug, '-g', 'daemon off;']
+    depends_on:
+      - tafiti
+    ports:
+      # change this port for a new instance
+      - 127.0.0.1:9018:80
+    volumes:
+      - ./docker/nginx/docker_default.conf:/etc/nginx/conf.d/default.conf
+      - static-folder:/opt/tafiti/static
+
+  db:
+    build:
+      context: .
+      dockerfile: ./docker/db/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - 'variables.env'
+    volumes:
+      - ./db_data:/var/lib/mysql:rw
+      - ./docker/db/tafiti.cnf:/etc/mysql/conf.d/tafiti.cnf
+    ports:
+      - 3306
+
+  tafiti:
+    restart: unless-stopped
+    build:
+      context: .
+    command: bash -c "./docker/wait-for-it.sh db:3306 --timeout=400 --strict -- ./docker/docker-entrypoint.sh"
+    env_file:
+      - 'variables.env'
+    volumes:
+      # bind these 2 folders to propagate changes during development
+      - templates/:/opt/tafiti/templates:rw
+
+      # bind these 2 folders to manage static files during production
+      - static-folder:/opt/tafiti/static:rw
+    depends_on:
+      - db
+    links:
+      - db
+    ports:
+      - 9019:9019
+
+volumes:
+  static-folder:
+  templates:

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    
+    <!-- Title -->
+    <title>{{ site_name if site_name else page_title }}</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ static('images/favicon.ico') }}">
+
+    <meta name="viewport" content="width=device-width, maximum-scale=5, initial-scale=1, user-scalable=0">
+    <!--[if IE]><meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'><![endif]-->
+
+    <!-- up to 10% speed up for external res -->
+    <!-- link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com/">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" -->
+
+    <!-- preloading icon font is helping to speed up a little bit -->
+    <!-- link rel="stylesheet" href="{{ static('node_modules/bootstrap/dist/css/bootstrap.min.css') }}" -->
+    <link rel="prefetch" href="{{ static('plugins/smarty/fonts/flaticon/Flaticon.woff2') }}" as="font" type="font/woff2" crossorigin="anonymous"/>
+
+    <!-- non block rendering : page speed : js = polyfill for old browsers missing `preload` -->
+    <link rel="stylesheet" href="{{ static('plugins/smarty/css/vendor_bundle.min.css') }}">
+    <link rel="stylesheet" href="{{ static('plugins/smarty/css/core.min.css') }}">
+    
+    {% block css %}
+    {% endblock %}
+
+    <link rel="stylesheet" href="{{ static('css/cssload_loader.css') }}">
+    <link rel="stylesheet" href="{{ static('css/analyser.css') }}">
+
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{{ static('images/favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ static('images/logo_dark.png') }}">
+    <meta name="theme-color" content="#377dff">
+
+</head>
+
+
+
+	<!--
+
+		Available Body Classes
+			.layout-boxed 					- boxed layout (ignored if any .header-* class is present)
+
+			.header-scroll-reveal  			- header : hide on scroll down and reveal on scroll up
+			.header-sticky  				- header : always visible on top
+			.header-over  					- header : over slider|parallax|image (next section must contain a large image, else will be indistinguishable)
+
+				Possible header combinations:
+					.header-over + .header-scroll-reveal
+					.header-over + .header-sticky
+						* NOTE: if .header-sticky + .header-scroll-reveal are both used, .header-scroll-reveal is ignored
+
+
+			.bg-cover .bg-fixed 			- both classes used with .layout-boxed to set a background image via style="background-image:url(...)"
+	-->
+	<body class=''>
+
+
+		<div id="wrapper">
+
+			<section class="bg-light p-0">
+				<div class="container py-5">
+
+					<h1 class="h3">
+						Sign In
+					</h1>
+
+					<nav aria-label="breadcrumb">
+						<ol class="breadcrumb fs--14">
+							<li class="breadcrumb-item"><a href="/">Home</a></li>
+							<li class="breadcrumb-item active" aria-current="page">Account</li>
+						</ol>
+					</nav>
+
+				</div>
+			</section>
+
+
+			<!-- FORM -->
+			<section class='pt-10'>
+				<div class="container">
+
+					<div class="row">
+
+						<div class="col-12 col-sm-12 offset-sm-0 col-md-8 offset-md-2 col-lg-6 offset-lg-0 order-2 order-lg-1">
+
+							<div class="accordion" id="accordionAccount">
+
+								<!-- NEW PASSWORD -->
+								<form class="collapse bs-validate {{'show' if recover_token else '' }}" novalidate method="post" action="/save_user_password" id="accordionRecoverPasswd" data-parent="#accordionAccount">
+									<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
+                                    <input type='hidden' name='uuid' value='{{ recover_user }}'>
+                                    <input type='hidden' name='uu_token' value='{{ recover_token }}'>
+									
+									<!-- title -->
+									<h2 class="text-primary mb-1">
+										<span class="font-weight-normal">New</span> Password
+									</h2>
+									<p class="mb-5 font-weight-medium b-0">
+										Enter a new password
+									</p>
+
+									<div class="p-5 rounded shadow-xs">
+
+										<h2 class="h5 text-center mb-5 mt-3 {{'collapse' if recover_token else 'show' }}">
+											Password Reset instructions are sent to your email.
+										</h2>
+
+										<div class="form-label-group mb-4">
+											<input type="password" name="pass" class="form-control" placeholder="Password" required="" autocomplete="off">
+											<label for="reset_email">New Password</label>
+										</div>
+
+										<div class="form-label-group mb-4">
+											<input type="password" name="repeat_pass" class="form-control" placeholder="Repeat Password" required="" autocomplete="off">
+											<label for="reset_email">Repeat Password</label>
+										</div>
+
+										<button type="submit" class="btn btn-primary btn-soft btn-block">
+											Set New Password
+										</button>
+
+										<div class="text-center mt--30">
+											<a href="#accordionAccountSignIn" class="d-block text-success text-decoration-none" data-toggle="collapse" aria-expanded="true" aria-controls="accordionAccountSignIn">
+												Nevermind, back to Sign In
+											</a>
+										</div>
+
+									</div>
+
+								</form>
+								<!-- /NEW PASSWORD -->
+
+
+								<!-- SIGN IN -->
+								<form class="collapse bs-validate {{'' if recover_token else 'show' }}" novalidate method="post" action="/login" id="accordionAccountSignIn" data-parent="#accordionAccount">
+									<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
+
+									<!-- title -->
+									<h2 class="text-primary mb-1">
+										<span class="font-weight-normal">Sign</span> In
+									</h2>
+									
+									<!-- ALERT -->
+		                            {% if error %}
+		                            <p class="alert alert-mini alert-danger mb-30">
+		                                <strong>Oh snap!</strong> {{ message if message else error }}
+		                            </p>
+		                            {% elif message %}
+		                            <p class="alert alert-mini alert-primary mb-30">
+		                                {{ message }}
+		                            </p>
+		                            {% else %}
+		                            <p class="mb-5 font-weight-medium b-0">
+										Type your email and password to continue
+									</p>
+		                            {% endif %}
+		                            <!-- /ALERT -->
+
+									
+
+									<div class="p-5 rounded shadow-xs">
+
+
+										<!--
+										<p class="text-danger">
+											Ups! Please check again
+										</p>
+										-->
+
+
+										<div class="form-label-group mb-3">
+											<input required placeholder="Email" id="username" name="username" type="email" class="form-control">
+											<label for="username">Email</label>
+										</div>
+
+										<div class="input-group-over">
+											<div class="form-label-group mb-3">
+												<input required placeholder="Password" id="pass" name="pass" type="password" class="form-control">
+												<label for="pass">Password</label>
+											</div>
+
+										</div>
+
+										<button type="submit" class="btn btn-primary btn-soft btn-block">
+											Sign In
+										</button>
+
+										<div class="text-center mt--30">
+											<a href="#accordionAccountPasswd" class="d-block text-success text-decoration-none" data-toggle="collapse" aria-expanded="true" aria-controls='accordionAccountPasswd'>
+												Forgot your password?
+											</a>
+										</div>
+
+									</div>
+									
+								</form>
+								<!-- /SIGN IN -->
+
+
+
+								<!-- PASSWD RESET -->
+								<form class="collapse bs-validate" novalidate method="post" action="/new_user_password" id="accordionAccountPasswd" data-parent="#accordionAccount">
+									<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
+									
+									<!-- title -->
+									<h2 class="text-primary mb-1">
+										<span class="font-weight-normal">Password</span> Reset
+									</h2>
+									<p class="mb-5 font-weight-medium b-0">
+										Type your email and password to continue
+									</p>
+
+									<div class="p-5 rounded shadow-xs">
+
+										<h2 class="h5 text-center mb-5 mt-3">
+											Password Reset instructions are sent to your email.
+										</h2>
+
+
+										<!--
+										<p class="text-danger">
+											Ups! Please check again
+										</p>
+										-->
+
+
+										<div class="form-label-group mb-4">
+											<input required placeholder="Email" id="email" name="email" type="email" class="form-control">
+											<label for="reset_email">Email</label>
+										</div>
+
+										<button type="submit" class="btn btn-primary btn-soft btn-block">
+											Reset Password
+										</button>
+
+										<div class="text-center mt--30">
+											<a href="#accordionAccountSignIn" class="d-block text-success text-decoration-none" data-toggle="collapse" aria-expanded="true" aria-controls="accordionAccountSignIn">
+												Nevermind, back to Sign In
+											</a>
+										</div>
+
+									</div>
+
+								</form>
+								<!-- /PASSWD RESET -->
+
+
+							</div>
+
+						</div>
+
+						<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-0 order-1 order-lg-2">
+
+							<!-- remove .mt--n50 if image has no top margin -->
+							<img class="img-fluid mt--n50" src="{{ static('images/using_product.svg') }}" alt="Chat analyser image">
+
+						</div>
+
+					</div>
+
+				</div>
+			</section>
+			<!-- /FORM -->
+
+
+		</div><!-- /#wrapper -->
+
+		<script src="{{ static('plugins/smarty/js/core.min.js') }}"></script>
+		
+	</body>
+</html>

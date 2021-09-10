@@ -1,0 +1,133 @@
+{% extends "base_dashboard.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ static('node_modules/material-design-lite/material.min.css') }}" />
+<link rel="stylesheet" href="{{ static('node_modules/parsleyjs/src/parsley.css') }}" />
+<link rel="stylesheet" href="{{ static('node_modules/font-awesome/css/font-awesome.min.css') }}">
+
+{% endblock %}
+
+{% block main_content %}
+
+<!-- section header -->
+<div class="bg-white rounded clearfix p-3 mb-4">
+    <h5 class='title'>
+        <span class=''><i class="fi fi-user-male"></i></span>&nbsp;&nbsp;<span class='text-primary'>{{ stats.user_name }}</span> Analysis
+    </h5>
+    <small class="d-block text-muted fs--14">{{ stats.s_date }} - {{ stats.e_date }}</small>
+
+    {% if error %}
+        <div class="portlet-header border-bottom text-danger">
+        {{ message }}
+        </div>
+    {% elif stats.info_message %}
+        <div class="portlet-header border-bottom text-primary">
+        {{ stats.info_message }}
+        </div>
+    {% endif %}
+</div>
+
+<!-- /section header -->
+
+<div class="app-main__inner">
+    <div class="row gutters-sm">
+
+        <!-- COLUMN 1 -->
+        <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-4">
+            <div class='tns_card'>
+                <span class="tns_card_title">Most Active Day</span>
+                <div class='d-flex'>
+                    <img src="{{ static('images/tag.svg') }}" alt='tag' class="tag" >
+                    <span class="tns_tag_value">{{ stats.most_active_day }}</span>
+                </div>
+            </div>
+            <div class='tns_card'>
+                <span class="tns_card_title">Most Popular emoji</span>
+                <div class='d-flex'>
+                    <img src="{{ static('images/tag.svg') }}" alt='tag' class="tag" >
+                    {% if stats.emojis|length == 0 %}
+                    <span class="tns_tag_value">No Emojis Sent</span>
+                    {% else %}
+                    <span class="tns_tag_value emoji_pop">{{ stats.emojis[0].e }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class='tns_card'>
+                <span class="tns_card_title">Categories of information sent</span>
+                <div class='d-flex'>
+                    <div id='categories_chart' style='width:400px;'>&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <!-- END OF COLUMN 1 -->
+
+        <!-- COLUMN 2 -->
+        <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-3">
+            <div class='tns_card'>
+                <span class="tns_card_title">Active Time of Day</span>
+                <div class='d-flex'>
+                    <img src="{{ static('images/tag.svg') }}" alt='tag' class="tag" >
+                    <span class="tns_tag_value">{{ stats.most_active_time.most_active_hr }}:00 HRS</span>
+                </div>
+            </div>
+
+            <div class="tns_card">
+                <span class="tns_card_title">Group Interaction</span>
+                <div class='d-flex text-center'>
+                    <div id="group_interaction" class="gauge-container"></div>
+                </div>
+            </div>
+
+            <div class='tns_card'>
+                <span class="tns_card_title">Active Days</span>
+                <div class='d-flex'>
+                    <div id='active_days' style='width:400px;'>&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <!-- END OF COLUMN 1 -->
+
+        <!-- COLUMN 3 -->
+        <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-3">
+            <div class='tns_card'>
+                <span class="tns_card_title">Message Logs</span>
+                <div class='d-flex'>
+                    <div id='message_log' style='width:400px;' class="js-ajax portlet-body max-h-500 scrollable-vertical scrollable-styled-dark js-ajaxified">
+
+                        {% for ms in stats.all_messages%}
+                            <!-- a href="#!" class="clearfix d-block dropdown-item font-weight-medium p-3 rounded border-bottom border-light" -->
+                            <div class='p-3'>
+                                <p class="fs--14 m-0 font-weight-normal tns-message">
+                                    {{ ms.mssg }}
+                                </p>
+
+                                <!-- date -->
+                                <small class="d-block fs--11 text-muted float-end">
+                                    {{ ms.dt }}
+                                </small>
+
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END OF COLUMN 1 -->
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script type='text/javascript' src="{{ static('node_modules/highcharts/modules/drilldown.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/highcharts/modules/data.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/svg-gauge/dist/gauge.min.js') }}"></script>
+
+<script>
+    $(document).ready(function(){
+        analyser.stats = {{ stats | safe }};
+        analyser.initiatePages();
+    });
+</script>
+
+{% endblock %}
