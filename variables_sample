@@ -1,0 +1,46 @@
+PYTHONUNBUFFERED=1
+
+# Sentry details. These will be used to construct the final SENTRY url
+SENTRY_USER=xxxxxx                                                              # The sentry user hash
+SENTRY_PASS=yyyyyyy                                                             # The sentry password hash being used
+SENTRY_PROJID=01                                                                # Sentry project ID
+
+# The main admin email
+ADMIN_EMAIL=your-email@gmail.com
+
+# Email settings 
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SENDER_EMAIL=your-email@gmail.com
+SENDER_PASSWORD=your-password
+MAIL_USERNAME=your-username
+MAIL_FROM_NAME=Senders Name                                                    # Include this for emails to look nice
+
+
+# the key that will be used for encryption
+SECRET_KEY=generate-a-strong-key-for-the-application
+
+DEFAULT_DB_NAME=db-name
+DEFAULT_DB_USER=db-user
+DEFAULT_DB_PASS=db-password
+DEFAULT_DB_HOST=db-host
+DEFAULT_DB_PORT=db-port
+
+# Define the details for the super user in the application
+DJANGO_ADMIN_USERNAME=master-username
+DJANGO_ADMIN_PASSWORD=master-password
+DJANGO_ADMIN_EMAIL=master-email@gmail.com
+
+DEFAULT_DB_ENGINE=django.db.backends.mysql
+MYSQL_ROOT_PASSWORD=mysql-root-admin                                         # This user is needed for creating databases
+
+# Amazon S3 settings
+USE_S3=True                                                                  # Determine whether to use static files from Amazon S3 or not
+AWS_ACCESS_KEY_ID=YOUR-AMAZON-ACCESS-KEY
+AWS_SECRET_ACCESS_KEY=YOUR-S3-SECRET-ACCESS-KEY
+AWS_STORAGE_BUCKET_NAME=amazon-s3-bucket-name
+AWS_S3_REGION_NAME=the-amazon-region
+
+# WhatsApp chats location
+USE_GCP=False                                                               # If to use Google Cloud for WhatsApp chat storage
+GCP_DRIVE_ID=your-gcp-drive-id
