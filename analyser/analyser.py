@@ -199,6 +199,11 @@ class Analyser():
         print('Downloading the file %s' % file_name)
         self.authenticate()
         file = self.drive.CreateFile({'id': file_id})
+
+        # Create tmpfiles directory
+        if(os.path.exists('tmpfiles') == False):
+            os.makedirs('tmpfiles') 
+
         file.GetContentFile('tmpfiles/%s' % file_name, 'text/plain')
 
     def extract_group_attr_from_firstline(self, file_id, file_name):
