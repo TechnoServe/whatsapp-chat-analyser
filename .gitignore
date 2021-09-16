@@ -5,7 +5,7 @@ analyser/.env
 variables.env
 *package-lock.json
 *node_modules
-tmpfiles
+tmpfiles/*
 mycreds.txt
 client_secrets.json
 out.json
