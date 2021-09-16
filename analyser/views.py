@@ -168,7 +168,7 @@ def signin(request):
 def login_page(request, *args, **kwargs):
     csrf_token = get_or_create_csrf_token(request)
     page_settings = {'page_title': "%s | Login Page" % settings.SITE_NAME, 'csrf_token': csrf_token}
-
+    terminal.tprint('###########################in authenticate', 'debug')
     try:
         # check if we have some username and password in kwargs
         if 'kwargs' in kwargs:

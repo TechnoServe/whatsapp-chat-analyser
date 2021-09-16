@@ -60,6 +60,8 @@ class Analyser():
         self.gauth.LoadCredentialsFile("mycreds.txt") 
         self.drive = GoogleDrive(self.gauth)
 
+        
+
     def get_chats_list(self):
         self.authenticate()
         file_list = self.drive.ListFile({'q': "'%s' in parents and trashed=false" % settings.GCP_DRIVE_ID}).GetList()
@@ -90,7 +92,7 @@ class Analyser():
             chat_file = self.pre_process_chatfile(chat)
 
             if chat_file is None or chat_file.status not in ['pending', 'to_reprocess']:
-                if os.path.exists('tmpfiles/%s' % chat['title']): os.remove('tmpfiles/%s' % chat['title'])
+                if os.path.exists('/home/msambou/Desktop/%s' % chat['title']): os.remove('/home/msambou/Desktop/%s' % chat['title'])
                 continue        # nothing to do with this chat file
 
     def pre_process_chatfile(self, chat):
@@ -197,13 +199,13 @@ class Analyser():
         print('Downloading the file %s' % file_name)
         self.authenticate()
         file = self.drive.CreateFile({'id': file_id})
-        file.GetContentFile('tmpfiles/%s' % file_name, 'text/plain')
+        file.GetContentFile('/home/msambou/Desktop/%s' % file_name, 'text/plain')
 
     def extract_group_attr_from_firstline(self, file_id, file_name):
-        if not os.path.exists('tmpfiles/%s' % file_name):
+        if not os.path.exists('/home/msambou/Desktop/%s' % file_name):
             self.download_file(file_id, file_name)
 
-        with open('tmpfiles/%s' % file_name, 'rt') as fh:
+        with open('/home/msambou/Desktop/%s' % file_name, 'rt') as fh:
             # get the first line and check whether we have something like '3/17/20, 9:38 PM - Rachel Tns created group "SMART DUKA WINNERS"'
             first_line = fh.readline().strip()
             second_line = fh.readline().strip()
@@ -299,11 +301,11 @@ class Analyser():
 
             filename = 'cur_processing_file.txt' if filename is None else filename
 
-            if not os.path.exists('tmpfiles/%s' % filename):
+            if not os.path.exists('/home/msambou/Desktop/%s' % filename):
                 self.download_file(google_id, filename)
 
             i = 0
-            with open('tmpfiles/%s' % filename, 'rt') as fh:
+            with open('/home/msambou/Desktop/%s' % filename, 'rt') as fh:
                 print('\n```````````````\nProcessing %s' % filename)
                 transaction.set_autocommit(False)
                 self.cur_file_messages = []

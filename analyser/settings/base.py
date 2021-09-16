@@ -27,15 +27,16 @@ MEDIAFILES_DIRS = [
 NO_ITEMS_PER_PAGE = 7
 ACCOUNT_ACTIVATION_DAYS = 1
 SITE_NAME = 'Tafiti Chat Analysis'
+SITE_ID=1
 
 # paths and routes for uploaded media files
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'analyser/media')
 MEDIA_ROOT = '/www/tns_whatsapp_analyser/analyser/media/'
 
 if 'DJANGO_ADMIN_USERNAME' in os.environ:
-    SENTRY_USER = os.environ['SENTRY_USER']
-    SENTRY_PASS = os.environ['SENTRY_PASS']
-    SENTRY_PROJID = os.environ['SENTRY_PROJID']
+    # SENTRY_USER = os.environ['SENTRY_USER']
+    # SENTRY_PASS = os.environ['SENTRY_PASS']
+    # SENTRY_PROJID = os.environ['SENTRY_PROJID']
 
     ADMIN_EMAIL = os.environ['ADMIN_EMAIL']
     SENDER_EMAIL = os.environ['SENDER_EMAIL']
@@ -129,7 +130,10 @@ else:
     STATICFILES_DIR = ( os.path.join('static'), os.path.join(BASE_DIR, 'odk_dashboard/static'), )
 
 # sentry DSN
-SENTRY_DSN = 'https://%s:%s@sentry.badili.co.ke/%s?verify_ssl=0' % (SENTRY_USER, SENTRY_PASS, SENTRY_PROJID)
+# SENTRY_DSN = 'https://%s:%s@sentry.badili.co.ke/%s?verify_ssl=0' % (SENTRY_USER, SENTRY_PASS, SENTRY_PROJID)
+
+SENTRY_DSN = 'https://9554a689d421479b96cb18b2b746e58c@o1001604.ingest.sentry.io/5961681'
+
 # DEFAULT_LOCALE = 'EN'
 DEFAULT_LOCALE = 'English (en)'
 IS_DRY_RUN = False

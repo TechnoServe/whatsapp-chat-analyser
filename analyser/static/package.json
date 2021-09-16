@@ -29,9 +29,8 @@
     "parsleyjs": "2.9.2",
     "popper.js": "1.14.7",
     "sprintf-js": "1.1.2",
-    "svg-gauge": "^1.0.6",
-    "toastr": "2.1.4",
-    "svg-gauge": "1.0.6"
+    "svg-gauge": "1.0.6",
+    "toastr": "2.1.4"
   },
   "devDependencies": {
     "jquery": "^3.5.1",
