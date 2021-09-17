@@ -219,6 +219,8 @@ class Analyser():
             group_name_line = second_line
         else: group_name_line = first_line
 
+        
+
         group_attr = re.findall(group_creator_regex, group_name_line, re.IGNORECASE)
 
         if len(group_attr) == 0 or len(group_attr[0]) != 3:
@@ -344,6 +346,8 @@ class Analyser():
                         # we have some date...
                         cur_line_parts = re.findall(msg_line_regex, line_, re.IGNORECASE)
                         cur_date = self.extract_date_from_message(line_, date_format)
+
+                       
 
                         if len(cur_line_parts) == 0:
                             # we have a message starting with a date but not really a message
