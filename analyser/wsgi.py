@@ -1,7 +1,10 @@
 
+
 import os
 
 from django.core.wsgi import get_wsgi_application
+
+from analyser.settings.base import *
 
 if 'DJANGO_ADMIN_USERNAME' in os.environ:
     print ("Using the PRODUCTION settings")
