@@ -30,7 +30,6 @@ from analyser.chat.DBService import DBService
 # Import Utilities 
 from analyser.chat.Utilities import Utilities
 
-
 terminal = Terminal()
 sentry_sdk.init(settings.SENTRY_DSN)
 my_hashids = Hashids(min_length=5, salt=settings.SECRET_KEY)
