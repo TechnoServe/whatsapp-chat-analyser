@@ -12,6 +12,10 @@ from rest_framework.authtoken.models import Token
 
 settings.TIME_ZONE
 
+"""
+    We define user access control groups here
+"""
+
 PERSONNEL_DESIGNATION_CHOICES = (
     ('data_manager', 'Data Manager'),
     ('system_admin', 'System Administrator'),
