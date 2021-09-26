@@ -2,7 +2,8 @@ import sentry_sdk
 from datetime import datetime
 from tzlocal import get_localzone
 import re
-# Import regex constants
+
+
 from analyser.chat.constants import *
 from django.conf import settings
 from analyser.common_tasks import Notification, Terminal
