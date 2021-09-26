@@ -15,6 +15,9 @@ settings.TIME_ZONE
 PERSONNEL_DESIGNATION_CHOICES = (
     ('data_manager', 'Data Manager'),
     ('system_admin', 'System Administrator'),
+    ('business_counselor', 'Business Counselor'),
+    ('business_analyst', 'Business Analyst'),
+    ('program_manager', 'Program Manager'),
 )
 
 PERSONNEL_GENDER_CHOICES = (
