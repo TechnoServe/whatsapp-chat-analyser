@@ -32,6 +32,9 @@ urlpatterns = [
 
     re_path(r'^data/(?P<d_type>users|exported_files|search|engaged_users)(/(?P<filter_>.+))?$', views.get_ajax_data, name='ajax_data'),
 
+    re_path(r'^dashboard.pm$', views.dashboardPM, name='dashboard.pm'),
+    re_path(r'^dashboard.ba$', views.dashboardBA, name='dashboard.ba'),
+    re_path(r'^dashboard.bc$', views.dashboardBC, name='dashboard.bc'),
     re_path(r'^dashboard$', views.dashboard, name='dashboard'),
     re_path(r'^groups$', views.list_whatsapp_chats, name='list_whatsapp_chats'),
     re_path(r'^engaged_users$', views.list_whatsapp_users, name='list_whatsapp_users'),

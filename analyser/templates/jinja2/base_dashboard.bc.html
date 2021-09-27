@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="{{ site_name }}">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    
+    <!-- Title -->
+    <title>{{ site_name if site_name else page_title }}</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{{ static('images/favicon.ico') }}">
+
+    <!-- up to 10% speed up for external res -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com/">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com/">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/">
+    
+    <!-- preloading icon font is helping to speed up a little bit -->
+    <link rel="stylesheet" href="{{ static('node_modules/bootstrap/dist/css/bootstrap.min.css') }}">
+    <link rel="prefetch" href="{{ static('plugins/smarty/fonts/flaticon/Flaticon.woff2') }}" as="font" type="font/woff2" crossorigin="anonymous"/>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+
+    <!-- Dash css file -->
+    <!-- link rel="stylesheet" href="{{ static('css/style.css') }}" -->
+
+    <!-- non block rendering : page speed : js = polyfill for old browsers missing `preload` -->
+    <link rel="stylesheet" href="{{ static('plugins/smarty/css/vendor_bundle.min.css') }}">
+    <link rel="stylesheet" href="{{ static('plugins/smarty/css/core.min.css') }}">
+    <link rel="stylesheet" href="{{ static('plugins/jQuery-Autocomplete/jquery.autocomplete.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ static('node_modules/daterangepicker/daterangepicker.css') }}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap">
+    <link rel="stylesheet" href="{{ static('node_modules/toastr/build/toastr.min.css') }}">
+
+    {% block css %}
+    {% endblock %}
+
+    <link rel="stylesheet" href="{{ static('css/cssload_loader.css') }}">
+    <link rel="stylesheet" href="{{ static('css/analyser.css') }}">
+
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{{ static('images/favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ static('images/tafiti_logo.png') }}">
+
+    <link rel="manifest" href="assets/images/manifest/manifest.json">
+    <meta name="theme-color" content="#377dff">
+
+</head>
+
+<body class="layout-admin aside-sticky header-sticky" data-s2t-class="btn-primary btn-sm bg-gradient-default rounded-circle b-0">
+    <div id="wrapper" class="d-flex align-items-stretch flex-column">
+        <header id="header" class="d-flex align-items-center rounded-top">
+
+            <!-- NAVBAR -->
+            <div class="container-fluid position-relative">
+
+                <nav class="navbar navbar-expand-lg navbar-light justify-content-lg-between justify-content-md-inherit h--70">
+
+                    <div class="align-items-start">
+                        
+                        <!-- 
+                            sidebar toggler 
+                        -->
+                        <a href="#aside-main" class="btn-sidebar-toggle h-100 d-inline-block d-lg-none justify-content-center align-items-center p-2">
+                            <span class="group-icon">
+                                <i>
+                                    <svg width="25" viewBox="0 0 20 20">
+                                        <path d="M 19.9876 1.998 L -0.0108 1.998 L -0.0108 -0.0019 L 19.9876 -0.0019 L 19.9876 1.998 Z"></path>
+                                        <path d="M 19.9876 7.9979 L -0.0108 7.9979 L -0.0108 5.9979 L 19.9876 5.9979 L 19.9876 7.9979 Z"></path>
+                                        <path d="M 19.9876 13.9977 L -0.0108 13.9977 L -0.0108 11.9978 L 19.9876 11.9978 L 19.9876 13.9977 Z"></path>
+                                        <path d="M 19.9876 19.9976 L -0.0108 19.9976 L -0.0108 17.9976 L 19.9876 17.9976 L 19.9876 19.9976 Z"></path>
+                                    </svg>
+                                </i>
+
+                                <i>
+                                    <svg width="25" viewBox="0 0 47.971 47.971">
+                                        <path d="M28.228,23.986L47.092,5.122c1.172-1.171,1.172-3.071,0-4.242c-1.172-1.172-3.07-1.172-4.242,0L23.986,19.744L5.121,0.88c-1.172-1.172-3.07-1.172-4.242,0c-1.172,1.171-1.172,3.071,0,4.242l18.865,18.864L0.879,42.85c-1.172,1.171-1.172,3.071,0,4.242C1.465,47.677,2.233,47.97,3,47.97s1.535-0.293,2.121-0.879l18.865-18.864L42.85,47.091c0.586,0.586,1.354,0.879,2.121,0.879s1.535-0.293,2.121-0.879c1.172-1.171,1.172-3.071,0-4.242L28.228,23.986z"></path>
+                                    </svg>
+                                </i>
+                            </span>
+                        </a>
+
+
+                        <!-- 
+                            Logo : height: 60px max
+                            visibility : mobile only
+                        -->
+                        <a class="navbar-brand d-inline-block d-lg-none" href="/dashboard">
+                            <img src="{{ static('images/tafiti_logo.png') }}" width="110" height="60" alt="...">
+                        </a>
+
+                    </div>
+
+
+                    <!-- NAVIGATION -->
+                    <div class="collapse navbar-collapse" id="navbarMainNav">
+
+                        <!-- MOBILE MENU NAVBAR -->
+                        <div class="navbar-xs d-none">
+
+                            <!-- mobile menu button : close -->
+                            <button class="navbar-toggler pt-0" type="button" data-toggle="collapse" data-target="#navbarMainNav" aria-controls="navbarMainNav" aria-expanded="false" aria-label="Toggle navigation">
+                                <svg width="20" viewBox="0 0 20 20">
+                                    <path d="M 20.7895 0.977 L 19.3752 -0.4364 L 10.081 8.8522 L 0.7869 -0.4364 L -0.6274 0.977 L 8.6668 10.2656 L -0.6274 19.5542 L 0.7869 20.9676 L 10.081 11.679 L 19.3752 20.9676 L 20.7895 19.5542 L 11.4953 10.2656 L 20.7895 0.977 Z"></path>
+                                </svg>
+                            </button>
+
+                            <!-- 
+                                Optional Mobile Menu Logo 
+                                Logo : height: 70px max
+                            -->
+                            <a class="navbar-brand" href="/dashboard">
+                                <img src="{{ static('images/tafiti_logo.png') }}" width="110" height="70" alt="...">
+                            </a>
+
+                        </div>
+                        <!-- /MOBILE MENU NAVBAR -->
+
+                        <!-- PAGE TITLE -->
+                        <div class="search__container">
+                            <input id='global_search' class="search__input" type="text" placeholder="Search for users or groups">
+                            <input name='analysis_range' value="{{ '' if s_date == '' else s_date + ' - ' + e_date }}" class="range__input pull-right" type="text" placeholder="Range">
+                            <!-- We can add the date pickers here -->
+                        </div>
+
+                        <ul class="navbar-nav align-items-center">
+                            <div class="page-title bg-transparent b-0">
+                                
+                            </div>
+                        </ul>
+                        <!-- PAGE TITLE -->
+
+                    </div>
+                    <!-- /NAVIGATION -->
+
+
+                    <!-- OPTIONS -->
+                    <ul class="list-inline list-unstyled mb-0 d-flex align-items-end">
+
+                        <!-- account -->
+                        <li class="list-inline-item ml--6 mr--6 dropdown">
+
+                            <a href="#" id="dropdownAccountOptions" class="btn btn-light dropdown-toggle btn-pill pl--12 pr--12" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+                                
+                                <span class="group-icon m-0">
+                                    <!-- <i class="fi fi-user-female"></i> -->
+                                    <i class="fi w--15 fi-user-male"></i>
+                                    <i class="fi w--15 fi-close"></i>
+                                </span>
+
+                                <span class="fs--14 d-none d-sm-inline-block font-weight-medium">{{ request.session.cu_last_name }} {{ request.session.cu_first_name }}</span>
+                            </a>
+
+                        </li>
+
+                    </ul>
+                    <!-- /OPTIONS -->
+
+                </nav>
+
+                <!-- TOP NAVIGATION TOGGLER -->
+                <button class="navbar-toggler h-auto w-auto m-0 btn btn-sm bg-white rounded-circle position-absolute end-0 mt-1 mb-1 ml-2 mr-2 z-index-2 d-none d-inline-block d-lg-none" type="button" data-toggle="collapse" data-target="#navbarMainNav" aria-controls="navbarMainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fi fi-bars"></i>
+                </button>
+                <!-- /TOP NAVIGATION TOGGLER -->
+
+            </div>
+            <!-- /NAVBAR -->
+
+        </header>
+
+
+        <div id="wrapper_content" class="d-flex flex-fill">
+
+            <!-- SIDEBAR -->
+            <aside id="aside-main" class="aside-start aside-primary bg-gradient-dark font-weight-dark aside-hide-xs d-flex align-items-stretch justify-content-lg-between align-items-start flex-column">
+
+                <!-- 
+                    LOGO 
+                    visibility : desktop only
+                -->
+                <div class="align-self-baseline w-100">
+                    <div class="clearfix d-flex justify-content-between bg-secondary">
+
+                        <!-- Logo : height: 60px max -->
+                        <a class="w-100 align-self-center navbar-brand px-3" href="/dashboard">
+                            <img src="{{ static('images/tafiti_logo.png') }}" width="230" height="auto" alt="Dashboard">
+                        </a>
+
+                    </div>
+                </div>
+                <!-- /LOGO -->
+
+
+                <div class="aside-wrapper scrollable-vertical scrollable-styled-light align-self-baseline h-100 w-100">
+
+                    <nav class="nav-deep badili-nav nav-deep-dark nav-deep-hover fs--15">
+                        <ul class="nav flex-column">
+                            
+                            {% for link in request.session.nav_links %}
+                                {% if link.type == 'section_title' %}
+                                    <li class="nav-title mt-5">
+                                        <h6 class="fs--15 mb-1 text-white font-weight-normal">{{ link.link_title }}</h6>
+                                    </li>
+                                {% elif link.type == 'link' %}
+                                    <li class="nav-item {{ 'active' if link.is_active == true else '' }}">
+                                        <a class="nav-link js-ajax" href="{{ link.href }}">{{ link['icon']|safe if 'icon' in link else '' }} {{ link.link_title }}</a>
+                                        {% if 'items' in link %}
+                                            <ul class='nav flex-column'>
+                                            {% for item_ in link['items'] %}
+                                                <li class="nav-item {{ 'active' if item_.is_active == true else '' }}">
+                                                    <a class="nav-link js-ajax" href="{{ item_.href }}">{{ item_.link_title }}</a>
+                                                </li>
+                                            {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            <li class="nav-title mt-5">
+                                <h6 class="fs--15 mb-1 text-white font-weight-normal">
+                                    <a class="nav-link js-ajax" href="/logout">
+                                        <i class="fi fi-exit"></i>
+                                        Logout
+                                    </a>
+                                </h6>
+                            </li>
+
+                        </ul>
+                    </nav>
+
+                </div>
+
+            </aside>
+            <!-- END OF SIDEBAR -->
+
+            <!-- MIDDLE -->
+            <div id="middle" class="flex-fill">
+                {% block main_content %}
+                {% endblock %}
+            </div>
+
+        </div>
+
+
+        <footer id="footer">
+            <div class="bg-gradient-purple rounded text-white p-3 fs--14 aside-primary">
+                 {{ site_name }}
+
+                <div class="d-inline-block float-end dropdown">
+                    Designed and developed with <i class="fi fi-heart-slim text-danger"></i> by <a href="https://badili.co.ke" target="_blank">Badili Innovations</a>
+                </div>
+
+            </div>
+        </footer>
+    </div>
+
+    <div id="overlay" onclick="off()">
+        <!-- i class="fs--30 fi fi-loading-dots fi-spin text-success"></i -->
+        <div class="w-100 d-flex justify-content-center align-items-center">
+            <div class="cssload-loader">
+                <div class="cssload-side"></div>
+                <div class="cssload-side"></div>
+                <div class="cssload-side"></div>
+                <div class="cssload-side"></div>
+                <div class="cssload-side"></div>
+                <div class="cssload-side"></div>
+                <div class="cssload-side"></div>
+                <div class="cssload-side"></div>
+            </div>
+        </div>
+    </div>
+    
+    {% block modals %}
+    {% endblock %}
+
+    <script type="text/javascript" src="{{ static('node_modules/jquery/dist/jquery.min.js') }}"></script>
+    <script type='text/javascript' src="{{ static('node_modules/sprintf-js/dist/sprintf.min.js') }}"></script>
+    <script type='text/javascript' src="{{ static('node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script type='text/javascript' src="{{ static('plugins/jQuery-Autocomplete/jquery.autocomplete.min.js') }}"></script>
+    <script type='text/javascript' src="{{ static('node_modules/moment/min/moment.min.js') }}"></script>
+    <script type='text/javascript' src="{{ static('node_modules/daterangepicker/daterangepicker.js') }}"></script>
+    <script type='text/javascript' src="{{ static('node_modules/toastr/build/toastr.min.js') }}"></script>
+    <script type='text/javascript' src="{{ static('node_modules/highcharts/highcharts.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/Analyser.bc.js') }}"></script>
+    
+    {% block javascript %}
+    {% endblock %}
+</body>
+</html>

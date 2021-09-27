@@ -466,6 +466,84 @@ def dashboard(request, *args, **kwargs):
         # we need a default page to go to
         return index(request, error=True, message='There was an error while getting a list of the WhatsApp groups. Please contact the system administrator')
 
+@login_required(login_url='/login')
+def dashboardPM(request, *args, **kwargs):
+    try:
+        params = get_basic_info(request)
+
+        if 'error' in kwargs:
+            params['error'] = kwargs['error']
+            params['message'] = kwargs['message']
+        params['page_title'] = 'Dashboard'
+        params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
+
+        try:
+            date_range = request.POST.get('range')
+        except:
+            date_range = None
+
+        analyser = Analyser()
+        params['stats'] = analyser.fetch_all_meta(date_range)
+        params['has_data'] = False if params['stats']['empty_db'] else True
+
+        return render(request, 'dashboard/dashboard.pm.html', params)
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        # we need a default page to go to
+        return index(request, error=True, message='There was an error while getting a list of the WhatsApp groups. Please contact the system administrator')
+
+@login_required(login_url='/login')
+def dashboardBA(request, *args, **kwargs):
+    try:
+        params = get_basic_info(request)
+
+        if 'error' in kwargs:
+            params['error'] = kwargs['error']
+            params['message'] = kwargs['message']
+        params['page_title'] = 'Dashboard'
+        params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
+
+        try:
+            date_range = request.POST.get('range')
+        except:
+            date_range = None
+
+        analyser = Analyser()
+        params['stats'] = analyser.fetch_all_meta(date_range)
+        params['has_data'] = False if params['stats']['empty_db'] else True
+
+        return render(request, 'dashboard/dashboard.ba.html', params)
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        # we need a default page to go to
+        return index(request, error=True, message='There was an error while getting a list of the WhatsApp groups. Please contact the system administrator')
+
+@login_required(login_url='/login')
+def dashboardBC(request, *args, **kwargs):
+    try:
+        params = get_basic_info(request)
+
+        if 'error' in kwargs:
+            params['error'] = kwargs['error']
+            params['message'] = kwargs['message']
+        params['page_title'] = 'Dashboard'
+        params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
+
+        try:
+            date_range = request.POST.get('range')
+        except:
+            date_range = None
+
+        analyser = Analyser()
+        params['stats'] = analyser.fetch_all_meta(date_range)
+        params['has_data'] = False if params['stats']['empty_db'] else True
+
+        return render(request, 'dashboard/dashboard.bc.html', params)
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
+        # we need a default page to go to
+        return index(request, error=True, message='There was an error while getting a list of the WhatsApp groups. Please contact the system administrator')
+
 
 @login_required(login_url='/login')
 def get_user_details(request):
