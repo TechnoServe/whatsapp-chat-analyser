@@ -92,7 +92,7 @@ def validate_user_access(request, data_type):
         'users': ['admins']
     }
     try:
-        if request.session['cu_issuperuser'] or request.session['cu_designation_id'] == 'system_admin': return True
+        if request.session['cu_issuperuser'] or request.session['cu_designation_id'] == 'system_admin' or request.session['cu_designation_id'] == 'business_counselor' or request.session['cu_designation_id'] == 'business_advisor' or request.session['cu_designation_id'] == 'program_manager': return True
         if request.session['cu_designation_id'] in access_rights[data_type]: return True
 
         raise Exception('Sorry you dont have rights to access the current resource')
@@ -168,7 +168,7 @@ def signin(request):
 def login_page(request, *args, **kwargs):
     csrf_token = get_or_create_csrf_token(request)
     page_settings = {'page_title': "%s | Login Page" % settings.SITE_NAME, 'csrf_token': csrf_token}
-    terminal.tprint('###########################in authenticate', 'debug')
+    #terminal.tprint('###########################in authenticate', 'debug')
     try:
         # check if we have some username and password in kwargs
         if 'kwargs' in kwargs:
@@ -196,6 +196,12 @@ def login_page(request, *args, **kwargs):
             else:
                 terminal.tprint('All ok', 'debug')
                 login(request, user)
+                if user.designation == "business_counselor":
+                    return redirect('/dashboard.bc', request=request)
+                elif user.designation == "business_advisor":
+                    return redirect('/dashboard.ba', request=request)
+                elif user.designation == "program_manager":
+                    return redirect('/dashboard.pm', request=request)
                 return redirect('/dashboard', request=request)
         else:
             return render(request, 'signin.html', {username: username})
@@ -386,6 +392,7 @@ def save_user_password(request):
 
 @login_required(login_url='/login')
 def get_ajax_data(request, d_type, filter_ = None):
+    
     try:
         validate_user_access(request, d_type)
 
@@ -562,6 +569,7 @@ def get_user_details(request):
 @login_required(login_url='/login')
 @user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin', login_url='/dashboard')
 def list_whatsapp_chats(request):
+    
     try:
         params = get_basic_info(request)
 
@@ -581,6 +589,7 @@ def list_whatsapp_chats(request):
 @login_required(login_url='/login')
 @user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin', login_url='/dashboard')
 def list_whatsapp_users(request):
+    
     try:
         params = get_basic_info(request)
 
@@ -597,6 +606,7 @@ def list_whatsapp_users(request):
 @login_required(login_url='/login')
 @user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin', login_url='/dashboard')
 def list_exported_files(request):
+    
     try:
         params = get_basic_info(request)
         params['page_title'] = 'Exported Chats'
@@ -609,8 +619,9 @@ def list_exported_files(request):
 
 
 @login_required(login_url='/login')
-@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin', login_url='/dashboard')
+@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin' or u.designation == 'business_counselor' or u.designation == 'business_advisor' or u.designation == 'program_manager', login_url='/dashboard')
 def show_group_stats(request, uid):
+    
     try:
         params = get_basic_info(request)
         params['page_title'] = 'Group Statistics'
@@ -635,8 +646,9 @@ def show_group_stats(request, uid):
 
 
 @login_required(login_url='/login')
-@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin', login_url='/dashboard')
+@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin' or u.designation == 'business_counselor' or u.designation == 'business_advisor' or u.designation == 'program_manager', login_url='/dashboard')
 def show_user_stats(request, gid, user_):
+    
     try:
         params = get_basic_info(request)
         group_id=int(my_hashids.decode(gid)[0])
@@ -659,8 +671,9 @@ def show_user_stats(request, gid, user_):
         return dashboard(request, error=True, message='%s. Please contact the system administrator' % mssg)
 
 @login_required(login_url='/login')
-@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin', login_url='/dashboard')
+@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin' or u.designation == 'business_counselor' or u.designation == 'business_advisor' or u.designation == 'program_manager', login_url='/dashboard')
 def global_search(request):
+    
     try:
         pass
     except Exception as e:
@@ -671,6 +684,7 @@ def global_search(request):
 @login_required(login_url='/login')
 @user_passes_test(lambda u: u.is_superuser or u.designation == 'system_admin', login_url='/dashboard')
 def users(request):
+    
     params = get_basic_info(request)
     params['page_title'] = 'System Users'
     params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
@@ -683,6 +697,7 @@ def users(request):
 @login_required(login_url='/login')
 @user_passes_test(lambda u: u.is_superuser or u.designation == 'system_admin', login_url='/dashboard')
 def validate_objects(request):
+    
     for key, value in request.GET.items():
         if key == 'tel':
             # check that this telephone is not already used
@@ -700,6 +715,7 @@ def validate_objects(request):
 @login_required(login_url='/login')
 @user_passes_test(lambda u: u.is_superuser or u.designation == 'system_admin', login_url='/dashboard')
 def add_objects(request, d_type):
+    
     params = get_basic_info(request)
 
     try:
@@ -789,6 +805,7 @@ def add_user(request):
 
 @login_required(login_url='/login')
 def edit_objects(request, d_type):
+    
     params = get_basic_info(request)
 
     try:
@@ -830,6 +847,7 @@ def delete_objects(request, d_type):
 @login_required(login_url='/login')
 @user_passes_test(lambda u: u.is_superuser or u.designation == 'system_admin', login_url='/dashboard')
 def manage_objects(request):
+    
     params = get_basic_info(request)
     u = User.objects.get(id=request.user.id)
     current_path = request.path.strip("/")
