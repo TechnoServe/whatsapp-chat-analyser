@@ -1,9 +1,12 @@
 function Analyser(){
     this.checkbox_template = "<input type='checkbox' class='selector' id='%s' />";
-    this.edit_template = "<button class='%s btn btn-outline-info btn-sm' data-toggle='modal' data-target='%s' data-object_type='%s' data-row-id='%s' data-action='edit'>Edit</button>";
-    this.delete_template = "<button class='%s btn btn-outline-danger btn-sm' data-object_type='%s' data-action='delete' data-row-id='%s' data-toggle='modal' data-target='#confirmModal' >Delete</button>";
-    this.activate_template = "<button class='%s btn btn-outline-%s btn-sm' data-object_type='%s' data-row-id='%s' data-toggle='modal' data-action='%s' data-target='#confirmModal'>%s</button>";
+    this.edit_template = "<button title='Edit' class='%s btn btn-info btn-sm' data-toggle='modal' data-target='%s' data-object_type='%s' data-row-id='%s' data-action='edit'><i class='fa fa-edit'></i></button>";
+    this.delete_template = "<button title='Delete' class='%s btn btn-danger btn-sm' data-object_type='%s' data-action='delete' data-row-id='%s' data-toggle='modal' data-target='#confirmModal' ><i class='fa fa-trash-o'></i></button>";
+    this.activate_template = "<button title='Deactivate' class='%s btn btn-%s btn-sm' data-object_type='%s' data-row-id='%s' data-toggle='modal' data-action='%s' data-target='#confirmModal'><i class='fa fa-power-off'></i></button>";
 
+    this.resend_link = "<button title='Resend Link' class='%s btn btn-success btn-sm' data-object_type='%s' data-row-id='%s' data-toggle='modal' data-action='%s' data-target='#confirmModal'><i class='fa fa-repeat'></i></button>";
+
+    //<button type="button" class="btn btn-info btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
     // add the csrf token before ajax requests
     this.csrftoken = $('meta[name=csrf-token]').attr('content');
     $.ajaxSetup({
@@ -66,7 +69,9 @@ Analyser.prototype.initiateSysUsers = function(event){
                 "data": "is_active",
                 "targets": 7, 
                 render: function ( data, type, row, meta ) {
-                    return row.is_active ? 'Yes' : 'No';
+                    resend_link = sprintf(analyser.resend_link, 'resend_link', 'user', row.pk_id);
+
+                    return row.is_active ? resend_link : 'No';
                 }
             },
             {
@@ -147,6 +152,7 @@ Analyser.prototype.initiateSysUsers = function(event){
         }
         // 2. Call the action to confirm the save user action and pass the data
     });
+
 
     analyser.initiateObjectManagement();
 };

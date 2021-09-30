@@ -18,8 +18,13 @@
         <li class="breadcrumb-item active" aria-current="page">
           SYSTEM USERS
         </li>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 buttons">
+          <button style="float: right;" class='add_user btn btn-primary btn-pill' data-toggle="modal" data-target="#newUser" data-object_type='user' data-action='add'>Add a User</button>
+      </div>
       </ol>
     </nav>
+
+    <button class="resend_link">Click me</button>
 
 </div>
 <!-- /section header -->
@@ -43,9 +48,7 @@
                 </thead>
             </table>
         </div>
-        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 buttons">
-            <button class='add_user btn btn-primary btn-pill mb-1' data-toggle="modal" data-target="#newUser" data-object_type='user' data-action='add'>Add a User</button>
-        </div>
+       
     </div>
 </div>
 {% endblock %}
@@ -154,6 +157,7 @@
     </div>
   </div>
 </div>
+
 {% endblock %}
 
 {% block javascript %}
@@ -167,7 +171,7 @@
 
 <script>
     $(document).ready(function(){
-        
+      
         // add regex validation
         $.validator.addMethod(
             "regex",
@@ -179,6 +183,10 @@
         );
         analyser.initiatePages();
     });
+
+    $(".resend_link").click(()=>{
+        alert("hello")
+      })
 </script>
 
 {% endblock %}

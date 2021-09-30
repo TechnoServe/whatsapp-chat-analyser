@@ -151,7 +151,9 @@
 <script type='text/javascript' src="{{ static('node_modules/svg-gauge/dist/gauge.min.js') }}"></script>
 
 <script type="text/javascript">
+
     $(document).ready(function(){
+        
         analyser.stats = {{ stats | safe }};
         analyser.initiatePages();
         $('.js-count-completed').countTo();
