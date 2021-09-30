@@ -843,6 +843,51 @@ def delete_objects(request, d_type):
         sentry_sdk.capture_exception(e)
         return JsonResponse({'error': True, 'message': 'There was an error while updating the database'})
 
+@login_required(login_url='/login')
+def resend_activation_email(request):
+    params = get_basic_info(request)
+
+    try:
+        pk_id = my_hashids.decode(request.POST.get('object_id'))[0]
+        user = User.objects.filter(id=pk_id).get()
+
+        reg_view = RegistrationView()
+        activation_link = reg_view.get_activation_key(user)
+
+        # send an email to this user
+        notify = Notification()
+        uid = user.id #urlsafe_base64_encode(force_bytes(user.id))
+        current_site = get_current_site(request)
+
+
+        terminal.tprint('###########################in resend', 'debug')
+        #terminal.tprint(uid, 'debug')
+
+        email_settings = {
+            'template': 'emails/verify_account.html',
+            'subject': '[%s] Confirm Registration' % settings.SITE_NAME,
+            'sender_email': settings.SENDER_EMAIL,
+            'recipient_email': user.email,
+            'site_name': settings.SITE_NAME,
+            'site_url': 'http://%s' % current_site.domain,
+            'title': 'Confirm Registration',
+            'salutation': 'Dear %s' % user.first_name,
+            'use_queue': getattr(settings, 'QUEUE_EMAILS', False),
+            'verification_link': 'http://%s/activate_new_user/%s/%s' % (current_site.domain, uid, activation_link),
+            'message': 'You have been registered successfully to the %s. We are glad to have you on board. Please click on the button below to activate your account. You will not be able to use your account until it is activated. The activation link will expire in %d hours' % (settings.SITE_NAME, settings.ACCOUNT_ACTIVATION_DAYS * 24),
+            'message_sub_heading': 'You have been registered successfully'
+        }
+        notify.send_email(email_settings)
+
+        return JsonResponse({'error': False, 'message': 'Activation email successfully sent'})
+
+    
+
+    except Exception as e:
+        if settings.DEBUG: terminal.tprint(str(e), 'fail')
+        sentry_sdk.capture_exception(e)
+        return JsonResponse({'error': True, 'message': 'There was an error while updating the database'})
+
 
 @login_required(login_url='/login')
 @user_passes_test(lambda u: u.is_superuser or u.designation == 'system_admin', login_url='/dashboard')
