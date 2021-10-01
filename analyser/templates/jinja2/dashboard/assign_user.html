@@ -5,79 +5,141 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<body class="w3-content" style="max-width:1200px">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="main.css" type="text/css">
+<body>
+    <div class="container-fluid">
+        <div class="row">
+          <div class="page_header">
+            <div class="left">
+                <h1>Dashboard</h1>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index-2.html"><i class="fa fa-home"></i></a></li>
+                    <li class="breadcrumb-item">Assign Counselors to Advisor</li>
+                </ol>
+            </div>
+            <div class="right">
+                Business Analyst: Ayobami Esther
+            </div>
+        </div>
+            <div class="col-2"></div>
+            <div class="col-8">
+              <br>
+                <div class="row">
+                    <div class="col-6">
 
-<div class="w3-panel">
-  <!-- <i class="w3-xlarge fa fa-bars"></i> -->
-</div>
-<!-- First Grid: Logo & About -->
-<div class="w3-row">
-<div class="w3-half w3-container w3-xlarge w3-text-grey">
-  <p class="">
-    Use this page to assign a Business Counselor to Business Advisor.
-  </p>
-</div>
-</div>
+                      <div class="card ">
+                        <div class="input-group input-group-transparent">
+                          <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span></div>
+                          <input id="myInput" type="text" onkeyup="myFunction()" class="form-control" placeholder="Search Business Counselors">
+                      </div>
+                        <table id="myTable">
+                          <tr class="header">
+                            <th style="width:80%;">Name</th>
+                            <th style="width:20%;">action</th>
+                          </tr>
+                          <tr>
+                            <td>Egide Kamuzinzi Nizerimana</td>
+                            <td><button type="button" class="btn btn-primary">Assign</button></td>
+                          </tr>
+                          <tr>
+                            <td>Esther Ayobami Aolenrewadju</td>
+                            <td><button type="button" class="btn btn-danger">Drop</button></td>
+                          </tr>
+                          <tr>
+                            <td>Michael Sambou</td>
+                            <td><button type="button" class="btn btn-primary">Assign</button></td>
+                          </tr>
+                          <tr>
+                            <td>Lechero Ghana</td>
+                            <td><button type="button" class="btn btn-danger">Drop</button></td>
+                          </tr>
+                          <tr>
+                            <td>Butterfly Nigeria</td>
+                            <td><button type="button" class="btn btn-primary">Assign</button></td>
+                          </tr>
+                          <tr>
+                            <td>Egidius Rwanda</td>
+                            <td><button type="button" class="btn btn-danger">Drop</button></td>
+                          </tr>
+                          <tr>
+                            <td>Ayoby Joshua</td>
+                            <td><button type="button" class="btn btn-primary">Assign</button></td>
+                          </tr>
+                          <tr>
+                            <td>Sambou Deborah</td>
+                            <td><button type="button" class="btn btn-primary">Assign</button></td>
+                          </tr>
+                          <tr>
+                            <td>Kamuzinzi Marie of Nazareth</td>
+                            <td><button type="button" class="btn btn-primary">Assign</button></td>
+                          </tr>
+                        </table>
+                      </div>
+                      <!--  -->
 
-<!-- Second Grid: Resent -->
-<div class="w3-panel w3-text-grey">
-<h4>List all Business Counselors</h4>
-</div>
+                    </div>
 
 
-<div style="width: 100%; display: table;">
-  <div style="display: table-row">
-    <div style="width: 600px; display: table-cell;">
-      <div class="input-group">
-        <input type="search" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."
-          title="Type in a name">
+                    <div class="col-6">
+                      <div class="card flex-fill">
+                        <div class="header">
+                          <h4>Counselors Assigned to Ayobami E.</h4>
+                        </div>
+                        <div>
+                          <table id="myTable">
+                            <tr>
+                              <td>Esther Ayobami Aolenrewadju</td>
+                            </tr>
+                            
+                            <tr>
+                              <td>Lechero Ghana</td>
+                            </tr>
+                            
+                            <tr>
+                              <td>Egidius Rwanda</td>
+                            </tr>
+                            
+                          </table>
+                        </div>
+                        
+                      </div>
+                      
+                    </div>
 
-      </div>
-      <table id="myTable">
-        <tr class="header">
-          <th style="width:80%;">Name</th>
-          <th style="width:20%;">action</th>
-        </tr>
-        <tr>
-          <td>Egide Kamuzinzi Nizerimana</td>
-          <td><button type="button" class="btn btn-dark">Assign</button></td>
-        </tr>
-        <tr>
-          <td>Esther Ayobami Aolenrewadju</td>
-          <td><button type="button" class="btn btn-dark">Assign</button></td>
-        </tr>
-        <tr>
-          <td>Michael Sambou</td>
-          <td><button type="button" class="btn btn-dark">Assign</button></td>
-        </tr>
-        <tr>
-          <td>Lechero Ghana</td>
-          <td><button type="button" class="btn btn-dark">Assign</button></td>
-        </tr>
-        <tr>
-          <td>Butterfly Nigeria</td>
-          <td><button type="button" class="btn btn-dark">Assign</button></td>
-        </tr>
-        <tr>
-          <td>Egidius Rwanda</td>
-          <td><button type="button" class="btn btn-dark">Assign</button></td>
-        </tr>
-        <tr>
-          <td>Ayoby Joshua</td>
-          <td><button type="button" class="btn btn-dark">Assign</button></td>
-        </tr>
-        <tr>
-          <td>Sambou Deborah</td>
-          <td><button type="button" class="btn btn-dark">Assign</button></td>
-        </tr>
-        <tr>
-          <td>Kamuzinzi Marie of Nazareth</td>
-          <td><button type="button" class="btn btn-dark">Assign</button></td>
-        </tr>
-      </table>
 
+                </div>
+            </div>
+            <div class="col-2"></div>
+        </div>
     </div>
+</body>
 
+</html>
+
+<style>
+  .page_header {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E8E9E9;
+  }
+  .btn-animated-y .btn-inner--hidden {
+    left: 0;
+    bottom: -150%;
+    -webkit-transition: bottom .3s ease 0s;
+    transition: bottom .3s ease 0s;
+}
+
+.btn-animated .btn-inner--hidden {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+</style>
 
 <script>
   function myFunction() {
@@ -99,63 +161,3 @@
     }
   }
 </script>
-    <div style="display: table-cell;">
-
-      <table id="myTable">
-        <tr class="header">
-          <th style="width:80%;">Members of the Group</th>
-        </tr>
-        <tr>
-          <td>Egide Kamuzinzi Nizerimana</td>
-        </tr>
-        <tr>
-          <td>Esther Ayobami Aolenrewadju</td>
-        </tr>
-        <tr>
-          <td>Michael Sambou</td>
-        </tr>
-        <tr>
-          <td>Lechero Ghana</td>
-        </tr>
-        <tr>
-          <td>Butterfly Nigeria</td>
-        </tr>
-        <tr>
-          <td>Egidius Rwanda</td>
-        </tr>
-        <tr>
-          <td>Ayoby Joshua</td>
-        </tr>
-        <tr>
-          <td>Sambou Deborah</td>
-        <tr>
-          <td>Kamuzinzi Marie of Nazareth</td>
-        </tr>
-      </table>
-    </div>
-  </div>
-</div>
-
-
-<script>
-  function myFunction1() {
-    var input, filter, table, tr, td, i, txtValue;
-    input = document.getElementById("leftTable");
-    filter = input.value.toUpperCase();
-    table = document.getElementById("myTable");
-    tr = table.getElementsByTagName("tr");
-    for (i = 0; i < tr.length; i++) {
-      td = tr[i].getElementsByTagName("td")[0];
-      if (td) {
-        txtValue = td.textContent || td.innerText;
-        if (txtValue.toUpperCase().indexOf(filter) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
-        }
-      }
-    }
-  }
-</script>
-</body>
-</html>
