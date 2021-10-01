@@ -48,6 +48,9 @@ urlpatterns = [
 
     re_path(r'^validate_input', views.validate_objects, name='validate_objects'),
     re_path(r'^users$', views.users, name='users'),
+
+    re_path(r'^resend_activation_email$', views.resend_activation_email, name='resend_activation_email'),
+
     
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

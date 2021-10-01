@@ -4,7 +4,7 @@ function Analyser(){
     this.delete_template = "<button title='Delete' class='%s btn btn-danger btn-sm' data-object_type='%s' data-action='delete' data-row-id='%s' data-toggle='modal' data-target='#confirmModal' ><i class='fa fa-trash-o'></i></button>";
     this.activate_template = "<button title='Deactivate' class='%s btn btn-%s btn-sm' data-object_type='%s' data-row-id='%s' data-toggle='modal' data-action='%s' data-target='#confirmModal'><i class='fa fa-power-off'></i></button>";
 
-    this.resend_link = "<button title='Resend Link' class='%s btn btn-success btn-sm' data-object_type='%s' data-row-id='%s' data-toggle='modal' data-action='%s' data-target='#confirmModal'><i class='fa fa-repeat'></i></button>";
+    this.resend_link = "<button title='Resend Link' class='%s btn btn-success btn-sm' data-row-id='%s' ><i class='fa fa-repeat'></i></button>";
 
     //<button type="button" class="btn btn-info btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
     // add the csrf token before ajax requests
@@ -69,9 +69,9 @@ Analyser.prototype.initiateSysUsers = function(event){
                 "data": "is_active",
                 "targets": 7, 
                 render: function ( data, type, row, meta ) {
-                    resend_link = sprintf(analyser.resend_link, 'resend_link', 'user', row.pk_id);
+                    resend_link = sprintf(analyser.resend_link, 'resend_link', row.pk_id);
 
-                    return row.is_active ? resend_link : 'No';
+                    return row.is_active ? 'Yes' : resend_link;
                 }
             },
             {
@@ -98,6 +98,28 @@ Analyser.prototype.initiateSysUsers = function(event){
     $('div.dataTables_filter input').addClass('form-control-clean')
     MicroModal.init();
     analyser.initiateActionButtons('newUser');
+
+    $(document).on('click', '.resend_link', function(e) {
+        //console.log(e.target)
+        //alert("heyy")
+        var button = e.target;
+        
+        if(button != undefined){
+            
+            ajax_data = {'object_id': $(button).data('row-id')};
+            $.ajax({
+                type: "POST", url: '/resend_activation_email', dataType: 'json', data:ajax_data,
+                error: analyser.communicationError,
+                success: function (data) {
+                    if(!data.error) {
+                        $.notify({message: data.message}, {type: 'success'});
+                    } else {
+                        $.notify({message: data.message}, {type: 'danger'});
+                    }
+                }
+            });
+        }
+    })
 
     // bind confirm_save button
     $('#confirm_save').on('click', function(){
