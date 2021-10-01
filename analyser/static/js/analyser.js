@@ -103,7 +103,7 @@ Analyser.prototype.initiateSysUsers = function(event){
         //console.log(e.target)
         //alert("heyy")
         var button = e.target;
-        console.log(button)
+        
         if(button != undefined){
             
             ajax_data = {'object_id': $(button).data('row-id')};
@@ -111,7 +111,11 @@ Analyser.prototype.initiateSysUsers = function(event){
                 type: "POST", url: '/resend_activation_email', dataType: 'json', data:ajax_data,
                 error: analyser.communicationError,
                 success: function (data) {
-                    console.log(data)
+                    if(!data.error) {
+                        $.notify({message: data.message}, {type: 'success'});
+                    } else {
+                        $.notify({message: data.message}, {type: 'danger'});
+                    }
                 }
             });
         }
