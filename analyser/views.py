@@ -856,7 +856,7 @@ def resend_activation_email(request):
 
         # send an email to this user
         notify = Notification()
-        uid = user.id #urlsafe_base64_encode(force_bytes(user.id))
+        uid = urlsafe_base64_encode(force_bytes(user.id))
         current_site = get_current_site(request)
 
 
