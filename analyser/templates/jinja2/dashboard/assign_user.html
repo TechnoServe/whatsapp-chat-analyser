@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<title>Assign a user</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<body class="w3-content" style="max-width:1200px">
+
+<div class="w3-panel">
+  <!-- <i class="w3-xlarge fa fa-bars"></i> -->
+</div>
+<!-- First Grid: Logo & About -->
+<div class="w3-row">
+<div class="w3-half w3-container w3-xlarge w3-text-grey">
+  <p class="">
+    Use this page to assign a Business Counselor to Business Advisor.
+  </p>
+</div>
+</div>
+
+<!-- Second Grid: Resent -->
+<div class="w3-panel w3-text-grey">
+<h4>List all Business Counselors</h4>
+</div>
+
+
+<div style="width: 100%; display: table;">
+  <div style="display: table-row">
+    <div style="width: 600px; display: table-cell;">
+      <div class="input-group">
+        <input type="search" id="myInput" onkeyup="myFunction()" placeholder="Search for names.."
+          title="Type in a name">
+
+      </div>
+      <table id="myTable">
+        <tr class="header">
+          <th style="width:80%;">Name</th>
+          <th style="width:20%;">action</th>
+        </tr>
+        <tr>
+          <td>Egide Kamuzinzi Nizerimana</td>
+          <td><button type="button" class="btn btn-dark">Assign</button></td>
+        </tr>
+        <tr>
+          <td>Esther Ayobami Aolenrewadju</td>
+          <td><button type="button" class="btn btn-dark">Assign</button></td>
+        </tr>
+        <tr>
+          <td>Michael Sambou</td>
+          <td><button type="button" class="btn btn-dark">Assign</button></td>
+        </tr>
+        <tr>
+          <td>Lechero Ghana</td>
+          <td><button type="button" class="btn btn-dark">Assign</button></td>
+        </tr>
+        <tr>
+          <td>Butterfly Nigeria</td>
+          <td><button type="button" class="btn btn-dark">Assign</button></td>
+        </tr>
+        <tr>
+          <td>Egidius Rwanda</td>
+          <td><button type="button" class="btn btn-dark">Assign</button></td>
+        </tr>
+        <tr>
+          <td>Ayoby Joshua</td>
+          <td><button type="button" class="btn btn-dark">Assign</button></td>
+        </tr>
+        <tr>
+          <td>Sambou Deborah</td>
+          <td><button type="button" class="btn btn-dark">Assign</button></td>
+        </tr>
+        <tr>
+          <td>Kamuzinzi Marie of Nazareth</td>
+          <td><button type="button" class="btn btn-dark">Assign</button></td>
+        </tr>
+      </table>
+
+    </div>
+
+
+<script>
+  function myFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+    <div style="display: table-cell;">
+
+      <table id="myTable">
+        <tr class="header">
+          <th style="width:80%;">Members of the Group</th>
+        </tr>
+        <tr>
+          <td>Egide Kamuzinzi Nizerimana</td>
+        </tr>
+        <tr>
+          <td>Esther Ayobami Aolenrewadju</td>
+        </tr>
+        <tr>
+          <td>Michael Sambou</td>
+        </tr>
+        <tr>
+          <td>Lechero Ghana</td>
+        </tr>
+        <tr>
+          <td>Butterfly Nigeria</td>
+        </tr>
+        <tr>
+          <td>Egidius Rwanda</td>
+        </tr>
+        <tr>
+          <td>Ayoby Joshua</td>
+        </tr>
+        <tr>
+          <td>Sambou Deborah</td>
+        <tr>
+          <td>Kamuzinzi Marie of Nazareth</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  function myFunction1() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("leftTable");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+</body>
+</html>
