@@ -92,7 +92,7 @@ def validate_user_access(request, data_type):
         'users': ['admins']
     }
     try:
-        if request.session['cu_issuperuser'] or request.session['cu_designation_id'] == 'system_admin' or request.session['cu_designation_id'] == 'business_counselor' or request.session['cu_designation_id'] == 'business_advisor' or request.session['cu_designation_id'] == 'program_manager': return True
+        if request.session['cu_issuperuser'] or request.session['cu_designation_id'] == 'system_admin' or request.session['cu_designation_id'] == 'business_counselor' or request.session['cu_designation_id'] == 'business_analyst' or request.session['cu_designation_id'] == 'program_manager': return True
         if request.session['cu_designation_id'] in access_rights[data_type]: return True
 
         raise Exception('Sorry you dont have rights to access the current resource')
@@ -198,7 +198,7 @@ def login_page(request, *args, **kwargs):
                 login(request, user)
                 if user.designation == "business_counselor":
                     return redirect('/dashboard.bc', request=request)
-                elif user.designation == "business_advisor":
+                elif user.designation == "business_analyst":
                     return redirect('/dashboard.ba', request=request)
                 elif user.designation == "program_manager":
                     return redirect('/dashboard.pm', request=request)
@@ -619,7 +619,7 @@ def list_exported_files(request):
 
 
 @login_required(login_url='/login')
-@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin' or u.designation == 'business_counselor' or u.designation == 'business_advisor' or u.designation == 'program_manager', login_url='/dashboard')
+@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin' or u.designation == 'business_counselor' or u.designation == 'business_analyst' or u.designation == 'program_manager', login_url='/dashboard')
 def show_group_stats(request, uid):
     
     try:
@@ -646,7 +646,7 @@ def show_group_stats(request, uid):
 
 
 @login_required(login_url='/login')
-@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin' or u.designation == 'business_counselor' or u.designation == 'business_advisor' or u.designation == 'program_manager', login_url='/dashboard')
+@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin' or u.designation == 'business_counselor' or u.designation == 'business_analyst' or u.designation == 'program_manager', login_url='/dashboard')
 def show_user_stats(request, gid, user_):
     
     try:
@@ -671,7 +671,7 @@ def show_user_stats(request, gid, user_):
         return dashboard(request, error=True, message='%s. Please contact the system administrator' % mssg)
 
 @login_required(login_url='/login')
-@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin' or u.designation == 'business_counselor' or u.designation == 'business_advisor' or u.designation == 'program_manager', login_url='/dashboard')
+@user_passes_test(lambda u: u.is_superuser or u.designation == 'data_manager' or u.designation == 'system_admin' or u.designation == 'business_counselor' or u.designation == 'business_analyst' or u.designation == 'program_manager', login_url='/dashboard')
 def global_search(request):
     
     try:
