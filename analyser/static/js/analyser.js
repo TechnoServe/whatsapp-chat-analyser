@@ -85,7 +85,7 @@ Analyser.prototype.initiateSysUsers = function(event){
                         row.is_active ? 'deactivate_user' : 'activate_user',
                         row.is_active ? 'secondary' : 'success',
                         'user',
-                        row.pk_id,
+                        row.pk_id, 
                         row.is_active ? 'deactivate' : 'activate',
                         row.is_active ? 'Deactivate' : 'Activate'
                     )
