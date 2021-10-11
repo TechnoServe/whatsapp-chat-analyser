@@ -32,8 +32,12 @@ from analyser.common_tasks import Notification, Terminal
 from analyser.analyser import Analyser
 from analyser.serializers import PersonnelSerializer, WhatsAppGroupSerializer, WhatsAppChatFileSerializer, UserDailyStatsSerializer
 
+# Import UserManagement 
+from analyser.chat.UserManagement import UserManagement
+
 terminal = Terminal()
 sentry_sdk.init(settings.SENTRY_DSN)
+manageUser = UserManagement()
 
 cur_user_email = None
 my_hashids = Hashids(min_length=5, salt=settings.SECRET_KEY)
@@ -46,9 +50,45 @@ def counselor_assignment(request):
     params = {'s_date': ''}
     params['page_title'] = 'System Users'
     params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
+    params['advisors'] = manageUser.getAllAdvisors()
     
     return render(request, 'dashboard/counselor_assignment.html', params)
 
+@login_required(login_url='/login')
+def ajax_search_user_by_role(request):
+    data = manageUser.searchPersonnelByRole(request.POST.get('keyword'), request.POST.get('role'))
+    return JsonResponse(data, status=200, safe=False)
+
+@login_required(login_url='/login')
+def ajax_counselors_assigned_to_advisor(request):
+    pk_id = my_hashids.decode(request.POST.get('advisor_id'))[0]
+    user = User.objects.filter(id=pk_id).get()
+    
+    data = manageUser.getCounselorsAssignedToAdvisors(user)
+    return JsonResponse(data, status=200, safe=False)
+
+@login_required(login_url='/login')
+def ajax_assign_counselor_to_advisor(request):
+    pk_id_advisor = my_hashids.decode(request.POST.get('advisor_id'))[0]
+    pk_id_counselor = my_hashids.decode(request.POST.get('counselor_id'))[0]
+
+    advisor = User.objects.filter(id=pk_id_advisor).get()
+    counselor = User.objects.filter(id=pk_id_counselor).get()
+
+    data = manageUser.assignCounselorToAdvisor(counselor, advisor)
+    return JsonResponse(data, status=200, safe=False)
+    
+
+@login_required(login_url='/login')
+def ajax_drop_counselor_assigned_to_advisor(request):
+    pk_id_advisor = my_hashids.decode(request.POST.get('advisor_id'))[0]
+    pk_id_counselor = my_hashids.decode(request.POST.get('counselor_id'))[0]
+
+    advisor = User.objects.filter(id=pk_id_advisor).get()
+    counselor = User.objects.filter(id=pk_id_counselor).get()
+
+    data = manageUser.dropCounselorAssignedToAdvisor(counselor, advisor)
+    return JsonResponse(data, status=200, safe=False)
 
 def get_basic_info(request):
     csrf_token = get_or_create_csrf_token(request)
@@ -146,4 +186,3 @@ def determine_user_links(request):
             allowed_links.append(link)
 
     request.session['nav_links'] = allowed_links
-
