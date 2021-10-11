@@ -1,0 +1,114 @@
+{% extends "base_dashboard.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ static('node_modules/material-design-lite/material.min.css') }}" />
+<link rel="stylesheet" href="{{ static('node_modules/parsleyjs/src/parsley.css') }}" />
+<link rel="stylesheet" href="{{ static('node_modules/font-awesome/css/font-awesome.min.css') }}">
+
+<link rel="stylesheet" href="{{ static('css/data_table.css') }}">
+{% endblock %}
+
+{% block main_content %}
+
+<!-- section header -->
+<div class="bg-white rounded clearfix p-3 mb-4">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-sublime fs--13 pb-2">
+            <li class="breadcrumb-item active" aria-current="page">
+                ASSIGN COUNSELORS TO ADVISORS
+            </li>
+
+        </ol>
+    </nav>
+
+</div>
+<!-- /section header -->
+
+<div class="app-main__inner">
+    <div class="row">
+        <!-- Advisor Select Box -->
+        <div class="col-lg-4 col-md-4">
+            <select class="form-control">
+                <option value="">---Select Business Advisor--</option>
+                <option value="">Mike</option>
+                <option value="">Hello</option>
+            </select>
+        </div>
+
+        <div class="col-lg-4 col-md-4">
+            <div class="input-group input-group-transparent">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span>
+                </div>
+                <input id="myInput" type="text" onkeyup="myFunction()" class="form-control"
+                    placeholder="Search Business Counselors">
+            </div>
+            <br>
+            <div class="card">
+                
+                <!-- <div class="card-header">BAs</div> -->
+
+                <li class="list-group-item d-flex justify-content-between">
+                    Alexis Helper
+                    <button class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></button>
+                </li>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-4">
+            <div class="card">
+                
+                <div class="card-header">Counselors Assigned to </div>
+
+                <div>
+                    <li class="list-group-item d-flex justify-content-between ">
+                        Mary Aboagye
+                        <button class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between ">
+                        Mary Aboagye
+                        <button class="btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}
+
+{% block modals %}
+
+
+{% endblock %}
+
+{% block javascript %}
+<script type='text/javascript' src="{{ static('plugins/datatables/datatables.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/material-design-lite/material.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/parsleyjs/dist/parsley.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/micromodal/dist/micromodal.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/jquery-form/dist/jquery.form.min.js') }}"></script>
+<script type='text/javascript'
+    src="{{ static('node_modules/jquery-validation/dist/jquery.validate.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/bootstrap-notify/bootstrap-notify.js') }}"></script>
+
+<script>
+    $(document).ready(function () {
+
+        // add regex validation
+        $.validator.addMethod(
+            "regex",
+            function (value, element, regexp) {
+                var re = new RegExp(regexp);
+                return this.optional(element) || re.test(value);
+            },
+            "Please check your input."
+        );
+        analyser.initiatePages();
+    });
+
+
+</script>
+
+{% endblock %}

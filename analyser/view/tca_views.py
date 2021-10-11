@@ -117,6 +117,12 @@ def determine_user_links(request):
             {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/engaged_users', 'link_title': 'Enagaged Users', 'allowed_users': ['data_manager', 'system_admin'] }
         ]},
         {
+        'type': 'link', 'href': '#', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Manage', 'allowed_users': ['data_manager', 'system_admin'], 
+        'items': [
+            {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/counselor_assignment', 'link_title': 'Counselor Assignment', 'allowed_users': ['data_manager', 'system_admin'] },
+            {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/advisor_assignment', 'link_title': 'Advisor Assignment', 'allowed_users': ['data_manager', 'system_admin'] }
+        ]},
+        {
         'type': 'link', 'href': '#', 'icon': '<i class="fi fi-layers-middle"></i>', 'link_title': 'Admin Section', 'allowed_users': ['data_manager', 'system_admin'], 
         'items': [
             {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/users', 'link_title': 'System Users', 'allowed_users': ['data_manager', 'system_admin'] },
