@@ -20,7 +20,7 @@ PERSONNEL_DESIGNATION_CHOICES = (
     ('data_manager', 'Data Manager'),
     ('system_admin', 'System Administrator'),
     ('business_counselor', 'Business Counselor'),
-    ('business_analyst', 'Business Analyst'),
+    ('business_advisor', 'Business Advisor'),
     ('program_manager', 'Program Manager'),
 )
 
@@ -123,3 +123,23 @@ class MessageLog(TimeModel):
     datetime_sent = models.DateTimeField(auto_now_add=False, null=False, blank=False)
     message = models.CharField(max_length=10000, null=False, blank=False)
 
+
+"""
+    This model allows for the assignment of Business Counselors to Business Advisors
+"""
+class CounselorAdvisorAssignment(models.Model):
+    class Meta:
+        unique_together = (('counselor', 'advisor'),)
+
+    counselor = models.ForeignKey(Personnel, on_delete=models.PROTECT, null=False, blank=False, related_name='r_counselor_advisor')
+    advisor = models.ForeignKey(Personnel, on_delete=models.PROTECT, null=False, blank=False, related_name='r_advisor_counselor')
+
+"""
+    This model allows for the assignment of Business Advisors to Program Managers
+"""
+class AdvisorManagerAssignment(models.Model):
+    class Meta:
+        unique_together = (('manager', 'advisor'),)
+    
+    advisor = models.ForeignKey(Personnel, on_delete=models.PROTECT, null=False, blank=False, related_name='r_advisor_manage')
+    manager = models.ForeignKey(Personnel, on_delete=models.PROTECT, null=False, blank=False, related_name='r_manager_advisor')
