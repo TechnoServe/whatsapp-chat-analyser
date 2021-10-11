@@ -68,11 +68,13 @@ class UserDailyStatsSerializer(BaseSerializer):
         depth = 1
 
 class CounselorAdvisorAssignmentSerializer(BaseSerializer):
+    counselor = PersonnelSerializer()
     class Meta:
         model = CounselorAdvisorAssignment
         fields = ['advisor', 'counselor']
 
 class AdvisorManagerAssignmentSerializer(BaseSerializer):
+    advisor = PersonnelSerializer()
     class Meta:
         model = AdvisorManagerAssignment
         fields = ['advisor', 'manager']
