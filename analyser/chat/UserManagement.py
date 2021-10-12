@@ -30,13 +30,13 @@ class UserManagement:
 
         return True
     
-    def getCounselorsAssignedToAdvisors(self, advisor):
+    def getCounselorsAssignedToAdvisor(self, advisor):
         qs = CounselorAdvisorAssignment.objects.filter(advisor=advisor)
         results = CounselorAdvisorAssignmentSerializer(qs, many=True)
 
         return results.data
 
-    def getAdvisorsAssignedToManagers(self, manager_username):
+    def getAdvisorsAssignedToManager(self, manager_username):
         manager = Personnel.objects.get(Q(username=manager_username))
 
         qs = AdvisorManagerAssignment.objects.filter(advisor=advisor)

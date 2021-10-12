@@ -48,11 +48,24 @@ User = get_user_model()
 def counselor_assignment(request):
     params = get_basic_info(request)
     params = {'s_date': ''}
-    params['page_title'] = 'System Users'
+    params['page_title'] = 'Counselor Assignment'
     params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
     params['advisors'] = manageUser.getAllAdvisors()
     
     return render(request, 'dashboard/counselor_assignment.html', params)
+
+@login_required(login_url='/login')
+def assigned_counselors(request):
+    params = get_basic_info(request)
+    params = {'s_date': ''}
+    params['page_title'] = 'Assigned Counselors'
+    params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
+    params['cur_user'] = request.user
+
+    
+    data = manageUser.getCounselorsAssignedToAdvisor(request.user)
+    params['assigned'] = data
+    return render(request, 'dashboard/assigned_counselors.html', params)
 
 @login_required(login_url='/login')
 def ajax_search_user_by_role(request):
@@ -64,7 +77,7 @@ def ajax_counselors_assigned_to_advisor(request):
     pk_id = my_hashids.decode(request.POST.get('advisor_id'))[0]
     user = User.objects.filter(id=pk_id).get()
     
-    data = manageUser.getCounselorsAssignedToAdvisors(user)
+    data = manageUser.getCounselorsAssignedToAdvisor(user)
     return JsonResponse(data, status=200, safe=False)
 
 @login_required(login_url='/login')
