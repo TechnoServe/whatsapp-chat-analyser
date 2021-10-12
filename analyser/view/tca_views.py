@@ -117,6 +117,13 @@ def determine_user_links(request):
             {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/engaged_users', 'link_title': 'Enagaged Users', 'allowed_users': ['data_manager', 'system_admin'] }
         ]},
         {
+        'type': 'link', 'href': '#', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Manage', 'allowed_users': ['data_manager', 'system_admin'], 
+        'items': [
+            {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/counselor_assignment', 'link_title': 'Counselor Assignment', 'allowed_users': ['data_manager', 'system_admin'] },
+            {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/advisor_assignment', 'link_title': 'Advisor Assignment', 'allowed_users': ['data_manager', 'system_admin'] }
+        ]},
+        {'type': 'link', 'href': '/assigned_counselors', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Assigned Counselors', 'allowed_users': ['business_advisor']}, 
+        {
         'type': 'link', 'href': '#', 'icon': '<i class="fi fi-layers-middle"></i>', 'link_title': 'Admin Section', 'allowed_users': ['data_manager', 'system_admin'], 
         'items': [
             {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/users', 'link_title': 'System Users', 'allowed_users': ['data_manager', 'system_admin'] },
@@ -858,8 +865,6 @@ def resend_activation_email(request):
         uid = urlsafe_base64_encode(force_bytes(user.id))
         current_site = get_current_site(request)
 
-
-        terminal.tprint('###########################in resend', 'debug')
         #terminal.tprint(uid, 'debug')
 
         email_settings = {

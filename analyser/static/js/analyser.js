@@ -38,6 +38,7 @@ Analyser.prototype.initiatePages = function(){
     else if(window.location.pathname.split('/')[1] == 'user_stats') this.initiateUserStats();
     else if(window.location.pathname == '/files_repo') this.initiateFilesRepo();
     else if(window.location.pathname == '/users') analyser.initiateSysUsers();
+    //else if(window.location.pathname == '/counselor_assignment') analyser.initiateSysUsers();
 };
 
 Analyser.prototype.initiateSysUsers = function(event){

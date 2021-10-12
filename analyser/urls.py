@@ -51,6 +51,17 @@ urlpatterns = [
 
     re_path(r'^resend_activation_email$', views.resend_activation_email, name='resend_activation_email'),
 
+    re_path(r'^counselor_assignment$', views.counselor_assignment, name='counselor_assignment'),
+    re_path(r'^ajax_search_user_by_role$', views.ajax_search_user_by_role, name='ajax_search_user_by_role'),
+    re_path(r'^ajax_counselors_assigned_to_advisor$', views.ajax_counselors_assigned_to_advisor, name='ajax_counselors_assigned_to_advisor'),
+    re_path(r'^ajax_assign_counselor_to_advisor$', views.ajax_assign_counselor_to_advisor, name='ajax_assign_counselor_to_advisor'),
+    re_path(r'^ajax_drop_counselor_assigned_to_advisor$', views.ajax_drop_counselor_assigned_to_advisor, name='ajax_drop_counselor_assigned_to_advisor'),
+
+    re_path(r'^assigned_counselors$', views.assigned_counselors, name='assigned_counselors'),
+
+
+
+    
     
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
