@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html>
+<title>chat window</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="main.css" type="text/css">
+
+<body>
+    
+        <!-- <header id="header" class="d-flex align-items-center rounded-top">
+
+            <!-- NAVBAR -->
+            <div class="container-fluid position-relative">
+
+                <nav class="navbar navbar-expand-lg navbar-light justify-content-lg-between justify-content-md-inherit h--70">
+
+                    <div class="align-items-start">
+                        
+                        <!-- 
+                            sidebar toggler 
+                        -->
+                        <a href="#aside-main" class="btn-sidebar-toggle h-100 d-inline-block d-lg-none justify-content-center align-items-center p-2">
+                            <span class="group-icon">
+                                <i>
+                                    <svg width="25" viewBox="0 0 20 20">
+                                        <path d="M 19.9876 1.998 L -0.0108 1.998 L -0.0108 -0.0019 L 19.9876 -0.0019 L 19.9876 1.998 Z"></path>
+                                        <path d="M 19.9876 7.9979 L -0.0108 7.9979 L -0.0108 5.9979 L 19.9876 5.9979 L 19.9876 7.9979 Z"></path>
+                                        <path d="M 19.9876 13.9977 L -0.0108 13.9977 L -0.0108 11.9978 L 19.9876 11.9978 L 19.9876 13.9977 Z"></path>
+                                        <path d="M 19.9876 19.9976 L -0.0108 19.9976 L -0.0108 17.9976 L 19.9876 17.9976 L 19.9876 19.9976 Z"></path>
+                                    </svg>
+                                </i>
+
+                                <i>
+                                    <svg width="25" viewBox="0 0 47.971 47.971">
+                                        <path d="M28.228,23.986L47.092,5.122c1.172-1.171,1.172-3.071,0-4.242c-1.172-1.172-3.07-1.172-4.242,0L23.986,19.744L5.121,0.88c-1.172-1.172-3.07-1.172-4.242,0c-1.172,1.171-1.172,3.071,0,4.242l18.865,18.864L0.879,42.85c-1.172,1.171-1.172,3.071,0,4.242C1.465,47.677,2.233,47.97,3,47.97s1.535-0.293,2.121-0.879l18.865-18.864L42.85,47.091c0.586,0.586,1.354,0.879,2.121,0.879s1.535-0.293,2.121-0.879c1.172-1.171,1.172-3.071,0-4.242L28.228,23.986z"></path>
+                                    </svg>
+                                </i>
+                            </span>
+                        </a>
+
+
+                        <!-- 
+                            Logo : height: 60px max
+                            visibility : mobile only
+                        -->
+                        <a class="navbar-brand d-inline-block d-lg-none" href="/dashboard">
+                            <img src="/static/images/tafiti_logo.png" alt="..." width="110" height="60">
+                        </a>
+
+                    </div>
+
+
+                    <!-- NAVIGATION -->
+                    <div class="collapse navbar-collapse" id="navbarMainNav">
+
+                        <!-- MOBILE MENU NAVBAR -->
+                        <div class="navbar-xs d-none">
+
+                            <!-- mobile menu button : close -->
+                            <button class="navbar-toggler pt-0" type="button" data-toggle="collapse" data-target="#navbarMainNav" aria-controls="navbarMainNav" aria-expanded="false" aria-label="Toggle navigation">
+                                <svg width="20" viewBox="0 0 20 20">
+                                    <path d="M 20.7895 0.977 L 19.3752 -0.4364 L 10.081 8.8522 L 0.7869 -0.4364 L -0.6274 0.977 L 8.6668 10.2656 L -0.6274 19.5542 L 0.7869 20.9676 L 10.081 11.679 L 19.3752 20.9676 L 20.7895 19.5542 L 11.4953 10.2656 L 20.7895 0.977 Z"></path>
+                                </svg>
+                            </button>
+
+                            <!-- 
+                                Optional Mobile Menu Logo 
+                                Logo : height: 70px max
+                            -->
+                            <a class="navbar-brand" href="/dashboard">
+                                <img src="/static/images/tafiti_logo.png" alt="..." width="110" height="70">
+                            </a>
+
+                        </div>
+                        <!-- /MOBILE MENU NAVBAR -->
+
+                        <!-- PAGE TITLE -->
+                        <div class="search__container">
+                            <input id="global_search" class="search__input" type="text" placeholder="Search for users or groups" autocomplete="off">
+                            <input name="analysis_range" value="" class="range__input pull-right" type="text" placeholder="Range">
+                            <!-- We can add the date pickers here -->
+                        </div>
+
+                        <ul class="navbar-nav align-items-center">
+                            <div class="page-title bg-transparent b-0">
+                                
+                            </div>
+                        </ul>
+                        <!-- PAGE TITLE -->
+
+                    </div>
+                    <!-- /NAVIGATION -->
+
+
+                    <!-- OPTIONS -->
+                    <ul class="list-inline list-unstyled mb-0 d-flex align-items-end">
+
+                        <!-- account -->
+                        <li class="list-inline-item ml--6 mr--6 dropdown">
+
+                            <a href="#" id="dropdownAccountOptions" class="btn btn-light dropdown-toggle btn-pill pl--12 pr--12" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+                                
+                                <span class="group-icon m-0">
+                                    <!-- <i class="fi fi-user-female"></i> -->
+                                    <i class="fi w--15 fi-user-male"></i>
+                                    <i class="fi w--15 fi-close"></i>
+                                </span>
+
+                                <span class="fs--14 d-none d-sm-inline-block font-weight-medium"> </span>
+                            </a>
+
+                        </li>
+
+                    </ul>
+                    <!-- /OPTIONS -->
+
+                </nav>
+
+                <!-- TOP NAVIGATION TOGGLER -->
+                <button class="navbar-toggler h-auto w-auto m-0 btn btn-sm bg-white rounded-circle position-absolute end-0 mt-1 mb-1 ml-2 mr-2 z-index-2 d-none d-inline-block d-lg-none" type="button" data-toggle="collapse" data-target="#navbarMainNav" aria-controls="navbarMainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="fi fi-bars"></i>
+                </button>
+                <!-- /TOP NAVIGATION TOGGLER -->
+
+            </div>
+            <!-- /NAVBAR -->
+        </header> 
+
+
+        <div id="wrapper_content" class="d-flex flex-fill">
+
+            <!-- SIDEBAR -->
+            <aside id="aside-main" class="aside-start aside-primary bg-gradient-dark font-weight-dark aside-hide-xs d-flex align-items-stretch justify-content-lg-between align-items-start flex-column">
+
+                <!-- 
+                    LOGO 
+                    visibility : desktop only
+                -->
+                <div class="align-self-baseline w-100">
+                    <div class="clearfix d-flex justify-content-between bg-secondary">
+
+                        <!-- Logo : height: 60px max -->
+                        <a class="w-100 align-self-center navbar-brand px-3" href="/dashboard">
+                            <img src="/static/images/tafiti_logo.png" alt="Dashboard" width="230" height="auto">
+                        </a>
+
+                    </div>
+                </div>
+                <!-- /LOGO -->
+
+
+                <div class="aside-wrapper scrollable-vertical scrollable-styled-light align-self-baseline h-100 w-100">
+
+                    <nav class="nav-deep badili-nav nav-deep-dark nav-deep-hover fs--15">
+                        <ul class="nav flex-column">
+                            
+                            
+                                
+                                    <li class="nav-item ">
+                                        <a class="nav-link js-ajax" href="#"><i class="fi fi-orbit"></i> Reports</a>
+                                        
+                                            <ul class="nav flex-column">
+                                            
+                                                <li class="nav-item ">
+                                                    <a class="nav-link js-ajax" href="/groups">WhatsApp Groups</a>
+                                                </li>
+                                            
+                                                <li class="nav-item ">
+                                                    <a class="nav-link js-ajax" href="/engaged_users">Enagaged Users</a>
+                                                </li>
+                                            
+                                            </ul>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li class="nav-item ">
+                                        <a class="nav-link js-ajax" href="#"><i class="fi fi-users"></i> Manage</a>
+                                        
+                                            <ul class="nav flex-column">
+                                            
+                                                <li class="nav-item ">
+                                                    <a class="nav-link js-ajax" href="/counselor_assignment">Counselor Assignment</a>
+                                                </li>
+                                            
+                                                <li class="nav-item ">
+                                                    <a class="nav-link js-ajax" href="/advisor_assignment">Advisor Assignment</a>
+                                                </li>
+                                            
+                                            </ul>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li class="nav-item ">
+                                        <a class="nav-link js-ajax" href="/assigned_counselors"><i class="fi fi-users"></i> Assigned Counselors</a>
+                                        
+                                    </li>
+                                
+                            
+                                
+                                    <li class="nav-item ">
+                                        <a class="nav-link js-ajax" href="#"><i class="fi fi-layers-middle"></i> Admin Section</a>
+                                        
+                                            <ul class="nav flex-column">
+                                            
+                                                <li class="nav-item ">
+                                                    <a class="nav-link js-ajax" href="/users">System Users</a>
+                                                </li>
+                                            
+                                                <li class="nav-item ">
+                                                    <a class="nav-link js-ajax" href="/files_repo">Exported Files</a>
+                                                </li>
+                                            
+                                            </ul>
+                                        
+                                    </li>
+                                
+                            
+
+                            <li class="nav-title mt-5">
+                                <h6 class="fs--15 mb-1 text-white font-weight-normal">
+                                    <a class="nav-link js-ajax" href="/logout">
+                                        <i class="fi fi-exit"></i>
+                                        Logout
+                                    </a>
+                                </h6>
+                            </li>
+
+                        </ul>
+                    </nav>
+
+                </div>
+
+            </aside>
+            <!-- END OF SIDEBAR -->
+
+            <!-- MIDDLE -->
+            <div id="middle" class="flex-fill">
+                
+
+<!-- section header -->
+<div class="bg-white rounded clearfix p-3 mb-4">
+    <h5 class="title">
+        <span class=""><i class="fi fi-layers"></i></span>&nbsp;&nbsp;<span class="text-primary">Technoserve Team</span> Analysis
+    </h5>
+    <!-- <small class="d-block text-muted fs--14">03/09/2021 - 15/09/2021</small> -->
+
+    
+        <!-- <div class="portlet-header border-bottom text-primary">
+        No records were found in the specified time period 14/07/2021 - 13/08/2021. The last chat date is 15/09/2021. Showing analysis for the period 03/09/2021 - 15/09/2021
+        </div> -->
+    
+</div>
+
+<!-- /section header -->
+
+<div class="app-main__inner">
+    <div class="row gutters-sm">
+
+        <!-- COLUMN 1 -->
+        <!-- <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-4">
+            <div class="tns_card">
+                <span class="tns_card_title">Most Active Day</span>
+                <div class="d-flex">
+                    <img src="/static/images/tag.svg" alt="tag" class="tag">
+                    <span class="tns_tag_value">13/09/2021, Monday</span>
+                </div>
+            </div>
+            <div class="tns_card">
+                <span class="tns_card_title">Attrition Level</span>
+                <div class="row">
+                    <div class="col-5">
+                        <div class="d-flex text-center">
+                            <div id="attrition" class="gauge-container red" style="height:auto;"><svg viewBox="0 0 100 100" class="gauge"><path class="dial" fill="none" stroke="#eee" stroke-width="2" d="M 50 10 A 40 40 0 1 1 49.999 10"></path><text x="50" y="50" fill="#999" class="value-text" font-size="100%" font-family="sans-serif" font-weight="normal" text-anchor="middle" alignment-baseline="middle" dominant-baseline="central">0%</text><path class="value" fill="none" stroke="#666" stroke-width="2.5" d="M 50 10 A 40 40 0 0 1 50 10"></path></svg></div>
+                        </div>
+                    </div>
+                    <div class="col-7 pl-0 pt-4">
+                        <div class="row mt-4">
+                            <div class="col-3">
+                                <button type="button" class="btn rounded-circle btn-danger btn-soft mb-2"><i class="fi fi-arrow-down"></i></button>
+                            </div>
+                            <div class="col-9 pt-3">
+                                <span class="tns_tag_value">0</span>
+                                <span class="tns_tag_value">Left Users</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tns_card">
+                <span class="tns_card_title">Joining Level</span>
+                <div class="row">
+                    <div class="col-5">
+                        <div class="d-flex text-center">
+                            <div id="joining" class="gauge-container green" style="height:auto;"><svg viewBox="0 0 100 100" class="gauge"><path class="dial" fill="none" stroke="#eee" stroke-width="2" d="M 50 10 A 40 40 0 1 1 49.999 10"></path><text x="50" y="50" fill="#999" class="value-text" font-size="100%" font-family="sans-serif" font-weight="normal" text-anchor="middle" alignment-baseline="middle" dominant-baseline="central">100%</text><path class="value" fill="none" stroke="#666" stroke-width="2.5" d="M 50 10 A 40 40 0 1 1 49.999 10"></path></svg></div>
+                        </div>
+                    </div>
+                    <div class="col-7 pl-0 pt-4">
+                        <div class="row mt-4">
+                            <div class="col-3">
+                                <button type="button" class="btn rounded-circle btn-success btn-soft mb-2"><i class="fi fi-arrow-up"></i></button>
+                            </div>
+                            <div class="col-9 pt-3">
+                                <span class="tns_tag_value">1</span>
+                                <span class="tns_tag_value">New Users</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tns_card">
+                <span class="tns_card_title">Group Name Changes</span>
+                <ul id="group_names" class="pl-0">
+                    
+                </ul>
+            </div>
+        </div> -->
+        <!-- END OF COLUMN 1 -->
+
+        <!-- COLUMN 2 -->
+        <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-3">
+    <div class="chat_window body">
+        <div class="chat-header">
+            <div class="user">
+                <img src="/home/egide/Downloads/istockphoto-1136653100-170667a.jpg" alt="Technorserver">
+                <p></p>
+                <div class="chat-about">
+                    <div class="chat-with">Technorserver WhatsApp Group</div>
+                    <div class="chat-num-messages">12 messages</div>
+                </div>
+            </div>
+            <!-- <div class="setting">
+                <a href="javascript:void(0);" class="btn"><i class="fa fa-gear"></i></a>
+            </div> -->
+        </div>
+        <hr>
+        <ul class="chat-history">
+            <li class="clearfix">
+                <div class="status online message-data text-right">
+                    <span class="name">Egide</span>
+                    <i class="fa fa-circle me"></i>
+                </div>
+                <div class="message other-message float-right">
+                    Hi Esther, how are you? How is the project coming along?
+                    <span class="time">10:10 AM, Today</span>
+                </div>
+            </li>
+            <li>
+                <div class="status message-data">
+                    <span class="name">Esther</span>
+                </div>
+                <div class="message my-message">
+                    <p>Are we meeting today? Project has been already finished and I have results to show you.</p>
+                    <div class="attachment">
+                        <a href="javascript:void(0);"><img src="assets/images/image-gallery/2.jpg" alt=""
+                                class="img-fluid img-thumbnail"></a>
+                        <a href="javascript:void(0);"><img src="assets/images/image-gallery/5.jpg" alt=""
+                                class="img-fluid img-thumbnail"></a>
+                    </div>
+                    <span class="time">10:12 AM, Today</span>
+                </div>
+            </li>
+            <li class="clearfix">
+                <div class="status online message-data text-right">
+                    <span class="name">Egide</span>
+                    <i class="fa fa-circle me"></i>
+                </div>
+                <div class="message other-message float-right">
+                    It is a long established fact that a reader will be distracted by the readable content of a page
+                    when looking at its layout.
+                    <span class="time">10:15 AM, Today</span>
+                </div>
+            </li>
+            <li>
+                <div class="status message-data">
+                    <span class="name">Esther</span>
+                </div>
+                <!-- <i class="fa fa-circle" style="color: #04BE5B; font-size: 10px;"></i>
+                <i class="fa fa-circle" style="color: #83d0a7; font-size: 10px;"></i>
+                <i class="fa fa-circle" style="color:#DAE9DA; font-size: 10px;"></i> -->
+            </li>
+        </ul>
+        <!-- <div class="chat-box">
+            <a href="javascript:void(0);" class="btn"><i class="fa fa-paperclip"></i></a>
+            <a href="javascript:void(0);" class="btn"><i class="fa fa-camera"></i></a>
+            <a href="javascript:void(0);" class="btn"><i class="fa fa-smile-o"></i></a>
+            <a href="javascript:void(0);" class="btn"><i class="fa fa-file-text"></i></a>
+            <a href="javascript:void(0);" class="btn"><i class="fa fa-envelope-o"></i></a>
+            <a href="javascript:void(0);" class="btn"><i class="fa fa-drivers-license-o"></i></a>
+            <div class="input-group">
+                <textarea class="form-control" placeholder="Enter text here..." required=""> </textarea>
+            </div> -->
+        </div>
+    </div>
+        </div>
+        <!-- END OF COLUMN 1 -->
+
+        <!-- COLUMN 3 -->
+        <!-- <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-3">
+            <div class="tns_card">
+                <span class="tns_card_title">Most Popular emoji</span>
+                <div class="d-flex">
+                    <img src="/static/images/tag.svg" alt="tag" class="tag">
+                    
+                    <span class="tns_tag_value emoji_pop">🤣</span>
+                    
+                </div>
+            </div>
+            <div class="tns_card">
+                <span class="tns_card_title">Active Days</span>
+                <div class="d-flex">
+                    <div id="active_days" style="width: 400px; overflow: hidden;" data-highcharts-chart="1"><div id="highcharts-j3dcq8r-6" style="position: relative; overflow: hidden; width: 400px; height: 400px; text-align: left; line-height: normal; z-index: 0; user-select: none; left: 0.0333252px; top: 0.833313px;" dir="ltr" class="highcharts-container "><svg version="1.1" class="highcharts-root" style="font-family:&quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Arial, Helvetica, sans-serif;font-size:12px;" xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 400 400"><desc>Created with Highcharts 8.2.0</desc><defs><clipPath id="highcharts-j3dcq8r-7-"><rect x="0" y="0" width="269" height="281" fill="none"></rect></clipPath></defs><rect fill="#ffffff" class="highcharts-background" x="0" y="0" width="400" height="400" rx="0" ry="0"></rect><rect fill="none" class="highcharts-plot-background" x="67" y="10" width="269" height="281"></rect><g class="highcharts-grid highcharts-xaxis-grid" data-z-index="1"><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 87.5 10 L 87.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 107.5 10 L 107.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 128.5 10 L 128.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 149.5 10 L 149.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 169.5 10 L 169.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 190.5 10 L 190.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 211.5 10 L 211.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 232.5 10 L 232.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 252.5 10 L 252.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 273.5 10 L 273.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 294.5 10 L 294.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 314.5 10 L 314.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 335.5 10 L 335.5 291" opacity="1"></path><path fill="none" data-z-index="1" class="highcharts-grid-line" d="M 66.5 10 L 66.5 291" opacity="1"></path></g><g class="highcharts-grid highcharts-yaxis-grid" data-z-index="1"><path fill="none" stroke="#e6e6e6" stroke-width="1" data-z-index="1" class="highcharts-grid-line" d="M 67 291.5 L 336 291.5" opacity="1"></path><path fill="none" stroke="#e6e6e6" stroke-width="1" data-z-index="1" class="highcharts-grid-line" d="M 67 221.5 L 336 221.5" opacity="1"></path><path fill="none" stroke="#e6e6e6" stroke-width="1" data-z-index="1" class="highcharts-grid-line" d="M 67 151.5 L 336 151.5" opacity="1"></path><path fill="none" stroke="#e6e6e6" stroke-width="1" data-z-index="1" class="highcharts-grid-line" d="M 67 80.5 L 336 80.5" opacity="1"></path><path fill="none" stroke="#e6e6e6" stroke-width="1" data-z-index="1" class="highcharts-grid-line" d="M 67 9.5 L 336 9.5" opacity="1"></path></g><g class="highcharts-grid highcharts-yaxis-grid" data-z-index="1"><path fill="none" stroke="#e6e6e6" stroke-width="1" data-z-index="1" class="highcharts-grid-line" d="M 67 291.5 L 336 291.5" opacity="1"></path><path fill="none" stroke="#e6e6e6" stroke-width="1" data-z-index="1" class="highcharts-grid-line" d="M 67 221.5 L 336 221.5" opacity="1"></path><path fill="none" stroke="#e6e6e6" stroke-width="1" data-z-index="1" class="highcharts-grid-line" d="M 67 151.5 L 336 151.5" opacity="1"></path><path fill="none" stroke="#e6e6e6" stroke-width="1" data-z-index="1" class="highcharts-grid-line" d="M 67 80.5 L 336 80.5" opacity="1"></path><path fill="none" stroke="#e6e6e6" stroke-width="1" data-z-index="1" class="highcharts-grid-line" d="M 67 9.5 L 336 9.5" opacity="1"></path></g><rect fill="none" class="highcharts-plot-border" data-z-index="1" x="67" y="10" width="269" height="281"></rect><g class="highcharts-axis highcharts-xaxis" data-z-index="2"><path fill="none" class="highcharts-axis-line" stroke="#ccd6eb" stroke-width="1" data-z-index="7" d="M 67 291.5 L 336 291.5"></path></g><g class="highcharts-axis highcharts-yaxis" data-z-index="2"><text x="23.649999618530273" data-z-index="7" text-anchor="middle" transform="translate(0,0) rotate(270 23.649999618530273 150.5)" class="highcharts-axis-title" style="color:#666666;fill:#666666;" y="150.5"><tspan>No of messages</tspan></text><path fill="none" class="highcharts-axis-line" data-z-index="7" d="M 67 10 L 67 291"></path></g><g class="highcharts-axis highcharts-yaxis" data-z-index="2"><text x="376.28333377838135" data-z-index="7" text-anchor="middle" transform="translate(0,0) rotate(90 376.28333377838135 150.5)" class="highcharts-axis-title" style="color:#666666;fill:#666666;" y="150.5"><tspan>Active users</tspan></text><path fill="none" class="highcharts-axis-line" data-z-index="7" d="M 336 10 L 336 291"></path></g><path fill="none" class="highcharts-crosshair highcharts-crosshair-category undefined" data-z-index="2" stroke="rgba(204,214,235,0.25)" stroke-width="20.692307692307693" style="pointer-events:none;" visibility="hidden" d="M 304.5 10 L 304.5 291"></path><g class="highcharts-series-group" data-z-index="3"><g class="highcharts-series highcharts-series-0 highcharts-column-series highcharts-color-0 highcharts-tracker" data-z-index="0.1" opacity="1" transform="translate(67,10) scale(1 1)" clip-path="url(#highcharts-j3dcq8r-7-)"><rect x="7" y="254" width="8" height="28" fill="rgb(124,181,236)" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="27" y="250" width="8" height="32" fill="#7cb5ec" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="48" y="271" width="8" height="11" fill="#7cb5ec" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="69" y="282" width="8" height="0" fill="rgb(124,181,236)" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="89" y="245" width="8" height="37" fill="rgb(124,181,236)" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="110" y="206" width="8" height="76" fill="rgb(124,181,236)" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="131" y="185" width="8" height="97" fill="#7cb5ec" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="151" y="110" width="8" height="172" fill="rgb(124,181,236)" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="172" y="264" width="8" height="18" fill="rgb(124,181,236)" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="193" y="256" width="8" height="26" fill="#7cb5ec" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="214" y="33" width="8" height="249" fill="#7cb5ec" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="234" y="205" width="8" height="77" fill="rgb(124,181,236)" opacity="1" class="highcharts-point highcharts-color-0"></rect><rect x="255" y="242" width="8" height="40" fill="#7cb5ec" opacity="1" class="highcharts-point highcharts-color-0"></rect></g><g class="highcharts-markers highcharts-series-0 highcharts-column-series highcharts-color-0" data-z-index="0.1" opacity="1" transform="translate(67,10) scale(1 1)" clip-path="none"></g><g class="highcharts-series highcharts-series-1 highcharts-spline-series highcharts-color-1" data-z-index="0.1" opacity="1" transform="translate(67,10) scale(1 1)" clip-path="url(#highcharts-j3dcq8r-7-)"><path fill="none" d="M 10.346153846154 17.5625 C 10.346153846154 17.5625 22.761538461538798 17.5625 31.038461538462 17.5625 C 39.3153846153848 17.5625 43.4538461538462 17.5625 51.730769230769 17.5625 C 60.007692307692196 17.5625 64.1461538461538 281 72.423076923077 281 C 80.7000000000002 281 84.8384615384618 17.5625 93.115384615385 17.5625 C 101.39230769230701 17.5625 105.53076923076802 17.5625 113.80769230769 17.5625 C 122.08461538461401 17.5625 126.223076923076 17.5625 134.5 17.5625 C 142.776923076924 17.5625 146.91538461538602 17.5625 155.19230769231 17.5625 C 163.469230769234 17.5625 167.607692307696 17.5625 175.88461538462 17.5625 C 184.16153846153998 17.5625 188.3 17.5625 196.57692307692 17.5625 C 204.85384615384402 17.5625 208.99230769230599 17.5625 217.26923076923 17.5625 C 225.546153846154 17.5625 229.68461538461602 17.5625 237.96153846154 17.5625 C 246.23846153846398 17.5625 258.65384615385 17.5625 258.65384615385 17.5625" class="highcharts-graph" data-z-index="1" stroke="#434348" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><path fill="none" d="M 10.346153846154 17.5625 C 10.346153846154 17.5625 22.761538461538798 17.5625 31.038461538462 17.5625 C 39.3153846153848 17.5625 43.4538461538462 17.5625 51.730769230769 17.5625 C 60.007692307692196 17.5625 64.1461538461538 281 72.423076923077 281 C 80.7000000000002 281 84.8384615384618 17.5625 93.115384615385 17.5625 C 101.39230769230701 17.5625 105.53076923076802 17.5625 113.80769230769 17.5625 C 122.08461538461401 17.5625 126.223076923076 17.5625 134.5 17.5625 C 142.776923076924 17.5625 146.91538461538602 17.5625 155.19230769231 17.5625 C 163.469230769234 17.5625 167.607692307696 17.5625 175.88461538462 17.5625 C 184.16153846153998 17.5625 188.3 17.5625 196.57692307692 17.5625 C 204.85384615384402 17.5625 208.99230769230599 17.5625 217.26923076923 17.5625 C 225.546153846154 17.5625 229.68461538461602 17.5625 237.96153846154 17.5625 C 246.23846153846398 17.5625 258.65384615385 17.5625 258.65384615385 17.5625" visibility="visible" data-z-index="2" class="highcharts-tracker-line" stroke-linecap="round" stroke-linejoin="round" stroke="rgba(192,192,192,0.0001)" stroke-width="22"></path></g><g class="highcharts-markers highcharts-series-1 highcharts-spline-series highcharts-color-1 highcharts-tracker" data-z-index="0.1" opacity="1" transform="translate(67,10) scale(1 1)"><path fill="#434348" d="M 237 17.5625 A 0 0 0 1 1 237 17.5625 Z" class="highcharts-halo highcharts-color-1" data-z-index="-1" fill-opacity="0.25" style="cursor:auto;" visibility="hidden"></path><path fill="#434348" d="M 10 21.5625 A 4 4 0 1 1 10.003999999333336 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1" stroke-width="0.10214704094284566"></path><path fill="#434348" d="M 31 21.5625 A 4 4 0 1 1 31.003999999333335 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1" stroke-width="0.03172505662590386"></path><path fill="#434348" d="M 51 21.5625 A 4 4 0 1 1 51.00399999933334 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1" stroke-width="0.00035526367970539763"></path><path fill="#434348" d="M 72 285 A 4 4 0 1 1 72.00399999933333 284.9999980000002 Z" opacity="1" class="highcharts-point highcharts-color-1" stroke-width="0.038663630064942556"></path><path fill="#434348" d="M 93 21.5625 A 4 4 0 1 1 93.00399999933333 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1" stroke-width="0.42488720543962144"></path><path fill="#434348" d="M 113 21.5625 A 4 4 0 1 1 113.00399999933333 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1" stroke-width="0.0006315216969912107"></path><path fill="#434348" d="M 134 21.5625 A 4 4 0 1 1 134.00399999933333 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1" stroke-width="0.00015790535835003006"></path><path fill="#434348" d="M 155 21.5625 A 4 4 0 1 1 155.00399999933333 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1" stroke-width="0.00008882380959551739"></path><path fill="#434348" d="M 175 21.5625 A 4 4 0 1 1 175.00399999933333 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1" stroke-width="0.01898616420695709"></path><path fill="#434348" d="M 196 21.5625 A 4 4 0 1 1 196.00399999933333 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1" stroke-width="0.02073910549131197"></path><path fill="#434348" d="M 217 21.5625 A 4 4 0 1 1 217.00399999933333 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1"></path><path fill="#434348" d="M 237 21.5625 A 4 4 0 1 1 237.00399999933333 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1" stroke-width="0.00006076101738528017"></path><path fill="#434348" d="M 258 21.5625 A 4 4 0 1 1 258.00399999933336 21.56249800000017 Z" opacity="1" class="highcharts-point highcharts-color-1"></path></g></g><text x="200" text-anchor="middle" class="highcharts-title" data-z-index="4" style="color:#333333;font-size:18px;fill:#333333;" y="24"></text><text x="200" text-anchor="middle" class="highcharts-subtitle" data-z-index="4" style="color:#666666;fill:#666666;" y="24"></text><text x="10" text-anchor="start" class="highcharts-caption" data-z-index="4" style="color:#666666;fill:#666666;" y="397"></text><g class="highcharts-legend" data-z-index="7" transform="translate(81,360)"><rect fill="none" class="highcharts-legend-box" rx="0" ry="0" x="0" y="0" width="237" height="25" visibility="visible"></rect><g data-z-index="1"><g><g class="highcharts-legend-item highcharts-column-series highcharts-color-0 highcharts-series-0" data-z-index="1" transform="translate(8,3)"><text x="21" style="color:#333333;cursor:pointer;font-size:12px;font-weight:bold;fill:#333333;" text-anchor="start" data-z-index="2" y="15"><tspan>Sent Messages</tspan></text><rect x="2" y="4" width="12" height="12" fill="#7cb5ec" rx="6" ry="6" class="highcharts-point" data-z-index="3"></rect></g><g class="highcharts-legend-item highcharts-spline-series highcharts-color-1 highcharts-series-1" data-z-index="1" transform="translate(135.66666412353516,3)"><path fill="none" d="M 0 11 L 16 11" class="highcharts-graph" stroke="#434348" stroke-width="2"></path><path fill="#434348" d="M 8 15 A 4 4 0 1 1 8.003999999333336 14.999998000000167 Z" class="highcharts-point" opacity="1"></path><text x="21" y="15" style="color:#333333;cursor:pointer;font-size:12px;font-weight:bold;fill:#333333;" text-anchor="start" data-z-index="2"><tspan>Active Users</tspan></text></g></g></g></g><g class="highcharts-axis-labels highcharts-xaxis-labels" data-z-index="7"><text x="79.93887871050484" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 79.93887871050484 307)" y="307" opacity="1">2021-09-03</text><text x="100.63118640281684" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 100.63118640281684 307)" y="307" opacity="1">2021-09-04</text><text x="121.32349409511684" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 121.32349409511684 307)" y="307" opacity="1">2021-09-05</text><text x="142.01580178742685" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 142.01580178742685 307)" y="307" opacity="1">2021-09-06</text><text x="162.70810947973683" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 162.70810947973683 307)" y="307" opacity="1">2021-09-07</text><text x="183.40041717204684" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 183.40041717204684 307)" y="307" opacity="1">2021-09-08</text><text x="204.09272486434685" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 204.09272486434685 307)" y="307" opacity="1">2021-09-09</text><text x="224.78503255665686" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 224.78503255665686 307)" y="307" opacity="1">2021-09-10</text><text x="245.47734024896684" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 245.47734024896684 307)" y="307" opacity="1">2021-09-11</text><text x="266.16964794127676" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 266.16964794127676 307)" y="307" opacity="1">2021-09-12</text><text x="286.86195563357677" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 286.86195563357677 307)" y="307" opacity="1">2021-09-13</text><text x="307.5542633258868" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 307.5542633258868 307)" y="307" opacity="1">2021-09-14</text><text x="328.2465710181968" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0) rotate(-45 328.2465710181968 307)" y="307" opacity="1">2021-09-15</text></g><g class="highcharts-axis-labels highcharts-yaxis-labels" data-z-index="7"><text x="52" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0)" y="296" opacity="1">0</text><text x="52" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0)" y="85" opacity="1">120</text><text x="52" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0)" y="225" opacity="1">40</text><text x="52" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0)" y="155" opacity="1">80</text><text x="52" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="end" transform="translate(0,0)" y="15" opacity="1">160</text></g><g class="highcharts-axis-labels highcharts-yaxis-labels" data-z-index="7"><text x="351" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="start" transform="translate(0,0)" y="296" opacity="1">0</text><text x="351" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="start" transform="translate(0,0)" y="225" opacity="1">0.8</text><text x="351" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="start" transform="translate(0,0)" y="155" opacity="1">1.6</text><text x="351" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="start" transform="translate(0,0)" y="85" opacity="1">2.4</text><text x="351" style="color:#666666;cursor:default;font-size:11px;fill:#666666;" text-anchor="start" transform="translate(0,0)" y="15" opacity="1">3.2</text></g><text x="390" class="highcharts-credits" text-anchor="end" data-z-index="8" style="cursor:pointer;color:#999999;font-size:9px;fill:#999999;" y="395"><tspan>TNS Chat Analyser</tspan></text><g class="highcharts-label highcharts-tooltip highcharts-color-0" style="white-space:nowrap;pointer-events:none;" data-z-index="8" transform="translate(184,-9999)" opacity="0" visibility="hidden"><path fill="none" class="highcharts-label-box highcharts-tooltip-box highcharts-shadow" d="M 3.5 0.5 L 112.5 0.5 C 115.5 0.5 115.5 0.5 115.5 3.5 L 115.5 55.5 C 115.5 58.5 115.5 58.5 112.5 58.5 L 3.5 58.5 C 0.5 58.5 0.5 58.5 0.5 55.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" stroke="#000000" stroke-opacity="0.049999999999999996" stroke-width="5" transform="translate(1, 1)"></path><path fill="none" class="highcharts-label-box highcharts-tooltip-box highcharts-shadow" d="M 3.5 0.5 L 112.5 0.5 C 115.5 0.5 115.5 0.5 115.5 3.5 L 115.5 55.5 C 115.5 58.5 115.5 58.5 112.5 58.5 L 3.5 58.5 C 0.5 58.5 0.5 58.5 0.5 55.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" stroke="#000000" stroke-opacity="0.09999999999999999" stroke-width="3" transform="translate(1, 1)"></path><path fill="none" class="highcharts-label-box highcharts-tooltip-box highcharts-shadow" d="M 3.5 0.5 L 112.5 0.5 C 115.5 0.5 115.5 0.5 115.5 3.5 L 115.5 55.5 C 115.5 58.5 115.5 58.5 112.5 58.5 L 3.5 58.5 C 0.5 58.5 0.5 58.5 0.5 55.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" stroke="#000000" stroke-opacity="0.15" stroke-width="1" transform="translate(1, 1)"></path><path fill="rgba(247,247,247,0.85)" class="highcharts-label-box highcharts-tooltip-box" d="M 3.5 0.5 L 112.5 0.5 C 115.5 0.5 115.5 0.5 115.5 3.5 L 115.5 55.5 C 115.5 58.5 115.5 58.5 112.5 58.5 L 3.5 58.5 C 0.5 58.5 0.5 58.5 0.5 55.5 L 0.5 3.5 C 0.5 0.5 0.5 0.5 3.5 0.5" stroke="#7cb5ec" stroke-width="1"></path></g></svg><div class="highcharts-label highcharts-tooltip highcharts-color-0" style="position: absolute; left: 184px; top: -9999px; opacity: 0; pointer-events: none; visibility: hidden;"><span style="position: absolute; font-family: &quot;Lucida Grande&quot;, &quot;Lucida Sans Unicode&quot;, Arial, Helvetica, sans-serif; font-size: 12px; white-space: nowrap; color: rgb(51, 51, 51); cursor: default; margin-left: 0px; margin-top: 0px; left: 8px; top: 8px;" data-z-index="1"><span style="font-size:10px">2021-09-14</span><table><tbody><tr><td style="color:#7cb5ec;padding:0">Sent Messages: </td><td style="padding:0"><b>44</b></td></tr><tr><td style="color:#434348;padding:0">Active Users: </td><td style="padding:0"><b>3</b></td></tr></tbody></table></span></div></div></div>
+                </div>
+            </div>
+        </div> -->
+        <!-- END OF COLUMN 1 -->
+    </div>
+</div>
+
+
+            </div>
+
+        </div>
+
+
+        <footer id="footer">
+            <div class="bg-gradient-purple rounded text-white p-3 fs--14 aside-primary">
+                 Tafiti Chat Analysis - Group Statistics
+
+                <div class="d-inline-block float-end dropdown">
+                    Designed and developed with <i class="fi fi-heart-slim text-danger"></i> by <a href="https://badili.co.ke" target="_blank">Badili Innovations</a>
+                </div>
+
+            </div>
+        </footer>
+    
+
+</body>
+
+</html>
+
+<style>
+  .page_header {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #E8E9E9;
+  }
+  .btn-animated-y .btn-inner--hidden {
+    left: 0;
+    bottom: -150%;
+    -webkit-transition: bottom .3s ease 0s;
+    transition: bottom .3s ease 0s;
+}
+
+.btn-animated .btn-inner--hidden {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+}
+</style>
+
+<script>
+  function myFunction() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("myInput");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("myTable");
+    tr = table.getElementsByTagName("tr");
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
