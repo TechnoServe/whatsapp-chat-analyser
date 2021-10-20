@@ -147,7 +147,8 @@ Analyser.prototype.initiateSysUsers = function(event){
                     }
                 },
                 tel: {
-                    regex: '^(\\+254|0)(1|7)[0-9]{8}$',
+                    //regex: '^(\\+254|0)(1|7)[0-9]{8}$',
+                    regex: '^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$',
                     remote: {
                         url: "validate_input",
                         async: false                // find a way to remove this
