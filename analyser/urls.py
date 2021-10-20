@@ -57,6 +57,13 @@ urlpatterns = [
     re_path(r'^ajax_assign_counselor_to_advisor$', views.ajax_assign_counselor_to_advisor, name='ajax_assign_counselor_to_advisor'),
     re_path(r'^ajax_drop_counselor_assigned_to_advisor$', views.ajax_drop_counselor_assigned_to_advisor, name='ajax_drop_counselor_assigned_to_advisor'),
 
+    # Advisor assignment
+    re_path(r'^advisor_assignment$', views.advisor_assignment, name='advisor_assignment'),
+    re_path(r'^ajax_advisors_assigned_to_manager$', views.ajax_advisors_assigned_to_manager, name='ajax_advisors_assigned_to_manager'),
+    re_path(r'^ajax_assign_advisor_to_manager$', views.ajax_assign_advisor_to_manager, name='ajax_assign_advisor_to_manager'),
+    re_path(r'^ajax_drop_advisor_assigned_to_manager$', views.ajax_drop_advisor_assigned_to_manager, name='ajax_drop_advisor_assigned_to_manager'),
+    
+
     re_path(r'^assigned_counselors$', views.assigned_counselors, name='assigned_counselors'),
 
 

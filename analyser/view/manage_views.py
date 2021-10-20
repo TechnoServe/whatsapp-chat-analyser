@@ -55,6 +55,17 @@ def counselor_assignment(request):
     return render(request, 'dashboard/counselor_assignment.html', params)
 
 @login_required(login_url='/login')
+def advisor_assignment(request):
+    params = get_basic_info(request)
+    params = {'s_date': ''}
+    params['page_title'] = 'Advisor Assignment'
+    params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
+    params['advisors'] = manageUser.getAllAdvisors()
+    params['managers'] = manageUser.getAllManagers()
+    
+    return render(request, 'dashboard/advisor_assignment.html', params)
+
+@login_required(login_url='/login')
 def assigned_counselors(request):
     params = get_basic_info(request)
     params = {'s_date': ''}
@@ -81,6 +92,14 @@ def ajax_counselors_assigned_to_advisor(request):
     return JsonResponse(data, status=200, safe=False)
 
 @login_required(login_url='/login')
+def ajax_advisors_assigned_to_manager(request):
+    pk_id = my_hashids.decode(request.POST.get('manager_id'))[0]
+    user = User.objects.filter(id=pk_id).get()
+    
+    data = manageUser.getAdvisorsAssignedToManager(user)
+    return JsonResponse(data, status=200, safe=False)
+
+@login_required(login_url='/login')
 def ajax_assign_counselor_to_advisor(request):
     pk_id_advisor = my_hashids.decode(request.POST.get('advisor_id'))[0]
     pk_id_counselor = my_hashids.decode(request.POST.get('counselor_id'))[0]
@@ -90,7 +109,17 @@ def ajax_assign_counselor_to_advisor(request):
 
     data = manageUser.assignCounselorToAdvisor(counselor, advisor)
     return JsonResponse(data, status=200, safe=False)
-    
+
+@login_required(login_url='/login')
+def ajax_assign_advisor_to_manager(request):
+    pk_id_manager = my_hashids.decode(request.POST.get('manager_id'))[0]
+    pk_id_advisor = my_hashids.decode(request.POST.get('advisor_id'))[0]
+
+    advisor = User.objects.filter(id=pk_id_advisor).get()
+    manager = User.objects.filter(id=pk_id_manager).get()
+
+    data = manageUser.assignAdvisorToManager(manager, advisor)
+    return JsonResponse(data, status=200, safe=False)   
 
 @login_required(login_url='/login')
 def ajax_drop_counselor_assigned_to_advisor(request):
@@ -102,6 +131,18 @@ def ajax_drop_counselor_assigned_to_advisor(request):
 
     data = manageUser.dropCounselorAssignedToAdvisor(counselor, advisor)
     return JsonResponse(data, status=200, safe=False)
+
+@login_required(login_url='/login')
+def ajax_drop_advisor_assigned_to_manager(request):
+    pk_id_advisor = my_hashids.decode(request.POST.get('advisor_id'))[0]
+    pk_id_manager = my_hashids.decode(request.POST.get('manager_id'))[0]
+
+    advisor = User.objects.filter(id=pk_id_advisor).get()
+    manager = User.objects.filter(id=pk_id_manager).get()
+
+    data = manageUser.dropAdvisorAssignedToManager(manager, advisor)
+    return JsonResponse(data, status=200, safe=False)
+
 
 def get_basic_info(request):
     csrf_token = get_or_create_csrf_token(request)

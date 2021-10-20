@@ -39,7 +39,7 @@ class UserManagement:
     def getAdvisorsAssignedToManager(self, manager_username):
         manager = Personnel.objects.get(Q(username=manager_username))
 
-        qs = AdvisorManagerAssignment.objects.filter(advisor=advisor)
+        qs = AdvisorManagerAssignment.objects.filter(manager=manager)
         results = AdvisorManagerAssignmentSerializer(qs, many=True)
 
         return results.data
@@ -49,9 +49,21 @@ class UserManagement:
         results = PersonnelSerializer(qs, many=True)
 
         return results.data
+
+    def getAllManagers(self):
+        qs = Personnel.objects.filter(designation="program_manager").all()
+        results = PersonnelSerializer(qs, many=True)
+
+        return results.data
     
     def dropCounselorAssignedToAdvisor(self, counselor, advisor):
         obj = CounselorAdvisorAssignment.objects.get(counselor=counselor, advisor=advisor)
+        obj.delete()
+
+        return True
+
+    def dropAdvisorAssignedToManager(self, manager, advisor):
+        obj = AdvisorManagerAssignment.objects.get(manager=manager, advisor=advisor)
         obj.delete()
 
         return True
