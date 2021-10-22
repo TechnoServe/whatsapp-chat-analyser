@@ -1,0 +1,268 @@
+{% extends "base_dashboard.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ static('node_modules/material-design-lite/material.min.css') }}" />
+<link rel="stylesheet" href="{{ static('node_modules/parsleyjs/src/parsley.css') }}" />
+<link rel="stylesheet" href="{{ static('node_modules/font-awesome/css/font-awesome.min.css') }}">
+
+<link rel="stylesheet" href="{{ static('css/data_table.css') }}">
+{% endblock %}
+
+{% block main_content %}
+
+<!-- section header -->
+<div class="bg-white rounded clearfix p-3 mb-4">
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-sublime fs--13 pb-2">
+            <li class="breadcrumb-item active" aria-current="page">
+                ASSIGN ADVISORS TO PROGRAM MANAGERS
+            </li>
+
+        </ol>
+    </nav>
+
+</div>
+<!-- /section header -->
+
+<div class="app-main__inner">
+    <div class="row">
+
+
+        <!-- Advisor Select Box -->
+        <div class="col-lg-4 col-md-4">
+            <select class="form-control" id="select_manager">
+                <option value="">---Select Program Manager--</option>
+                {% for man in managers %}
+                <option value="{{ man.pk_id }}">{{ man.first_name + " " + man.last_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-lg-4 col-md-4">
+            <div class="input-group input-group-transparent">
+                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span>
+                </div>
+                <input id="search_keyword" type="text" onkeyup="searchAdvisors()" class="form-control"
+                    placeholder="Search Business Advisors">
+            </div>
+            <br>
+            <div class="card">
+
+                <!-- <div class="card-header">BAs</div> -->
+                <div class="" id="advisors_div">
+
+                </div>
+                <!-- <li class="list-group-item d-flex justify-content-between">
+                    Alexis Helper
+                    <button class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></button>
+                </li> -->
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-md-4">
+            <div class="card">
+
+                <div class="card-header">Counselors Assigned to <span id="advisor_name"><b></b></span></div>
+
+                <div class="" id="assigned_div">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+{% endblock %}
+
+{% block modals %}
+
+
+{% endblock %}
+
+{% block javascript %}
+<script type='text/javascript' src="{{ static('plugins/datatables/datatables.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/material-design-lite/material.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/parsleyjs/dist/parsley.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/micromodal/dist/micromodal.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/jquery-form/dist/jquery.form.min.js') }}"></script>
+<script type='text/javascript'
+    src="{{ static('node_modules/jquery-validation/dist/jquery.validate.min.js') }}"></script>
+<script type='text/javascript' src="{{ static('node_modules/bootstrap-notify/bootstrap-notify.js') }}"></script>
+
+<script>
+
+    $("#select_manager").change(() => {
+        let _manager_id = $("#select_manager").val()
+        let _manager_name = $("#select_manager option:selected").text()
+
+        if (_manager_id != "") {
+            $("#manager_name").html(_manager_name)
+            advisorsAssignedToManager();
+        } else {
+            $("#manager_name").html("")
+            $("#assigned_div").empty()
+        }
+
+    })
+
+    searchAdvisors = () => {
+        $("#advisors_div").empty()
+
+        keyword = $("#search_keyword").val().trim();
+
+        if (keyword.length < 3) {
+            return;
+        }
+
+        ajax_data = { keyword: keyword, role: "business_advisor" };
+        $.ajax({
+            type: "POST", url: '/ajax_search_user_by_role', dataType: 'json', data: ajax_data,
+            
+            success: function (data) {
+                console.log(data)
+                if (!data.error) {
+                    populateAdvisorsDiv(data)
+                } else {
+                    console.log("error")
+                    console.log(data)
+                }
+            }
+        });
+    }
+
+    populateAdvisorsDiv = (all_personnel) => {
+        let manager_id = $("#select_manager").val()
+        ajax_data = { manager_id: manager_id };
+        $.ajax({
+            type: "POST", url: '/ajax_advisors_assigned_to_manager', dataType: 'json', data: ajax_data,
+
+            success: function (data) {
+                if (!data.error) {
+                    let row = ""
+                    
+                    all_personnel.forEach(user => {
+                        if(isAdvisorAssgined(data, user)) {
+                            return;
+                        }
+                        // check whether current user
+                        row = '<li class="list-group-item d-flex justify-content-between">';
+                        row += user.first_name + ' ' + user.last_name;
+                        row += '<input type="hidden" value="' + user.pk_id + '">';
+                        row += '<button class="add_button btn btn-primary btn-sm"><i class="fa fa-plus"></i></button>'
+                        row += '</li>'
+
+                        $("#advisors_div").append(row)
+                    });
+                } else {
+                    console.log("error")
+                    console.log(data)
+                }
+            }
+        });
+
+    }
+
+    advisorsAssignedToManager = () => {
+        $("#assigned_div").empty()
+        let manager_id = $("#select_manager").val()
+        ajax_data = { manager_id: manager_id };
+        $.ajax({
+            type: "POST", url: '/ajax_advisors_assigned_to_manager', dataType: 'json', data: ajax_data,
+
+            success: function (data) {
+                console.log(data)
+                if (!data.error) {
+                    populateAssignedDiv(data)
+                } else {
+                    console.log("error")
+                    console.log(data)
+                }
+            }
+        });
+    }
+
+    populateAssignedDiv = (data) => {
+        let row = ""
+        data.forEach(user => {
+            row = '<li class="list-group-item d-flex justify-content-between">';
+            row += user.advisor.first_name + ' ' + user.advisor.last_name;
+            row += '<input type="hidden" value="' + user.advisor.pk_id + '">';
+            row += '<button class="drop_button btn btn-danger btn-sm"><i class="fa fa-minus"></i></button>'
+            row += '</li>'
+
+            $("#assigned_div").append(row)
+        });
+    }
+
+    function isAdvisorAssgined(assigned, counselor) {
+        let status = false;
+
+        assigned.forEach(user => {
+            if(user.counselor.pk_id === counselor.pk_id) {
+                status = true;
+            }
+        });
+        return status;
+    }
+
+    
+
+    $(document).on('click', '.add_button', (e)=>{
+        let list_element = e.target.parentElement;
+        let counselor_id = list_element.children[0].value
+        let advisor_id = $("#select_manager").val()
+
+        addAdvisor(advisor_id, counselor_id);
+        
+    });
+
+    $(document).on('click', '.drop_button', (e)=>{
+        let list_element = e.target.parentElement;
+        let advisor_id = list_element.children[0].value
+        let manager_id = $("#select_manager").val()
+        
+        dropAdvisor(manager_id, advisor_id);
+        
+    });
+
+    addAdvisor = (manager_id, advisor_id) => {
+        ajax_data = { manager_id: manager_id, advisor_id: advisor_id };
+        $.ajax({
+            type: "POST", url: '/ajax_assign_advisor_to_manager', dataType: 'json', data: ajax_data,
+
+            success: function (data) {
+                if (!data.error) {
+                    $("#advisors_div").empty()
+                    advisorsAssignedToManager()
+                } else {
+                    console.log("error")
+                    console.log(data)
+                }
+            }
+        });
+    }
+
+    dropAdvisor = (manager_id, advisor_id) => {
+        ajax_data = { manager_id: manager_id, advisor_id: advisor_id };
+        $.ajax({
+            type: "POST", url: '/ajax_drop_advisor_assigned_to_manager', dataType: 'json', data: ajax_data,
+
+            success: function (data) {
+                if (!data.error) {
+                    advisorsAssignedToManager()
+                } else {
+                    console.log("error")
+                    console.log(data)
+                }
+            }
+        });
+    }
+
+
+
+
+</script>
+
+{% endblock %}
