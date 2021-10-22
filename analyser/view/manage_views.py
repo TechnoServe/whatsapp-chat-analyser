@@ -79,6 +79,19 @@ def assigned_counselors(request):
     return render(request, 'dashboard/assigned_counselors.html', params)
 
 @login_required(login_url='/login')
+def assigned_advisors(request):
+    params = get_basic_info(request)
+    params = {'s_date': ''}
+    params['page_title'] = 'Assigned Counselors'
+    params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
+    params['cur_user'] = request.user
+
+    
+    data = manageUser.getAdvisorsAssignedToManager(request.user)
+    params['assigned'] = data
+    return render(request, 'dashboard/assigned_advisors.html', params)
+
+@login_required(login_url='/login')
 def ajax_search_user_by_role(request):
     data = manageUser.searchPersonnelByRole(request.POST.get('keyword'), request.POST.get('role'))
     return JsonResponse(data, status=200, safe=False)
