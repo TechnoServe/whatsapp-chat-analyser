@@ -199,3 +199,16 @@ def determine_user_links(request):
             allowed_links.append(link)
 
     request.session['nav_links'] = allowed_links
+
+@login_required(login_url='/login')
+def getchats(request):
+    params = get_basic_info(request)
+    params = {'s_date': ''}
+    params['page_title'] = 'Assigned Counselors'
+    params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
+    params['cur_user'] = request.user
+
+    
+    data = manageUser.getCounselorsAssignedToAdvisor(request.user)
+    params['assigned'] = data
+    return render(request, 'dashboard/chats.html', params)

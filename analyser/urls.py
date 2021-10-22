@@ -58,6 +58,7 @@ urlpatterns = [
     re_path(r'^ajax_drop_counselor_assigned_to_advisor$', views.ajax_drop_counselor_assigned_to_advisor, name='ajax_drop_counselor_assigned_to_advisor'),
 
     re_path(r'^assigned_counselors$', views.assigned_counselors, name='assigned_counselors'),
+    re_path(r'^chatsr$', views.getchats, name='assigned_counselors'),
 
 
 
