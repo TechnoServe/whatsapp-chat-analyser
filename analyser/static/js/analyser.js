@@ -557,6 +557,20 @@ Analyser.prototype.drawGroupStatsGraphs = function(){
             column: {
                 pointPadding: 0.2,
                 borderWidth: 0
+            },
+            series: {
+                point: {
+                  events: {
+                    click() {
+                        let point = this;
+
+                        let date = point.category;
+                        let sent_messages = point.y;
+
+                      console.log(sent_messages)
+                    }
+                  }
+                }
             }
         },
         series: [{
@@ -712,8 +726,10 @@ Analyser.prototype.drawUserStatsGraphs = function(){
             column: {
                 pointPadding: 0.2,
                 borderWidth: 0
-            }
+            },
+            
         },
+        
         series: [{
             name: 'Sent Messages',
             data: analyser.stats.active_dates.messages
