@@ -65,6 +65,7 @@ urlpatterns = [
     
 
     re_path(r'^assigned_counselors$', views.assigned_counselors, name='assigned_counselors'),
+    re_path(r'^chats$', views.getchats, name='assigned_counselors'),
     re_path(r'^assigned_advisors$', views.assigned_advisors, name='assigned_advisors'),
 
 
