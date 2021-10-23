@@ -647,6 +647,7 @@ def show_group_stats(request, uid):
         params['stats'] = analyser.fetch_group_meta(group_id, date_range)
         params['name_changes'] = params['stats']['name_changes']
         params['stats'].pop('name_changes')
+        params['group_id'] = group_id
 
         return render(request, 'dashboard/group_stats.html', params)
     except Exception as e:

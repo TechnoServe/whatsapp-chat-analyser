@@ -1,4 +1,4 @@
-function Analyser(){
+function Analyser() {
     this.checkbox_template = "<input type='checkbox' class='selector' id='%s' />";
     this.edit_template = "<button title='Edit' class='%s btn btn-info btn-sm' data-toggle='modal' data-target='%s' data-object_type='%s' data-row-id='%s' data-action='edit'><i class='fa fa-edit'></i></button>";
     this.delete_template = "<button title='Delete' class='%s btn btn-danger btn-sm' data-object_type='%s' data-action='delete' data-row-id='%s' data-toggle='modal' data-target='#confirmModal' ><i class='fa fa-trash-o'></i></button>";
@@ -10,15 +10,15 @@ function Analyser(){
     // add the csrf token before ajax requests
     this.csrftoken = $('meta[name=csrf-token]').attr('content');
     $.ajaxSetup({
-      beforeSend: function(xhr, settings) {
-        if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
-            xhr.setRequestHeader("X-CSRFToken", analyser.csrftoken)
+        beforeSend: function (xhr, settings) {
+            if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type)) {
+                xhr.setRequestHeader("X-CSRFToken", analyser.csrftoken)
+            }
         }
-      }
     });
 
     this.graph_credits = { text: 'TNS Chat Analyser', href: '#' };
-    
+
     this.button_settings = {
         'user': {
             'is_long_process': false,
@@ -30,23 +30,23 @@ function Analyser(){
     }
 };
 
-Analyser.prototype.initiatePages = function(){
-    if(window.location.pathname == '/dashboard') this.initiateDashboard();
-    else if(window.location.pathname == '/groups') this.initiateGroups();
-    else if(window.location.pathname == '/engaged_users') this.initiateEngagedUsers();
-    else if(window.location.pathname.split('/')[1] == 'group_stats') this.initiateGroupStats();
-    else if(window.location.pathname.split('/')[1] == 'user_stats') this.initiateUserStats();
-    else if(window.location.pathname == '/files_repo') this.initiateFilesRepo();
-    else if(window.location.pathname == '/users') analyser.initiateSysUsers();
+Analyser.prototype.initiatePages = function () {
+    if (window.location.pathname == '/dashboard') this.initiateDashboard();
+    else if (window.location.pathname == '/groups') this.initiateGroups();
+    else if (window.location.pathname == '/engaged_users') this.initiateEngagedUsers();
+    else if (window.location.pathname.split('/')[1] == 'group_stats') this.initiateGroupStats();
+    else if (window.location.pathname.split('/')[1] == 'user_stats') this.initiateUserStats();
+    else if (window.location.pathname == '/files_repo') this.initiateFilesRepo();
+    else if (window.location.pathname == '/users') analyser.initiateSysUsers();
     //else if(window.location.pathname == '/counselor_assignment') analyser.initiateSysUsers();
 };
 
-Analyser.prototype.initiateSysUsers = function(event){
+Analyser.prototype.initiateSysUsers = function (event) {
     analyser.button_settings['user']['table'] = $('#sys_users').DataTable({
         "ajax": {
             url: 'data/users',
-            type:'GET',
-            "dataSrc": function ( json ) {
+            type: 'GET',
+            "dataSrc": function (json) {
                 analyser.cur_attendance_dates = json['dates'];
                 return json['data'];
             }
@@ -55,21 +55,21 @@ Analyser.prototype.initiateSysUsers = function(event){
         "columnDefs": [
             {
                 "data": "selector",
-                "targets": 0, 
-                render: function ( data, type, row, meta ) {
+                "targets": 0,
+                render: function (data, type, row, meta) {
                     return sprintf(analyser.checkbox_template, row.pk_id);
                 }
             },
-            {"data": "first_name", "targets": 1 },
-            {"data": "last_name", "targets": 2 },
-            {"data": "username", "targets": 3 },
-            {"data": "email", "targets": 4 },
-            {"data": "tel", "targets": 5 },
-            {"data": "designation", "targets": 6 },
+            { "data": "first_name", "targets": 1 },
+            { "data": "last_name", "targets": 2 },
+            { "data": "username", "targets": 3 },
+            { "data": "email", "targets": 4 },
+            { "data": "tel", "targets": 5 },
+            { "data": "designation", "targets": 6 },
             {
                 "data": "is_active",
-                "targets": 7, 
-                render: function ( data, type, row, meta ) {
+                "targets": 7,
+                render: function (data, type, row, meta) {
                     resend_link = sprintf(analyser.resend_link, 'resend_link', row.pk_id);
 
                     return row.is_active ? 'Yes' : resend_link;
@@ -77,8 +77,8 @@ Analyser.prototype.initiateSysUsers = function(event){
             },
             {
                 "data": "actions",
-                "targets": 8, 
-                render: function ( data, type, row, meta ) {
+                "targets": 8,
+                render: function (data, type, row, meta) {
                     edit_btn = sprintf(analyser.edit_template, 'edit_user', '#newUser', 'user', row.pk_id);
                     delete_btn = sprintf(analyser.delete_template, 'delete_user', 'user', row.pk_id);
 
@@ -86,7 +86,7 @@ Analyser.prototype.initiateSysUsers = function(event){
                         row.is_active ? 'deactivate_user' : 'activate_user',
                         row.is_active ? 'secondary' : 'success',
                         'user',
-                        row.pk_id, 
+                        row.pk_id,
                         row.is_active ? 'deactivate' : 'activate',
                         row.is_active ? 'Deactivate' : 'Activate'
                     )
@@ -100,22 +100,22 @@ Analyser.prototype.initiateSysUsers = function(event){
     MicroModal.init();
     analyser.initiateActionButtons('newUser');
 
-    $(document).on('click', '.resend_link', function(e) {
+    $(document).on('click', '.resend_link', function (e) {
         //console.log(e.target)
         //alert("heyy")
         var button = e.target;
-        
-        if(button != undefined){
-            
-            ajax_data = {'object_id': $(button).data('row-id')};
+
+        if (button != undefined) {
+
+            ajax_data = { 'object_id': $(button).data('row-id') };
             $.ajax({
-                type: "POST", url: '/resend_activation_email', dataType: 'json', data:ajax_data,
+                type: "POST", url: '/resend_activation_email', dataType: 'json', data: ajax_data,
                 error: analyser.communicationError,
                 success: function (data) {
-                    if(!data.error) {
-                        $.notify({message: data.message}, {type: 'success'});
+                    if (!data.error) {
+                        $.notify({ message: data.message }, { type: 'success' });
                     } else {
-                        $.notify({message: data.message}, {type: 'danger'});
+                        $.notify({ message: data.message }, { type: 'danger' });
                     }
                 }
             });
@@ -123,7 +123,7 @@ Analyser.prototype.initiateSysUsers = function(event){
     })
 
     // bind confirm_save button
-    $('#confirm_save').on('click', function(){
+    $('#confirm_save').on('click', function () {
         // 1. validate the entered data
         var new_user = $("[name=add_user]");
         analyser.newuser_validator = new_user.validate({
@@ -137,8 +137,8 @@ Analyser.prototype.initiateSysUsers = function(event){
                         async: false                // find a way to remove this
                     }
                 },
-                first_name: {minlength: 3},
-                surname: {minlength: 3},
+                first_name: { minlength: 3 },
+                surname: { minlength: 3 },
                 username: {
                     minlength: 3,
                     remote: {
@@ -157,13 +157,13 @@ Analyser.prototype.initiateSysUsers = function(event){
             },
             messages: {
                 tel: { remote: "This telephone is already in use" },
-                email: { remote: "This email is already in use"},
-                username: { remote: "This username is already in use"}
+                email: { remote: "This email is already in use" },
+                username: { remote: "This username is already in use" }
             }
         });
         isValid = false;
         isValid = new_user.valid();
-        if( isValid ){
+        if (isValid) {
             analyser.cur_action = 'add';
             analyser.cur_object = 'user';
             analyser.ajax_data = objectifyForm($('[name=add_user]').serializeArray());
@@ -171,7 +171,7 @@ Analyser.prototype.initiateSysUsers = function(event){
             $('#confirmModal').modal();
             analyser.refresh_table = analyser.users_table;
         }
-        else{
+        else {
             analyser.first_modal = undefined;
         }
         // 2. Call the action to confirm the save user action and pass the data
@@ -181,24 +181,24 @@ Analyser.prototype.initiateSysUsers = function(event){
     analyser.initiateObjectManagement();
 };
 
-Analyser.prototype.initiateObjectManagement = function(){
+Analyser.prototype.initiateObjectManagement = function () {
     $('#confirmModal').on('show.bs.modal', function (event) {
         var button = event.relatedTarget;
-        if(button != undefined){
+        if (button != undefined) {
             analyser.cur_object = $(button).data('object_type');
             analyser.cur_action = $(button).data('action');
             $('#confirm').data('object_id', $(button).data('row-id'));
-            analyser.ajax_data = {'object_id': $(button).data('row-id')};
+            analyser.ajax_data = { 'object_id': $(button).data('row-id') };
         }
 
         // change the modal message
-        $('#modal_title').html('Confirm '+ analyser.cur_action +'!');
-        var modal_message = 'Are you sure you want to <strong>'+ analyser.cur_action +'</strong> this <strong>'+ analyser.cur_object +'</strong>. ';
-        if(analyser.cur_action == 'delete'){
+        $('#modal_title').html('Confirm ' + analyser.cur_action + '!');
+        var modal_message = 'Are you sure you want to <strong>' + analyser.cur_action + '</strong> this <strong>' + analyser.cur_object + '</strong>. ';
+        if (analyser.cur_action == 'delete') {
             modal_message += 'This action is not reversible.';
         }
 
-        if(analyser.button_settings[analyser.cur_object]['is_long_process']){
+        if (analyser.button_settings[analyser.cur_object]['is_long_process']) {
             modal_message += "<br /><br />This will take a few seconds as we save the changes and update the data collection app...";
         }
 
@@ -207,8 +207,8 @@ Analyser.prototype.initiateObjectManagement = function(){
     });
 
     $('#confirm').on('click', function () {
-        if(analyser.cur_object == 'elisa_results'){
-            $('#'+analyser.button_settings[analyser.cur_object]['form']).submit();
+        if (analyser.cur_object == 'elisa_results') {
+            $('#' + analyser.button_settings[analyser.cur_object]['form']).submit();
             return true;
         }
 
@@ -222,19 +222,19 @@ Analyser.prototype.initiateObjectManagement = function(){
             success: function (data) {
                 analyser.endShowProcessing();
                 if (data.error) {
-                    $.notify({message: data.message}, {type: 'danger'});
+                    $.notify({ message: data.message }, { type: 'danger' });
                     $('#confirmModal').modal('hide');
                     return;
                 } else {
                     var message = data.message == undefined ? analyser.button_settings[analyser.cur_object]['success_message'] : data.message;
-                    $.notify({message: message}, {type: 'success'});
+                    $.notify({ message: message }, { type: 'success' });
                     $('#confirmModal').modal('hide');
                     $('.modal-backdrop').remove();
                     $('.modal-backdrop').remove();
-                    $('#'+analyser.cur_modal).modal('hide');
+                    $('#' + analyser.cur_modal).modal('hide');
                     // we might need to update the pre-requisite table
                     analyser.button_settings[analyser.cur_object]['table'].ajax.reload();
-                    $('[name='+ analyser.button_settings[analyser.cur_object]['form'] +']').trigger("reset");
+                    $('[name=' + analyser.button_settings[analyser.cur_object]['form'] + ']').trigger("reset");
                     analyser.cur_action = undefined;
                 }
             }
@@ -242,12 +242,12 @@ Analyser.prototype.initiateObjectManagement = function(){
     });
 };
 
-Analyser.prototype.initiateActionButtons = function(id_){
-    $('#'+id_).on('show.bs.modal', function (event) {
+Analyser.prototype.initiateActionButtons = function (id_) {
+    $('#' + id_).on('show.bs.modal', function (event) {
         var button = event.relatedTarget;
         analyser.cur_object = $(button).data('object_type');
         analyser.cur_action = $(button).data('action');
-        if(analyser.newuser_validator != undefined){
+        if (analyser.newuser_validator != undefined) {
             analyser.newuser_validator.resetForm();
             $('.form-control.error').removeClass('error');
             // analyser.newuser_validator.destroy();
@@ -255,7 +255,7 @@ Analyser.prototype.initiateActionButtons = function(id_){
     });
 };
 
-Analyser.prototype.initiateGroups = function(){
+Analyser.prototype.initiateGroups = function () {
     analyser.initiateSearchAutocomplete();
     analyser.initiateDateRanges();
     var table = $('#whatsapp_groups').DataTable({
@@ -267,48 +267,48 @@ Analyser.prototype.initiateGroups = function(){
             {
                 "data": "selector",
                 "orderable": false,
-                "targets": 0, 
-                render: function ( data, type, row, meta ) {
+                "targets": 0,
+                render: function (data, type, row, meta) {
                     return sprintf(analyser.checkbox_template, row.group_id);
                 }
             },
             {
                 "data": "group_name",
                 "targets": 1,
-                render: function ( data, type, row, meta ) {
-                    return "<a href='#' class='group_link' data-group_id='"+ row.group_id +"'>"+ row.group_name +"</a>";
+                render: function (data, type, row, meta) {
+                    return "<a href='#' class='group_link' data-group_id='" + row.group_id + "'>" + row.group_name + "</a>";
                 }
             },
-            {"data": "date_created", "targets": 2 },
-            {"data": "created_by", "targets": 3 },
-            {"data": "new_users_", "targets": 4 },
-            {"data": "left_users_", "targets": 5 },
-            {"data": "no_messages_", "targets": 6 },
-            {"data": "no_images_", "targets": 7 },
-            {"data": "no_links_", "targets": 8 }
+            { "data": "date_created", "targets": 2 },
+            { "data": "created_by", "targets": 3 },
+            { "data": "new_users_", "targets": 4 },
+            { "data": "left_users_", "targets": 5 },
+            { "data": "no_messages_", "targets": 6 },
+            { "data": "no_images_", "targets": 7 },
+            { "data": "no_links_", "targets": 8 }
         ]
     });
-    table.columns().iterator( 'column', function (ctx, idx) {
-        $( table.column(idx).header() ).append('<span class="sort-icon"/>');
-    } );
+    table.columns().iterator('column', function (ctx, idx) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
 
     $('div.dataTables_filter input').addClass('form-control-clean');
     MicroModal.init();
 
-    $(document).on('click', '.group_link', function(){ analyser.showItemStats(sprintf('/group_stats/%s', $(this).data('group_id'))); });
+    $(document).on('click', '.group_link', function () { analyser.showItemStats(sprintf('/group_stats/%s', $(this).data('group_id'))); });
 };
 
-Analyser.prototype.initiateEngagedUsers = function(){
+Analyser.prototype.initiateEngagedUsers = function () {
     analyser.initiateSearchAutocomplete();
     analyser.initiateDateRanges();
     var table = $('#engaged_users').DataTable({
         "processing": true,
         "serverSide": true,
-        "ajax": $.fn.dataTable.pipeline( {
+        "ajax": $.fn.dataTable.pipeline({
             url: 'data/engaged_users',
             pages: 5,                       // number of pages to cache
-            type:'POST'
-        } ),
+            type: 'POST'
+        }),
         "rowId": 'pk_id',
         "deferRender": true,
         // dom: 'Bfrtip',
@@ -316,76 +316,76 @@ Analyser.prototype.initiateEngagedUsers = function(){
             {
                 "data": "selector",
                 "orderable": false,
-                "targets": 0, 
-                render: function ( data, type, row, meta ) {
+                "targets": 0,
+                render: function (data, type, row, meta) {
                     return sprintf(analyser.checkbox_template, row.pk_id);
                 }
             },
             {
                 "data": "name_phone",
                 "targets": 1,
-                render: function ( data, type, row, meta ) {
-                    return "<a href='#' class='user_link' data-group_id='"+ row.group_id +"' data-user_id='"+ row.name_phone +"'>"+ row.name_phone +"</a>";
+                render: function (data, type, row, meta) {
+                    return "<a href='#' class='user_link' data-group_id='" + row.group_id + "' data-user_id='" + row.name_phone + "'>" + row.name_phone + "</a>";
                 }
             },
             {
                 "data": "group_name",
                 "targets": 2,
-                render: function ( data, type, row, meta ) {
-                    return "<a href='#' class='group_link' data-group_id='"+ row.group_id +"'>"+ row.group_name +"</a>";
+                render: function (data, type, row, meta) {
+                    return "<a href='#' class='group_link' data-group_id='" + row.group_id + "'>" + row.group_name + "</a>";
                 }
             },
-            {"data": "no_messages", "targets": 3 },
-            {"data": "no_images", "targets": 4 },
-            {"data": "no_links", "targets": 5 }
+            { "data": "no_messages", "targets": 3 },
+            { "data": "no_images", "targets": 4 },
+            { "data": "no_links", "targets": 5 }
         ]
     });
 
-    table.columns().iterator( 'column', function (ctx, idx) {
-        $( table.column(idx).header() ).append('<span class="sort-icon"/>');
-    } );
+    table.columns().iterator('column', function (ctx, idx) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
 
-    $(document).on('click', '.user_link', function(){ analyser.showItemStats(sprintf('/user_stats/%s/%s', $(this).data('group_id'), $(this).data('user_id'))); });
-    $(document).on('click', '.group_link', function(){ analyser.showItemStats(sprintf('/group_stats/%s', $(this).data('group_id'))); });
+    $(document).on('click', '.user_link', function () { analyser.showItemStats(sprintf('/user_stats/%s/%s', $(this).data('group_id'), $(this).data('user_id'))); });
+    $(document).on('click', '.group_link', function () { analyser.showItemStats(sprintf('/group_stats/%s', $(this).data('group_id'))); });
 };
 
-Analyser.prototype.initiateFilesRepo = function(){
+Analyser.prototype.initiateFilesRepo = function () {
     analyser.files_table = $('#exported_chats').DataTable({
         "processing": true,
         "language": {
             processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading..n.</span> ',
         },
         "serverSide": true,
-        "ajax": $.fn.dataTable.pipeline( {
+        "ajax": $.fn.dataTable.pipeline({
             url: 'data/exported_files',
             pages: 5,                       // number of pages to cache
-            type:'POST'
-        } ),
+            type: 'POST'
+        }),
         "rowId": 'id',
         "deferRender": true,
         "columnDefs": [
             {
                 "data": "selector",
-                "targets": 0, 
-                render: function ( data, type, row, meta ) {
+                "targets": 0,
+                render: function (data, type, row, meta) {
                     return sprintf(analyser.checkbox_template, row.pk_id);
                 }
             },
-            {"data": "title", "targets": 1 },
-            {"data": "group_name", "targets": 2 },
-            {"data": "datetime_created", "targets": 3 },
-            {"data": "filesize", "targets": 4 },
-            {"data": "status", "targets": 5 },
-            {"data": "comments", "targets": 6, "sWidth": "25%" },
+            { "data": "title", "targets": 1 },
+            { "data": "group_name", "targets": 2 },
+            { "data": "datetime_created", "targets": 3 },
+            { "data": "filesize", "targets": 4 },
+            { "data": "status", "targets": 5 },
+            { "data": "comments", "targets": 6, "sWidth": "25%" },
             {
                 "data": "actions",
-                "targets": 7, 
-                render: function ( data, type, row, meta ) {
+                "targets": 7,
+                render: function (data, type, row, meta) {
                     edit_btn = sprintf(analyser.edit_template, 'reprocess_file', '#reprocessFile', 'reprocess_file', row.pk_id);
                     return edit_btn;
                 }
             }
-            
+
         ]
     });
 
@@ -400,16 +400,16 @@ Analyser.prototype.initiateFilesRepo = function(){
             success: function (data) {
                 analyser.endShowProcessing();
                 if (data.error) {
-                    $.notify({message: data.message}, {type: 'danger'});
+                    $.notify({ message: data.message }, { type: 'danger' });
                     $('#process_files').modal('hide');
                     return;
                 } else {
                     var message = data.message == undefined ? analyser.button_settings[analyser.cur_object]['success_message'] : data.message;
-                    $.notify({message: message}, {type: 'success'});
+                    $.notify({ message: message }, { type: 'success' });
                     $('#process_files').modal('hide');
                     $('.modal-backdrop').remove();
                     $('.modal-backdrop').remove();
-                    $('#'+analyser.cur_modal).modal('hide');
+                    $('#' + analyser.cur_modal).modal('hide');
                     // we might need to update the pre-requisite table
                     analyser.files_table.ajax.reload();
                 }
@@ -418,44 +418,44 @@ Analyser.prototype.initiateFilesRepo = function(){
     });
 };
 
-Analyser.prototype.showProcessing = function(){
+Analyser.prototype.showProcessing = function () {
     $('#overlay, .cssload-loader').css('display', 'flex');
 };
 
-Analyser.prototype.endShowProcessing = function(){
+Analyser.prototype.endShowProcessing = function () {
     $('#overlay, .cssload-loader').css('display', 'none');
 };
 
-Analyser.prototype.initiateDashboard = function(){
+Analyser.prototype.initiateDashboard = function () {
     analyser.initiateSearchAutocomplete();
     analyser.initiateDateRanges();
 
     var gauge1 = Gauge(
-      document.getElementById("processing_progress"), {
+        document.getElementById("processing_progress"), {
         max: 100,
         dialStartAngle: -90,
         dialEndAngle: -90.001,
         value: 100,
-        label: function(value) {
-          return (Math.round(value * 100) / 100) + '%';
+        label: function (value) {
+            return (Math.round(value * 100) / 100) + '%';
         }
-      }
+    }
     );
     gauge1.setValueAnimated(analyser.stats.perc_processed, 1);
 };
 
-Analyser.prototype.initiateGroupStats = function(){
+Analyser.prototype.initiateGroupStats = function () {
     analyser.initiateSearchAutocomplete();
     analyser.initiateDateRanges();
     analyser.drawGroupStatsGraphs();
 };
 
-Analyser.prototype.initiateDateRanges = function(){
-    if(analyser.stats == undefined || analyser.stats.max_date == undefined){
+Analyser.prototype.initiateDateRanges = function () {
+    if (analyser.stats == undefined || analyser.stats.max_date == undefined) {
         my_max_date = moment().format('DD/MM/YYYY');
         my_min_date = moment().subtract(730, 'days').format('DD/MM/YYYY');
     }
-    else{
+    else {
         my_max_date = moment(analyser.stats.max_date, 'DD/MM/YYYY').format('DD/MM/YYYY');
         my_min_date = moment(analyser.stats.min_date, 'DD/MM/YYYY').format('DD/MM/YYYY');
     }
@@ -467,21 +467,21 @@ Analyser.prototype.initiateDateRanges = function(){
         'maxDate': my_max_date,
         'minDate': my_min_date
     }
-    
-    if(analyser.stats == undefined || analyser.stats.s_date == undefined){
+
+    if (analyser.stats == undefined || analyser.stats.s_date == undefined) {
         picker_settings['startDate'] = moment().subtract(90, 'days').format('DD/MM/YYYY');
         picker_settings['endDate'] = moment().subtract(60, 'days').format('DD/MM/YYYY');
     }
-    else{
+    else {
         picker_settings['startDate'] = moment(analyser.stats.s_date, 'DD/MM/YYYY').format('DD/MM/YYYY');
         picker_settings['endDate'] = moment(analyser.stats.e_date, 'DD/MM/YYYY').format('DD/MM/YYYY');
     }
 
     $('input[name="analysis_range"]').daterangepicker(picker_settings);
-    $('input[name="analysis_range"]').on('apply.daterangepicker', function(ev, picker){ analyser.showItemStats(window.location.pathname); });
+    $('input[name="analysis_range"]').on('apply.daterangepicker', function (ev, picker) { analyser.showItemStats(window.location.pathname); });
 };
 
-Analyser.prototype.drawGroupStatsGraphs = function(){
+Analyser.prototype.drawGroupStatsGraphs = function () {
     Highcharts.chart('categories_chart', {
         chart: {
             plotBackgroundColor: null,
@@ -506,7 +506,7 @@ Analyser.prototype.drawGroupStatsGraphs = function(){
                 dataLabels: {
                     enabled: true,
                     distance: -50,
-                    formatter: function(){ return sprintf('%s: %.1f%%', this.point.name, (this.point.y / analyser.stats.totals) * 100); }
+                    formatter: function () { return sprintf('%s: %.1f%%', this.point.name, (this.point.y / analyser.stats.totals) * 100); }
                 }
             }
         },
@@ -531,7 +531,7 @@ Analyser.prototype.drawGroupStatsGraphs = function(){
 
     Highcharts.chart('active_days', {
         chart: { zoomType: 'xy' },
-        title: { text: ''},
+        title: { text: '' },
         xAxis: {
             categories: analyser.stats.active_dates.dates,
             crosshair: true
@@ -560,16 +560,34 @@ Analyser.prototype.drawGroupStatsGraphs = function(){
             },
             series: {
                 point: {
-                  events: {
-                    click() {
-                        let point = this;
+                    events: {
+                        click() {
+                            let point = this;
 
-                        let date = point.category;
-                        let sent_messages = point.y;
+                            let date = point.category;
+                            let sent_messages = point.y;
+                            let group_id = $("#group_id").val()
 
-                      console.log(sent_messages)
+                            ajax_data = { 'group_id': $("#group_id").val(), date: point.category };
+                            console.log(ajax_data)
+                            $.ajax({
+                                type: "POST", url: '/searchGroupChatByDate', dataType: 'json', data: ajax_data,
+                                
+                                success: function (data) {
+                                    console.log(data)
+                                    populateChatDiv(data)
+                                    // if (!data.error) {
+                                    //     $.notify({ message: data.message }, { type: 'success' });
+                                    // } else {
+                                    //     $.notify({ message: data.message }, { type: 'danger' });
+                                    // }
+                                }
+                            });
+
+                            $("#exampleGetChatHistory").modal('show')
+                            //console.log(sent_messages)
+                        }
                     }
-                  }
                 }
             }
         },
@@ -589,71 +607,71 @@ Analyser.prototype.drawGroupStatsGraphs = function(){
 
 
     var gauge1 = Gauge(
-      document.getElementById("attrition"), {
+        document.getElementById("attrition"), {
         max: 100,
         dialStartAngle: -90,
         dialEndAngle: -90.001,
         value: 100,
-        label: function(value) {
-          return (Math.round(value * 100) / 100) + '%';
+        label: function (value) {
+            return (Math.round(value * 100) / 100) + '%';
         }
-      }
+    }
     );
-    gauge1.setValueAnimated(((analyser.stats.lefties / analyser.stats.no_users)*100).toFixed(1), 1);
+    gauge1.setValueAnimated(((analyser.stats.lefties / analyser.stats.no_users) * 100).toFixed(1), 1);
 
     var gauge2 = Gauge(
-      document.getElementById("joining"), {
+        document.getElementById("joining"), {
         max: 100,
         dialStartAngle: -90,
         dialEndAngle: -90.001,
         value: 100,
-        label: function(value) {
-          return (Math.round(value * 100) / 100) + '%';
+        label: function (value) {
+            return (Math.round(value * 100) / 100) + '%';
         }
-      }
+    }
     );
-    gauge2.setValueAnimated(((analyser.stats.joinies / analyser.stats.no_users)*100).toFixed(1), 1);
+    gauge2.setValueAnimated(((analyser.stats.joinies / analyser.stats.no_users) * 100).toFixed(1), 1);
 };
 
-Analyser.prototype.initiateUserStats = function(){
+Analyser.prototype.initiateUserStats = function () {
     analyser.initiateSearchAutocomplete();
     analyser.initiateDateRanges();
     analyser.drawUserStatsGraphs();
 };
 
-Analyser.prototype.initiateSearchAutocomplete = function(){
+Analyser.prototype.initiateSearchAutocomplete = function () {
     $('#global_search').autocomplete({
         minChars: 3,
         serviceUrl: '/data/search',
         type: 'POST',
         dataType: 'json',
-        onSelect: function(selection){
+        onSelect: function (selection) {
             console.log(selection);
 
             // show the detail of this thing
-            if(selection.data.category == 'Group') url = sprintf('/group_stats/%s', selection.data.id);
-            else if(selection.data.category == 'User') url = sprintf('/user_stats/%s/%s', selection.data.group_id, selection.data.user);
-            else if(selection.data.category == 'File') url = sprintf('/file_stats/%s', selection.data.id);
-            
+            if (selection.data.category == 'Group') url = sprintf('/group_stats/%s', selection.data.id);
+            else if (selection.data.category == 'User') url = sprintf('/user_stats/%s/%s', selection.data.group_id, selection.data.user);
+            else if (selection.data.category == 'File') url = sprintf('/file_stats/%s', selection.data.id);
+
             analyser.showItemStats(url);
         }
     });
 };
 
-Analyser.prototype.showItemStats = function(url){
+Analyser.prototype.showItemStats = function (url) {
     range = $('[name=analysis_range]').val();
     $(
         sprintf(
-            "<form class='hidden-form' action='%s' method='post' style='display: none;'><input type='hidden' name='range' value='%s'><input type='hidden' name='csrfmiddlewaretoken' value='%s'></form>", 
-            url, 
-            range, 
+            "<form class='hidden-form' action='%s' method='post' style='display: none;'><input type='hidden' name='range' value='%s'><input type='hidden' name='csrfmiddlewaretoken' value='%s'></form>",
+            url,
+            range,
             analyser.csrftoken
         )
     ).appendTo('body');
     $('.hidden-form').submit();
 };
 
-Analyser.prototype.drawUserStatsGraphs = function(){
+Analyser.prototype.drawUserStatsGraphs = function () {
     Highcharts.chart('categories_chart', {
         chart: {
             plotBackgroundColor: null,
@@ -702,7 +720,7 @@ Analyser.prototype.drawUserStatsGraphs = function(){
 
     Highcharts.chart('active_days', {
         chart: { type: 'column' },
-        title: { text: ''},
+        title: { text: '' },
         xAxis: {
             categories: analyser.stats.active_dates.dates,
             crosshair: true
@@ -727,9 +745,9 @@ Analyser.prototype.drawUserStatsGraphs = function(){
                 pointPadding: 0.2,
                 borderWidth: 0
             },
-            
+
         },
-        
+
         series: [{
             name: 'Sent Messages',
             data: analyser.stats.active_dates.messages
@@ -738,37 +756,37 @@ Analyser.prototype.drawUserStatsGraphs = function(){
     });
 
     var gauge1 = Gauge(
-      document.getElementById("group_interaction"), {
+        document.getElementById("group_interaction"), {
         max: 100,
         dialStartAngle: -90,
         dialEndAngle: -90.001,
         value: 100,
-        label: function(value) {
-          return (Math.round(value * 100) / 100) + '%';
+        label: function (value) {
+            return (Math.round(value * 100) / 100) + '%';
         }
-      }
+    }
     );
     gauge1.setValueAnimated(analyser.stats.grp_interaction, 1);
 };
 
-Analyser.prototype.communicationError = function(){
+Analyser.prototype.communicationError = function () {
     analyser.destroyLoadingSpinner();
 };
 
-Analyser.prototype.showLoadingSpinner = function(loading_text='Loading...'){
+Analyser.prototype.showLoadingSpinner = function (loading_text = 'Loading...') {
     if (typeof $('body').loadingModal === "function") {
         $('body').loadingModal({
-          position: 'auto',
-          text: loading_text,
-          color: '#fff',
-          opacity: '0.7',
-          backgroundColor: 'rgb(0,0,0)',
-          animation: 'cubeGrid'
+            position: 'auto',
+            text: loading_text,
+            color: '#fff',
+            opacity: '0.7',
+            backgroundColor: 'rgb(0,0,0)',
+            animation: 'cubeGrid'
         });
     }
 };
 
-Analyser.prototype.destroyLoadingSpinner = function(){
+Analyser.prototype.destroyLoadingSpinner = function () {
     if (typeof $('body').loadingModal === "function") {
         $('body').loadingModal('destroy');
     }
@@ -777,45 +795,70 @@ Analyser.prototype.destroyLoadingSpinner = function(){
 function objectifyForm(formArray) {
     //serialize data function
     var returnArray = {};
-    for (var i = 0; i < formArray.length; i++){
+    for (var i = 0; i < formArray.length; i++) {
         returnArray[formArray[i]['name']] = formArray[i]['value'];
     }
     return returnArray;
 }
 
+function populateChatDiv(data) {
+    $("#chat_modal").empty()
+
+    data.forEach(chat => {
+        let msg = chat.message;
+
+        if(!msg.includes("omitted")) {
+            row = '<li class="chat_item darker">';
+        row += '<div class="row">';
+        row += '<div class="col-lg-8">';
+            row += '<p>' + chat.message + '</p>';
+            row += '<span class="time-left">' + chat.datetime_sent + '</span>';
+        row += '</div>';
+        row += '<div class="col-lg-8">';
+            row += '<span style="float: right;">' + chat.user.name_phone + '</span>';
+        row += '</div>';
+        row += '</div>';
+        row += '</div>';
+
+        $("#chat_modal").append(row)
+        }
+        
+    });
+}
+
 analyser = new Analyser();
 
-$(document).on('click', '.nav-deep.badili-nav .nav-item', function(){
+$(document).on('click', '.nav-deep.badili-nav .nav-item', function () {
     $(this).find('ul').toggle(1000);
 });
 
 //-- Plugin implementation
-(function($) {
-  $.fn.countTo = function(options) {
-    return this.each(function() {
-      //-- Arrange
-      var FRAME_RATE = 60; // Predefine default frame rate to be 60fps
-      var $el = $(this);
-      var countFrom = parseInt($el.attr('data-count-from'));
-      var countTo = parseInt($el.attr('data-count-to'));
-      var countSpeed = $el.attr('data-count-speed'); // Number increment per second
+(function ($) {
+    $.fn.countTo = function (options) {
+        return this.each(function () {
+            //-- Arrange
+            var FRAME_RATE = 60; // Predefine default frame rate to be 60fps
+            var $el = $(this);
+            var countFrom = parseInt($el.attr('data-count-from'));
+            var countTo = parseInt($el.attr('data-count-to'));
+            var countSpeed = $el.attr('data-count-speed'); // Number increment per second
 
-      //-- Action
-      var rafId;
-      var increment;
-      var currentCount = countFrom;
-      var countAction = function() {              // Self looping local function via requestAnimationFrame
-        if(currentCount < countTo) {              // Perform number incremeant
-          $el.text(Math.floor(currentCount));     // Update HTML display
-          increment = countSpeed / FRAME_RATE;    // Calculate increment step
-          currentCount += increment;              // Increment counter
-          rafId = requestAnimationFrame(countAction);
-        } else {                                  // Terminate animation once it reaches the target count number
-          $el.text(countTo);                      // Set to the final value before everything stops
-          //cancelAnimationFrame(rafId);
-        }
-      };
-      rafId = requestAnimationFrame(countAction); // Initiates the looping function
-    });
-  };
+            //-- Action
+            var rafId;
+            var increment;
+            var currentCount = countFrom;
+            var countAction = function () {              // Self looping local function via requestAnimationFrame
+                if (currentCount < countTo) {              // Perform number incremeant
+                    $el.text(Math.floor(currentCount));     // Update HTML display
+                    increment = countSpeed / FRAME_RATE;    // Calculate increment step
+                    currentCount += increment;              // Increment counter
+                    rafId = requestAnimationFrame(countAction);
+                } else {                                  // Terminate animation once it reaches the target count number
+                    $el.text(countTo);                      // Set to the final value before everything stops
+                    //cancelAnimationFrame(rafId);
+                }
+            };
+            rafId = requestAnimationFrame(countAction); // Initiates the looping function
+        });
+    };
 }(jQuery));

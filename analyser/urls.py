@@ -68,6 +68,8 @@ urlpatterns = [
     re_path(r'^chats$', views.getchats, name='assigned_counselors'),
     re_path(r'^assigned_advisors$', views.assigned_advisors, name='assigned_advisors'),
 
+    # search group chat
+    re_path(r'^searchGroupChatByDate$', views.searchGroupChatByDate, name='searchGroupChatByDate'),
 
 
     

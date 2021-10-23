@@ -35,9 +35,12 @@ from analyser.serializers import PersonnelSerializer, WhatsAppGroupSerializer, W
 # Import UserManagement 
 from analyser.chat.UserManagement import UserManagement
 
+from analyser.chat.MessageHistory import MessageHistory
+
 terminal = Terminal()
 sentry_sdk.init(settings.SENTRY_DSN)
 manageUser = UserManagement()
+messageHistory = MessageHistory()
 
 cur_user_email = None
 my_hashids = Hashids(min_length=5, salt=settings.SECRET_KEY)
@@ -264,5 +267,17 @@ def getchats(request):
 
     
     data = manageUser.getCounselorsAssignedToAdvisor(request.user)
+    date = '2021-09-07'
+    group_id = 1
+
+    messages = messageHistory.getMessageLogByDate(date,group_id)
     params['assigned'] = data
+    params['messages'] = messages
     return render(request, 'dashboard/chats.html', params)
+
+@login_required(login_url='/login')
+def searchGroupChatByDate(request):
+    #group_id=int(my_hashids.decode(request.POST.get('group_id'))[0])
+
+    data = messageHistory.getMessageLogByDate(request.POST.get('date'), request.POST.get('group_id'))
+    return JsonResponse(data, status=200, safe=False)

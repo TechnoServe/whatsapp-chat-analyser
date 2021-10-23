@@ -6,9 +6,13 @@
 <link rel="stylesheet" href="{{ static('node_modules/font-awesome/css/font-awesome.min.css') }}">
 
 <link rel="stylesheet" href="{{ static('css/data_table.css') }}">
+<link rel="stylesheet" href="{{ static('main.css') }}">
 {% endblock %}
 
 {% block main_content %}
+
+<!-- -->
+<input type="hidde" id="group_id" value="{{ group_id }}">
 
 <!-- section header -->
 <div class="bg-white rounded clearfix p-3 mb-4">
@@ -166,6 +170,26 @@
     </div>
 </div>
 
+<!-- Chat Modal -->
+<div class="modal fade" id="exampleGetChatHistory" tabindex="-1" role="dialog" aria-labelledby="exampleGetChatHistory" 
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chat history for this week</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="chat_modal" style="overflow-y: scroll !important; height:400px !important;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block javascript %}
@@ -181,5 +205,59 @@
     });
 </script>
 
+<style>
+    /* Chat containers */
+    .chat_item {
+      border: 2px solid #dedede;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    
+    /* Darker chat container */
+    .darker {
+      border-color: #ccc;
+      background-color: #ddd;
+    }
+    
+    /* Clear floats */
+    .chat_item::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+    
+    /* Style images */
+    .chat_item img {
+      float: left;
+      max-width: 60px;
+      width: 100%;
+      margin-right: 20px;
+      border-radius: 50%;
+    }
+    
+    /* Style the right image */
+    .chat_item img.right {
+      float: right;
+      margin-left: 20px;
+      margin-right:0;
+    }
+    
+    /* Style time text */
+    .time-right {
+      float: right;
+      color: #aaa;
+    }
+    
+    /* Style time text */
+    .time-left {
+      float: left;
+      color: #999;
+    }
+    </style>
+    
 
 {% endblock %}
+
+

@@ -1,6 +1,6 @@
 from django.conf import settings
 
-from .models import Personnel, WhatsAppGroup, WhatsAppChatFile, GroupDailyStats, UserDailyStats, AdvisorManagerAssignment, CounselorAdvisorAssignment
+from .models import Personnel, WhatsAppGroup, WhatsAppChatFile, GroupDailyStats, UserDailyStats, AdvisorManagerAssignment, CounselorAdvisorAssignment, MessageLog
 from rest_framework import serializers
 from hashids import Hashids
 
@@ -78,3 +78,9 @@ class AdvisorManagerAssignmentSerializer(BaseSerializer):
     class Meta:
         model = AdvisorManagerAssignment
         fields = ['advisor', 'manager']
+
+class MessageLogSerializer(BaseSerializer):
+    user = UserDailyStatsSerializer()
+    class Meta:
+        model = MessageLog
+        fields = ['message', 'datetime_sent', 'user']
