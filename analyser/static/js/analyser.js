@@ -569,6 +569,7 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
                             let group_id = $("#group_id").val()
 
                             ajax_data = { 'group_id': $("#group_id").val(), date: point.category };
+                            $("#date_selected").html(date)
                             console.log(ajax_data)
                             $.ajax({
                                 type: "POST", url: '/searchGroupChatByDate', dataType: 'json', data: ajax_data,
@@ -576,11 +577,6 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
                                 success: function (data) {
                                     console.log(data)
                                     populateChatDiv(data)
-                                    // if (!data.error) {
-                                    //     $.notify({ message: data.message }, { type: 'success' });
-                                    // } else {
-                                    //     $.notify({ message: data.message }, { type: 'danger' });
-                                    // }
                                 }
                             });
 
