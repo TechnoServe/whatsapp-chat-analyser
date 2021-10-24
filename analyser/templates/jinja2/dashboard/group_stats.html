@@ -7,6 +7,17 @@
 
 <link rel="stylesheet" href="{{ static('css/data_table.css') }}">
 <link rel="stylesheet" href="{{ static('main.css') }}">
+
+<!-- FOR WORD CLOUD -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<!-- -------------- -->
+
+
 {% endblock %}
 
 {% block main_content %}
@@ -166,7 +177,18 @@
                 </div>
             </div>
         </div>
-        <!-- END OF COLUMN 1 -->
+        <!-- second row -->
+    </div>
+    <div class="row ">
+        <div class="col-12">
+            <div class='tns_card'style='width:100%;'>
+                <span class="tns_card_title">Word Cloud </span>
+                <div class='d-flex'>
+                    <div id='word_cloud' style='width:2000px;height: 1000px;'>&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
