@@ -605,9 +605,16 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
 
 
     
-    word = `Declarative visualization grammars can accelerate development, facilitate retargeting across platforms, and allow language-level optimizations. However, existing declarative visualization languages are primarily concerned with visual encoding, and rely on imperative event handlers for interactive behaviors. In response, we introduce a model of declarative interaction design for data visualizations. Adopting methods from reactive programming, we model low-level events as composable data streams from which we form higher-level semantic signals. Signals feed predicates and scale inversions, which allow us to generalize interactive selections at the level of item geometry (pixels) into interactive queries over the data domain. Production rules then use these queries to manipulate the visualization’s appearance. To facilitate reuse and sharing, these constructs can be encapsulated as named interactors: standalone, purely declarative specifications of interaction techniques. We assess our model’s feasibility and expressivity by instantiating it with extensions to the Vega visualization grammar. Through a diverse range of examples, we demonstrate coverage over an established taxonomy of visualization interaction techniques.",
+    word = `I don't know and I cant tell I thought he already gave us the go ahead to meet with our sponsor So when is our first meeting? Can we do it earlier or later after 8:30? Our meeting is at 4pm right Can we meet for 10-15 mins to digest what we just heard Hello team, we need to find a way to meet our cmu practicum adviser Hello team, we need to find a way to meet our cmu practicum adviser Please tell him we want to meet with him Kindly put your github usernames here Has anyone being able to run the technoserve project Monday before practicum meeting is also great,
     `
-    words = word.replace(stopwords, "")
+    var words = ""
+    words = word.replace(stopwords[0], "")
+    words = words.toLowerCase()
+    
+    // stopwords.forEach(stop => {
+    //     words = words.replace(stop, "")
+    // });
+    // console.log(words)
 
     const text = words,
         lines = text.split(/[,\. ]+/g),
