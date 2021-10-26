@@ -23,7 +23,7 @@
 {% block main_content %}
 
 <!-- -->
-<input type="hidde" id="group_id" value="{{ group_id }}">
+<input type="hidden" id="group_id" value="{{ group_id }}">
 
 <!-- section header -->
 <div class="bg-white rounded clearfix p-3 mb-4">
@@ -211,6 +211,9 @@
         </div>
     </div>
 </div>
+
+<!--Word Cloud Stuff-->
+<div type="hidden" class="hide" id="tokenized_text"> {{ wordCloud }}</div>
 
 {% endblock %}
 

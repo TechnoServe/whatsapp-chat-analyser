@@ -15,6 +15,8 @@ import sentry_sdk
 from datetime import datetime
 from tzlocal import get_localzone
 
+import json
+
 terminal = Terminal()
 sentry_sdk.init(settings.SENTRY_DSN)
 my_hashids = Hashids(min_length=5, salt=settings.SECRET_KEY)
@@ -66,6 +68,7 @@ class DBService:
         # 1. Save the group
         # 2. Save the group daily stats
         # 3. Save the user daily stats
+        self.cur_file_messages = []
         max_count = {'hr': -1, 'count': -1}
         for hr_, count_ in cur_day_details['active_hrs'].items(): max_count={'hr':hr_, 'count':count_} if count_>max_count['count'] else max_count
         try:

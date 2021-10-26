@@ -605,16 +605,7 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
 
 
     
-    word = `I don't know and I cant tell I thought he already gave us the go ahead to meet with our sponsor So when is our first meeting? Can we do it earlier or later after 8:30? Our meeting is at 4pm right Can we meet for 10-15 mins to digest what we just heard Hello team, we need to find a way to meet our cmu practicum adviser Hello team, we need to find a way to meet our cmu practicum adviser Please tell him we want to meet with him Kindly put your github usernames here Has anyone being able to run the technoserve project Monday before practicum meeting is also great,
-    `
-    var words = ""
-    words = word.replace(stopwords[0], "")
-    words = words.toLowerCase()
-    
-    // stopwords.forEach(stop => {
-    //     words = words.replace(stop, "")
-    // });
-    // console.log(words)
+    let words = $("#tokenized_text").html()
 
     const text = words,
         lines = text.split(/[,\. ]+/g),

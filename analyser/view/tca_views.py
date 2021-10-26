@@ -32,6 +32,9 @@ from analyser.common_tasks import Notification, Terminal
 from analyser.analyser import Analyser
 from analyser.serializers import PersonnelSerializer, WhatsAppGroupSerializer, WhatsAppChatFileSerializer, UserDailyStatsSerializer
 
+# NLP Related Imports
+from analyser.nlp.WordCloud import WordCloud
+
 terminal = Terminal()
 sentry_sdk.init(settings.SENTRY_DSN)
 
@@ -39,6 +42,7 @@ cur_user_email = None
 my_hashids = Hashids(min_length=5, salt=settings.SECRET_KEY)
 
 User = get_user_model()
+wordCloud = WordCloud()
 
 class CustomPasswordResetTokenGenerator(PasswordResetTokenGenerator):
     """Custom Password Token Generator Class."""
@@ -648,6 +652,9 @@ def show_group_stats(request, uid):
         params['name_changes'] = params['stats']['name_changes']
         params['stats'].pop('name_changes')
         params['group_id'] = group_id
+        params['wordCloud'] = wordCloud.getGroupChat(group_id)
+
+        
 
         return render(request, 'dashboard/group_stats.html', params)
     except Exception as e:

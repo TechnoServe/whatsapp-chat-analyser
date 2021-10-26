@@ -23,3 +23,9 @@ class MessageHistory:
 
         result = MessageLogSerializer(qs, many=True)
         return result.data
+
+    
+    def getAllMessages(self):
+        qs = MessageLog.objects.all().values_list('message')
+
+    
