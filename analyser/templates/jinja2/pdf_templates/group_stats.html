@@ -1,0 +1,287 @@
+
+{% block css %}
+<link rel="stylesheet" href="../../../static/node_modules/material-design-lite/material.min.css" />
+<link rel="stylesheet" href="../../../static/node_modules/parsleyjs/src/parsley.css" />
+<link rel="stylesheet" href="../../../static/node_modules/font-awesome/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="../../../static/css/data_table.css">
+<link rel="stylesheet" href="../../../static/main.css">
+
+<!-- FOR WORD CLOUD -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/wordcloud.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<!-- -------------- -->
+
+
+{% endblock %}
+
+{% block main_content %}
+
+<!-- -->
+<input type="hidden" id="group_id" value="{{ group_id }}">
+
+<!-- section header -->
+<div class="bg-white rounded clearfix p-3 mb-4">
+    <h5 class='title'>
+        <span class=''><i class="fi fi-layers"></i></span>&nbsp;&nbsp;<span class='text-primary'>{{ stats.group_name }}</span> Analysis
+    </h5>
+    <small class="d-block text-muted fs--14">{{ stats.s_date }} - {{ stats.e_date }}</small>
+
+    {% if error %}
+        <div class="portlet-header border-bottom text-danger">
+        {{ message }}
+        </div>
+    {% elif stats.info_message %}
+        <div class="portlet-header border-bottom text-primary">
+        {{ stats.info_message }}
+        </div>
+    {% endif %}
+</div>
+
+<!-- /section header -->
+
+<div class="app-main__inner">
+    <div class="row gutters-sm">
+
+        <!-- COLUMN 1 -->
+        <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-4">
+            <div class='tns_card'>
+                <span class="tns_card_title">Most Active Day</span>
+                <div class='d-flex'>
+                    <img src="../../../static/images/tag.svg" alt='tag' class="tag" >
+                    <span class="tns_tag_value">{{ stats.most_active_day }}</span>
+                </div>
+            </div>
+            <div class='tns_card'>
+                <span class="tns_card_title">Attrition Level</span>
+                <div class='row'>
+                    <div class='col-5'>
+                        <div class='d-flex text-center'>
+                            <div id="attrition" class="gauge-container red" style="height:auto;"></div>
+                        </div>
+                    </div>
+                    <div class='col-7 pl-0 pt-4'>
+                        <div class='row mt-4'>
+                            <div class='col-3'>
+                                <button type="button" class="btn rounded-circle btn-danger btn-soft mb-2"><i class="fi fi-arrow-down"></i></button>
+                            </div>
+                            <div class='col-9 pt-3'>
+                                <span class="tns_tag_value">{{ stats.lefties }}</span>
+                                <span class="tns_tag_value">Left Users</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='tns_card'>
+                <span class="tns_card_title">Joining Level</span>
+                <div class='row'>
+                    <div class='col-5'>
+                        <div class='d-flex text-center'>
+                            <div id="joining" class="gauge-container green" style="height:auto;"></div>
+                        </div>
+                    </div>
+                    <div class='col-7 pl-0 pt-4'>
+                        <div class='row mt-4'>
+                            <div class='col-3'>
+                                <button type="button" class="btn rounded-circle btn-success btn-soft mb-2"><i class="fi fi-arrow-up"></i></button>
+                            </div>
+                            <div class='col-9 pt-3'>
+                                <span class="tns_tag_value">{{ stats.joinies }}</span>
+                                <span class="tns_tag_value">New Users</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='tns_card'>
+                <span class="tns_card_title">Group Name Changes</span>
+                <ul id='group_names' class='pl-0'>
+                    {% for change_ in name_changes %}
+                    <li class="clearfix d-block dropdown-item font-weight-medium p-3 rounded overflow-hidden border-bottom border-light">
+
+                        <!-- badge -->
+                        {% if loop.index == 1 %}
+                        <span class="badge badge-success float-end font-weight-normal mt-1">current</span>
+                        {% endif %}
+
+                        <!-- NOTIFICATION -->
+                        <p class="fs--14 m-0 text-truncate font-weight-normal">
+                            <i class="fi fi-arrow-right-full d-middle text-success float-start fs--20 bg-light w--20 h--20 text-center"></i>
+                            {{ change_.to_name }}
+                        </p>
+                        <p class="fs--14 m-0 text-truncate font-weight-normal">
+                            <i class="fi fi-arrow-left-full d-middle text-danger float-start fs--20 bg-light w--20 h--20 text-center"></i>
+                            {{ change_.from_name }}
+                        </p>
+
+                        <!-- date -->
+                        <small class="d-block fs--11 text-muted">
+                            on {{ change_.change_datetime_ }}
+                        </small>
+
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <!-- END OF COLUMN 1 -->
+
+        <!-- COLUMN 2 -->
+        <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-3">
+            <div class='tns_card'>
+                <span class="tns_card_title">Active Time of Day</span>
+                <div class='d-flex'>
+                    <img src="../../../static/images/tag.svg" alt='tag' class="tag" >
+                    <span class="tns_tag_value">{{ stats.most_active_time.most_active_hr }}:00 HRS</span>
+                </div>
+            </div>
+            <div class='tns_card'>
+                <span class="tns_card_title">Most Active User</span>
+                <div class='d-flex'>
+                    <img src="../../../static/images/tag.svg" alt='tag' class="tag" >
+                    <span class="tns_tag_value">{{ stats.active_user.name_phone }}</span>
+                </div>
+            </div>
+            <div class='tns_card'>
+                <span class="tns_card_title">Categories of information sent</span>
+                <div class='d-flex'>
+                    <div id='categories_chart' style='width:400px;'>&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <!-- END OF COLUMN 1 -->
+
+        <!-- COLUMN 3 -->
+        <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-3">
+            <div class='tns_card'>
+                <span class="tns_card_title">Most Popular emoji</span>
+                <div class='d-flex'>
+                    <img src="../../../static/images/tag.svg" alt='tag' class="tag" >
+                    {% if stats.emojis|length == 0 %}
+                    <span class="tns_tag_value">No Emojis Sent</span>
+                    {% else %}
+                    <span class="tns_tag_value emoji_pop">{{ stats.emojis[0].e }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class='tns_card'>
+                <span class="tns_card_title">Active Days</span>
+                <div class='d-flex'>
+                    <div id='active_days' style='width:400px;'>&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <!-- second row -->
+    </div>
+    <div class="row ">
+        <div class="col-12">
+            <div class='tns_card'style='width:100%;'>
+                <span class="tns_card_title">Word Cloud </span>
+                <div class='d-flex'>
+                    <div id='word_cloud' style='width:2000px;height: 1000px;'>&nbsp;</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Chat Modal -->
+<div class="modal fade" id="exampleGetChatHistory" tabindex="-1" role="dialog" aria-labelledby="exampleGetChatHistory" 
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chat history for <span id="date_selected"></span></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="chat_modal" style="overflow-y: scroll !important; height:400px !important;">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Word Cloud Stuff-->
+<div type="hidden" class="hide" id="tokenized_text"> {{ wordCloud }}</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script type='text/javascript' src="../../../static/node_modules/highcharts/modules/drilldown.js"></script>
+<script type='text/javascript' src="../../../static/node_modules/highcharts/modules/data.js"></script>
+<script type='text/javascript' src="../../../static/node_modules/svg-gauge/dist/gauge.min.js"></script>
+<script type='text/javascript' src="../../../static/node_modules/svg-gauge/dist/gauge.min.js"></script>
+
+<script>
+    $(document).ready(function(){
+        analyser.stats = {{ stats | safe }};
+        analyser.initiatePages();
+    });
+</script>
+
+<style>
+    /* Chat containers */
+    .chat_item {
+      border: 2px solid #dedede;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    
+    /* Darker chat container */
+    .darker {
+      border-color: #ccc;
+      background-color: #ddd;
+    }
+    
+    /* Clear floats */
+    .chat_item::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+    
+    /* Style images */
+    .chat_item img {
+      float: left;
+      max-width: 60px;
+      width: 100%;
+      margin-right: 20px;
+      border-radius: 50%;
+    }
+    
+    /* Style the right image */
+    .chat_item img.right {
+      float: right;
+      margin-left: 20px;
+      margin-right:0;
+    }
+    
+    /* Style time text */
+    .time-right {
+      float: right;
+      color: #aaa;
+    }
+    
+    /* Style time text */
+    .time-left {
+      float: left;
+      color: #999;
+    }
+    </style>
+    
+
+{% endblock %}
+
+

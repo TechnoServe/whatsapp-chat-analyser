@@ -38,7 +38,6 @@ my_hashids = Hashids(min_length=5, salt=settings.SECRET_KEY)
 # Instantiate DBService object
 dbService = DBService()
 
-
 SCOPES = ['https://www.googleapis.com/auth/drive.readonly']
 
 # You changed the subject from "mSPARK MSA DUKAS T1" to "mSPARK MOMBASA DUKAS T1"

@@ -79,12 +79,12 @@ class Utilities:
         # if y != '': print(y)
         return y
 
-        emoji_list = []
-        data = re.findall(r'\X', text)
-        for word in data:
-            if any(char in emoji.UNICODE_EMOJI for char in word):
-                emoji_list.append(word)
-        return emoji_list
+        # emoji_list = []
+        # data = re.findall(r'\X', text)
+        # for word in data:
+        #     if any(char in emoji.UNICODE_EMOJI for char in word):
+        #         emoji_list.append(word)
+        # return emoji_list
     
 
     def process_dated_non_message(chat_mssg):
