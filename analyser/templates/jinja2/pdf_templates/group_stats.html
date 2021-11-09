@@ -52,7 +52,6 @@
             <div class='tns_card'>
                 <span class="tns_card_title">Most Active Day</span>
                 <div class='d-flex'>
-                    <img src="../../../static/images/tag.svg" alt='tag' class="tag" >
                     <span class="tns_tag_value">{{ stats.most_active_day }}</span>
                 </div>
             </div>
@@ -136,14 +135,12 @@
             <div class='tns_card'>
                 <span class="tns_card_title">Active Time of Day</span>
                 <div class='d-flex'>
-                    <img src="../../../static/images/tag.svg" alt='tag' class="tag" >
                     <span class="tns_tag_value">{{ stats.most_active_time.most_active_hr }}:00 HRS</span>
                 </div>
             </div>
             <div class='tns_card'>
                 <span class="tns_card_title">Most Active User</span>
                 <div class='d-flex'>
-                    <img src="../../../static/images/tag.svg" alt='tag' class="tag" >
                     <span class="tns_tag_value">{{ stats.active_user.name_phone }}</span>
                 </div>
             </div>
@@ -161,7 +158,6 @@
             <div class='tns_card'>
                 <span class="tns_card_title">Most Popular emoji</span>
                 <div class='d-flex'>
-                    <img src="../../../static/images/tag.svg" alt='tag' class="tag" >
                     {% if stats.emojis|length == 0 %}
                     <span class="tns_tag_value">No Emojis Sent</span>
                     {% else %}

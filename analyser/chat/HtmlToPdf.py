@@ -14,8 +14,8 @@ class HtmlToPdf:
         
         template = templateEnv.get_template(page)
         html = template.render(data)
-        
-        file = open('tmpfiles/test.pdf', "w+b")
+
+        file = open('pdfFiles/'+data['fileName'], "w+b")
         pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest = file,
         encoding = 'utf-8')
 

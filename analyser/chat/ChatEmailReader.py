@@ -4,11 +4,20 @@ import os
 import time
 import webbrowser
 from email.header import decode_header
+from django.core.mail import EmailMessage
 
 from analyser.analyser import Analyser
 from analyser.chat.UploadFile import UploadFile
 from analyser.nlp.WordCloud import WordCloud
 from analyser.chat.HtmlToPdf import HtmlToPdf
+
+from analyser.models import WhatsAppChatFile
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+from email.mime.multipart import MIMEMultipart
+
+
 
 analyser = Analyser()
 uploadFile = UploadFile()
@@ -100,6 +109,12 @@ class ChatEmailReader:
 
                                     # Process pending chats
                                     analyser.process_pending_chats()
+
+                                    # get uploaded file id
+                                    chat_file=WhatsAppChatFile.objects.filter(title=filename).values_list('group_id', 'title')
+
+                                    # Get group ID
+                                    self.getPDF(chat_file[0][0], chat_file[0][1], senderEmail)
                     else:
                         # extract content type of email
                         content_type = msg.get_content_type()
@@ -119,19 +134,54 @@ class ChatEmailReader:
             self.readEmail()
 
     
-    def getPDF(self):
+    def getPDF(self, group_id, fileName, to):
         analyser = Analyser()
         wordCloud = WordCloud()
 
         params = {}
-        params['stats'] = analyser.fetch_group_meta(6, None)
+        params['stats'] = analyser.fetch_group_meta(group_id, None)
         params['name_changes'] = params['stats']['name_changes']
         params['stats'].pop('name_changes')
-        params['group_id'] = 6
-        params['wordCloud'] = wordCloud.getGroupChat(6)
+        params['group_id'] = group_id
+        params['wordCloud'] = wordCloud.getGroupChat(group_id)
+
+        pdfFile = fileName.replace(".txt", ".pdf")
+        params['fileName'] = pdfFile
 
         pdf = HtmlToPdf.generatePDF("pdf_templates/group_stats.html", params)
 
+        self.sendEmail(pdfFile, to)
+
+    def sendEmail(self, pdf_filename, to):
+        smtp_ssl_host = 'smtp.gmail.com'
+        smtp_ssl_port = 465
+        sender = self.username
+        targets = [to, ]
+
+        msg = MIMEMultipart()
+        txt = MIMEText('Kindly find attached, a copy of the generated report.')
+
+        msg['Subject'] = 'Chat Analysis'
+        msg['From'] = sender
+        msg['To'] = ', '.join(targets)
+
+        msg.attach(txt)
+
+        filepath = 'pdfFiles/' + pdf_filename
+        with open(filepath, 'rb') as f:
+            pdf = MIMEImage(f.read(),  _subtype="pdf")
+
+        pdf.add_header('Content-Disposition',
+                    'attachment',
+                    filename=os.path.basename(filepath))
+        msg.attach(pdf)
+
+        server = smtplib.SMTP_SSL(smtp_ssl_host, smtp_ssl_port)
+        server.login(self.username, self.password)
+        server.sendmail(sender, targets, msg.as_string())
+        server.quit()
+
+   
     # def printPDF(self):
     #     analyser = Analyser()
     #     wordCloud = WordCloud()
