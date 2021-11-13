@@ -288,6 +288,10 @@ class DBService:
 
         to_return['emojis'] = [ {'e': k, 'y': v} for k, v in sorted(sumd_emojis.items(), key=lambda x: x[1], reverse=True) ]
         to_return['emojis_count'] = emoji_count
+        to_return['links_count'] = period_stats['links_count']
+        to_return['messages_count'] = period_stats['messages_count']
+        to_return['images_count'] = period_stats['images_count']
+
         to_return['active_user'] = most_active_user
         to_return['no_users'] = total_users['joinies'] - total_users['lefties']
         to_return['totals'] = emoji_count + period_stats['images_count'] + period_stats['links_count'] + period_stats['messages_count']

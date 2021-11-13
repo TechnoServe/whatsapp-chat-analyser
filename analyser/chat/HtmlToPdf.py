@@ -1,3 +1,4 @@
+from django import template
 from django.template import Context
 from django.template.loader import get_template
 import jinja2
@@ -5,16 +6,22 @@ import datetime
 from xhtml2pdf import pisa
 import pdfkit
 
+
+from weasyprint import HTML
+from pathlib import Path
+
 from wkhtmltopdf.views import PDFTemplateView
 
 class HtmlToPdf:
     def generatePDF(page, data):
+        import os
         templateLoader = jinja2.FileSystemLoader(searchpath="analyser/templates/jinja2")
         templateEnv = jinja2.Environment(loader=templateLoader)
         
-        template = templateEnv.get_template(page)
+       
+        template = get_template(page)
         html = template.render(data)
-
+        
         file = open('pdfFiles/'+data['fileName'], "w+b")
         pisaStatus = pisa.CreatePDF(html.encode('utf-8'), dest = file,
         encoding = 'utf-8')
@@ -25,15 +32,24 @@ class HtmlToPdf:
 
         return pdf
 
-    # def pdfKit(data):
-    #     templateLoader = jinja2.FileSystemLoader(searchpath="analyser/templates/jinja2")
-    #     templateEnv = jinja2.Environment(loader=templateLoader)
-        
-    #     template = templateEnv.get_template('pdf_templates/group_stats.html')
-    #     #context = Context({"data": data})
 
-    #     html = template.render(data)
+    def weasyPrint(data):
+        infile = "analyser/templates/jinja2/pdf_templates/group_stats.html"
+
+
+        templateLoader = jinja2.FileSystemLoader(searchpath="analyser/templates/jinja2")
+        templateEnv = jinja2.Environment(loader=templateLoader)
         
-    #     pdfkit.from_string(html, 'tmpfiles/tft.pdf')
+        page="pdf_templates/group_stats.html"
+        template = get_template(page)
         
-        #pdfkit.from_file('analyser/templates/jinja2/pdf_templates/group_stats.html', 'tmpfiles/tft.pdf')
+        html = template.render(data)
+
+        #html = Path(infile).read_text()
+        """Generate a PDF file from a string of HTML."""
+        htmldoc = HTML(string=html, base_url="")
+        pdf = htmldoc.write_pdf()
+        Path("pdfFiles/lechero.pdf").write_bytes(pdf)
+
+    
+

@@ -17,6 +17,8 @@ from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 
+from analyser.chat.Chart import Chart
+
 
 
 analyser = Analyser()
@@ -147,6 +149,8 @@ class ChatEmailReader:
 
         pdfFile = fileName.replace(".txt", ".pdf")
         params['fileName'] = pdfFile
+        params['s_date'] = '2021-09-10'
+        params['e_date'] = '2021-10-11'
 
         pdf = HtmlToPdf.generatePDF("pdf_templates/group_stats.html", params)
 
@@ -182,13 +186,62 @@ class ChatEmailReader:
         server.quit()
 
    
-    # def printPDF(self):
-    #     analyser = Analyser()
-    #     wordCloud = WordCloud()
-    #     params = {}
-    #     params['stats'] = analyser.fetch_group_meta(6, None)
-    #     params['name_changes'] = params['stats']['name_changes']
-    #     params['stats'].pop('name_changes')
-    #     params['group_id'] = 6
-    #     params['wordCloud'] = wordCloud.getGroupChat(6)
-    #     HtmlToPdf.pdfKit(params)
+    def printPDF(self):
+        analyser = Analyser()
+        wordCloud = WordCloud()
+        params = {}
+        params['stats'] = analyser.fetch_group_meta(6, None)
+        params['name_changes'] = params['stats']['name_changes']
+        params['stats'].pop('name_changes')
+        params['group_id'] = 6
+        params['wordCloud'] = wordCloud.getGroupChat(6)
+        HtmlToPdf.pdfKit(params)
+
+    
+    def weasyPrint(self):
+        analyser = Analyser()
+        wordCloud = WordCloud()
+        params = {}
+
+        params['s_date'] = '2021-10-09'
+        params['e_date'] = '2021-09-09'
+        params['page_title'] = 'Group Statistics'
+        params['request'] = {}
+
+        params['stats'] = analyser.fetch_group_meta(6, None)
+        params['name_changes'] = params['stats']['name_changes']
+        params['stats'].pop('name_changes')
+        params['group_id'] = 6
+        params['wordCloud'] = wordCloud.getGroupChat(6)
+        params['graph'] = self.return_graph()
+
+        chartData = [
+            params['stats']['images_count'],
+            params['stats']['messages_count'],
+            params['stats']['links_count'],
+            params['stats']['emojis_count'],
+        ]
+        Chart.CategoriesOfInformation(chartData)
+
+        HtmlToPdf.weasyPrint(params)
+
+    
+    def return_graph(self):
+        import matplotlib.pyplot as plt
+        from io import StringIO
+        import numpy as np
+        
+        x = np.arange(0,np.pi*3,.1)
+        y = np.sin(x)
+
+        fig = plt.figure()
+        plt.plot(x,y)
+
+        plt.savefig("analyser/templates/jinja2/pdf_templates/pie_chart.png")
+
+        imgdata = StringIO()
+        fig.savefig(imgdata, format='svg')
+        imgdata.seek(0)
+
+        data = imgdata.getvalue()
+        return data

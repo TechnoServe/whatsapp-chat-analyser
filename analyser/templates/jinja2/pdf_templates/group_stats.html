@@ -1,11 +1,86 @@
-
+<head>
+  <meta
+  name="viewport"
+  content="width=device-width,
+           initial-scale=1, 
+           shrink-to-fit=no"/>
+           
 {% block css %}
-<link rel="stylesheet" href="../../../static/node_modules/material-design-lite/material.min.css" />
-<link rel="stylesheet" href="../../../static/node_modules/parsleyjs/src/parsley.css" />
-<link rel="stylesheet" href="../../../static/node_modules/font-awesome/css/font-awesome.min.css">
+<!-- Favicon -->
+<link rel="icon" href="analyser/static/images/favicon.ico" />
 
-<link rel="stylesheet" href="../../../static/css/data_table.css">
-<link rel="stylesheet" href="../../../static/main.css">
+<!-- up to 10% speed up for external res -->
+<link rel="dns-prefetch" href="https://fonts.googleapis.com/" />
+<link rel="dns-prefetch" href="https://fonts.gstatic.com/" />
+<link rel="preconnect" href="https://fonts.googleapis.com/" />
+<link rel="preconnect" href="https://fonts.gstatic.com/" />
+
+<!-- preloading icon font is helping to speed up a little bit -->
+<link
+  rel="stylesheet"
+  href="analyser/static/node_modules/bootstrap/dist/css/bootstrap.min.css"
+/>
+<link
+  rel="prefetch"
+  href="analyser/static/plugins/smarty/fonts/flaticon/Flaticon.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin="anonymous"
+/>
+<link
+  href="https://fonts.googleapis.com/css?family=Montserrat"
+  rel="stylesheet"
+/>
+
+<!-- Dash css file -->
+<!-- link rel="stylesheet" href="analyser/static/css/style.css" -->
+
+<!-- non block rendering : page speed : js = polyfill for old browsers missing `preload` -->
+<link
+  rel="stylesheet"
+  href="analyser/static/plugins/smarty/css/vendor_bundle.min.css"
+/>
+<link rel="stylesheet" href="analyser/static/plugins/smarty/css/core.min.css" />
+<link
+  rel="stylesheet"
+  href="analyser/static/plugins/jQuery-Autocomplete/jquery.autocomplete.css"
+/>
+<link
+  rel="stylesheet"
+  type="text/css"
+  href="analyser/static/node_modules/daterangepicker/daterangepicker.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;display=swap"
+/>
+<link
+  rel="stylesheet"
+  href="analyser/static/node_modules/toastr/build/toastr.min.css"
+/>
+
+<link rel="stylesheet" href="analyser/static/css/cssload_loader.css" />
+<link rel="stylesheet" href="analyser/static/css/analyser.css" />
+
+<!-- favicon -->
+<link rel="shortcut icon" href="analyser/static/images/favicon.ico" />
+<link rel="apple-touch-icon" href="analyser/static/images/tafiti_logo.png" />
+
+<link rel="manifest" href="assets/images/manifest/manifest.json" />
+<meta name="theme-color" content="#377dff" />
+
+<link
+  rel="stylesheet"
+  href="analyser/static/node_modules/material-design-lite/material.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="analyser/static/node_modules/parsleyjs/src/parsley.css"
+/>
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+
+<link rel="stylesheet" href="analyser/static/css/data_table.css" />
+<link rel="stylesheet" href="analyser/static/main.css" />
 
 <!-- FOR WORD CLOUD -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -16,268 +91,454 @@
 
 <!-- -------------- -->
 
-
-{% endblock %}
-
-{% block main_content %}
+{% endblock %} {% block main_content %}
 
 <!-- -->
-<input type="hidden" id="group_id" value="{{ group_id }}">
-
+<input type="hidden" id="group_id" value="{{ group_id }}" />
+</head>
+<body>
 <!-- section header -->
 <div class="bg-white rounded clearfix p-3 mb-4">
-    <h5 class='title'>
-        <span class=''><i class="fi fi-layers"></i></span>&nbsp;&nbsp;<span class='text-primary'>{{ stats.group_name }}</span> Analysis
-    </h5>
-    <small class="d-block text-muted fs--14">{{ stats.s_date }} - {{ stats.e_date }}</small>
+  <h5 class="title">
+    <span class=""><i class="fi fi-layers"></i></span>&nbsp;&nbsp;<span
+      class="text-primary"
+      >{{ stats.group_name }}</span
+    >
+    Analysis
+  </h5>
+  <small class="d-block text-muted fs--14"
+    >{{ stats.s_date }} - {{ stats.e_date }}</small
+  >
 
-    {% if error %}
-        <div class="portlet-header border-bottom text-danger">
-        {{ message }}
-        </div>
-    {% elif stats.info_message %}
-        <div class="portlet-header border-bottom text-primary">
-        {{ stats.info_message }}
-        </div>
-    {% endif %}
+  {% if error %}
+  <div class="portlet-header border-bottom text-danger">{{ message }}</div>
+  {% elif stats.info_message %}
+  <div class="portlet-header border-bottom text-primary">
+    {{ stats.info_message }}
+  </div>
+  {% endif %}
 </div>
 
 <!-- /section header -->
 
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-4 alert alert-danger tns_card">
+      <span class="">Most Active Day</span>
+      <div class="d-flex">
+        <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
+        <span class="tns_tag_value">{{ stats.most_active_day }}</span>
+      </div>
+    </div>
+    <div class="col-4 alert alert-success tns_card">
+      <div class="">
+        <span class="">Active Time of Day</span>
+        <div class="d-flex">
+          <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
+          <span class="tns_tag_value"
+            >{{ stats.most_active_time.most_active_hr }}:00 HRS</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="col-4 alert alert-info tns_card">
+      <span class="">Most Popular emoji</span>
+      <div class="d-flex">
+        <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
+        {% if stats.emojis|length == 0 %}
+        <span class="tns_tag_value">No Emojis Sent</span>
+        {% else %}
+        <span class="tns_tag_value emoji_pop">{{ stats.emojis[0].e }}</span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-4 alert alert-secondary tns_card">
+      <span class="">Joining Level</span>
+      <div class="d-flex">
+        <i class="fas fa-arrow-up alert alert-success" style="color: green; background-color: green; font-size: 25px;"></i>
+        <span class="tns_tag_value">{{ stats.joinies }} New Users</span>
+      </div>
+      
+    </div>
+
+    <div class="col-4 alert alert-warning tns_card">
+      <span class="">Attrition Level</span>
+      <div class="d-flex">
+        <i class="fas fa-arrow-down alert alert-danger" style="color: red; background-color: red; font-size: 25px;"></i>
+        <span class="tns_tag_value">{{ stats.lefties }} Users Left</span>
+      </div>
+    </div>
+    <div class="col-4 alert alert-success tns_card">
+      <span class="">Most Active User</span>
+      <div class="d-flex">
+        <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
+        <span class="tns_tag_value">{{ stats.active_user.name_phone }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-4">
+      <div class="tns_card">
+        <span class="tns_card_title">Categories of information sent</span>
+        <div class="d-flex">
+          <div id="categories_chart" style="width: 400px">
+            <img src="analyser/templates/jinja2/pdf_templates/pie_chart.png" alt="Pie Chart">
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="col-8">
+
+    </div>
+  </div>
+</div>
+<!-- End of Charts -->
+
 <div class="app-main__inner">
-    <div class="row gutters-sm">
+  <div class="row gutters-sm">
+    
 
-        <!-- COLUMN 1 -->
-        <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-4">
-            <div class='tns_card'>
-                <span class="tns_card_title">Most Active Day</span>
-                <div class='d-flex'>
-                    <span class="tns_tag_value">{{ stats.most_active_day }}</span>
-                </div>
-            </div>
-            <div class='tns_card'>
-                <span class="tns_card_title">Attrition Level</span>
-                <div class='row'>
-                    <div class='col-5'>
-                        <div class='d-flex text-center'>
-                            <div id="attrition" class="gauge-container red" style="height:auto;"></div>
-                        </div>
-                    </div>
-                    <div class='col-7 pl-0 pt-4'>
-                        <div class='row mt-4'>
-                            <div class='col-3'>
-                                <button type="button" class="btn rounded-circle btn-danger btn-soft mb-2"><i class="fi fi-arrow-down"></i></button>
-                            </div>
-                            <div class='col-9 pt-3'>
-                                <span class="tns_tag_value">{{ stats.lefties }}</span>
-                                <span class="tns_tag_value">Left Users</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class='tns_card'>
-                <span class="tns_card_title">Joining Level</span>
-                <div class='row'>
-                    <div class='col-5'>
-                        <div class='d-flex text-center'>
-                            <div id="joining" class="gauge-container green" style="height:auto;"></div>
-                        </div>
-                    </div>
-                    <div class='col-7 pl-0 pt-4'>
-                        <div class='row mt-4'>
-                            <div class='col-3'>
-                                <button type="button" class="btn rounded-circle btn-success btn-soft mb-2"><i class="fi fi-arrow-up"></i></button>
-                            </div>
-                            <div class='col-9 pt-3'>
-                                <span class="tns_tag_value">{{ stats.joinies }}</span>
-                                <span class="tns_tag_value">New Users</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class='tns_card'>
-                <span class="tns_card_title">Group Name Changes</span>
-                <ul id='group_names' class='pl-0'>
-                    {% for change_ in name_changes %}
-                    <li class="clearfix d-block dropdown-item font-weight-medium p-3 rounded overflow-hidden border-bottom border-light">
-
-                        <!-- badge -->
-                        {% if loop.index == 1 %}
-                        <span class="badge badge-success float-end font-weight-normal mt-1">current</span>
-                        {% endif %}
-
-                        <!-- NOTIFICATION -->
-                        <p class="fs--14 m-0 text-truncate font-weight-normal">
-                            <i class="fi fi-arrow-right-full d-middle text-success float-start fs--20 bg-light w--20 h--20 text-center"></i>
-                            {{ change_.to_name }}
-                        </p>
-                        <p class="fs--14 m-0 text-truncate font-weight-normal">
-                            <i class="fi fi-arrow-left-full d-middle text-danger float-start fs--20 bg-light w--20 h--20 text-center"></i>
-                            {{ change_.from_name }}
-                        </p>
-
-                        <!-- date -->
-                        <small class="d-block fs--11 text-muted">
-                            on {{ change_.change_datetime_ }}
-                        </small>
-
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
+    <!-- COLUMN 1 -->
+    <div class="col-6 col-xl-4 col-md-6 col-sm-12 mb-4 alert">
+      <div class="tns_card">
+        <span class="tns_card_title">Most Active Day</span>
+        <div class="d-flex">
+          <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
+          <span class="tns_tag_value">{{ stats.most_active_day }}</span>
         </div>
-        <!-- END OF COLUMN 1 -->
-
-        <!-- COLUMN 2 -->
-        <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-3">
-            <div class='tns_card'>
-                <span class="tns_card_title">Active Time of Day</span>
-                <div class='d-flex'>
-                    <span class="tns_tag_value">{{ stats.most_active_time.most_active_hr }}:00 HRS</span>
-                </div>
+      </div>
+      <div class="tns_card">
+        <span class="tns_card_title">Attrition Level</span>
+        <div class="row">
+          <div class="col-5">
+            <div class="d-flex text-center">
+              <div
+                id="attrition"
+                class="gauge-container red"
+                style="height: auto"
+              ></div>
             </div>
-            <div class='tns_card'>
-                <span class="tns_card_title">Most Active User</span>
-                <div class='d-flex'>
-                    <span class="tns_tag_value">{{ stats.active_user.name_phone }}</span>
-                </div>
+          </div>
+          <div class="col-7 pl-0 pt-4">
+            <div class="row mt-4">
+              <div class="col-3">
+                <button
+                  type="button"
+                  class="btn rounded-circle btn-danger btn-soft mb-2"
+                >
+                  <i class="fi fi-arrow-down"></i>
+                </button>
+              </div>
+              <div class="col-9 pt-3">
+                <span class="tns_tag_value">{{ stats.lefties }}</span>
+                <span class="tns_tag_value">Left Users</span>
+              </div>
             </div>
-            <div class='tns_card'>
-                <span class="tns_card_title">Categories of information sent</span>
-                <div class='d-flex'>
-                    <div id='categories_chart' style='width:400px;'>&nbsp;</div>
-                </div>
-            </div>
+          </div>
         </div>
-        <!-- END OF COLUMN 1 -->
-
-        <!-- COLUMN 3 -->
-        <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-3">
-            <div class='tns_card'>
-                <span class="tns_card_title">Most Popular emoji</span>
-                <div class='d-flex'>
-                    {% if stats.emojis|length == 0 %}
-                    <span class="tns_tag_value">No Emojis Sent</span>
-                    {% else %}
-                    <span class="tns_tag_value emoji_pop">{{ stats.emojis[0].e }}</span>
-                    {% endif %}
-                </div>
+      </div>
+      <div class="tns_card">
+        <span class="tns_card_title">Joining Level</span>
+        <div class="row">
+          <div class="col-5">
+            <div class="d-flex text-center">
+              <div
+                id="joining"
+                class="gauge-container green"
+                style="height: auto"
+              ></div>
             </div>
-            <div class='tns_card'>
-                <span class="tns_card_title">Active Days</span>
-                <div class='d-flex'>
-                    <div id='active_days' style='width:400px;'>&nbsp;</div>
-                </div>
+          </div>
+          <div class="col-7 pl-0 pt-4">
+            <div class="row mt-4">
+              <div class="col-3">
+                <button
+                  type="button"
+                  class="btn rounded-circle btn-success btn-soft mb-2"
+                >
+                  <i class="fi fi-arrow-up"></i>
+                </button>
+              </div>
+              <div class="col-9 pt-3">
+                <span class="tns_tag_value">{{ stats.joinies }}</span>
+                <span class="tns_tag_value">New Users</span>
+              </div>
             </div>
+          </div>
         </div>
-        <!-- second row -->
+      </div>
+      <div class="tns_card">
+        <span class="tns_card_title">Group Name Changes</span>
+        <ul id="group_names" class="pl-0">
+          {% for change_ in name_changes %}
+          <li
+            class="
+              clearfix
+              d-block
+              dropdown-item
+              font-weight-medium
+              p-3
+              rounded
+              overflow-hidden
+              border-bottom border-light
+            "
+          >
+            <!-- badge -->
+            {% if loop.index == 1 %}
+            <span class="badge badge-success float-end font-weight-normal mt-1"
+              >current</span
+            >
+            {% endif %}
+
+            <!-- NOTIFICATION -->
+            <p class="fs--14 m-0 text-truncate font-weight-normal">
+              <i
+                class="
+                  fi fi-arrow-right-full
+                  d-middle
+                  text-success
+                  float-start
+                  fs--20
+                  bg-light
+                  w--20
+                  h--20
+                  text-center
+                "
+              ></i>
+              {{ change_.to_name }}
+            </p>
+            <p class="fs--14 m-0 text-truncate font-weight-normal">
+              <i
+                class="
+                  fi fi-arrow-left-full
+                  d-middle
+                  text-danger
+                  float-start
+                  fs--20
+                  bg-light
+                  w--20
+                  h--20
+                  text-center
+                "
+              ></i>
+              {{ change_.from_name }}
+            </p>
+
+            <!-- date -->
+            <small class="d-block fs--11 text-muted">
+              on {{ change_.change_datetime_ }}
+            </small>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
     </div>
-    <div class="row ">
-        <div class="col-12">
-            <div class='tns_card'style='width:100%;'>
-                <span class="tns_card_title">Word Cloud </span>
-                <div class='d-flex'>
-                    <div id='word_cloud' style='width:2000px;height: 1000px;'>&nbsp;</div>
-                </div>
-            </div>
-        </div>
+    <!-- END OF COLUMN 1 -->
 
+    <!-- COLUMN 2 -->
+    <div class="col-6 col-xl-4 col-md-6 col-sm-12 mb-3">
+      <div class="tns_card">
+        <span class="tns_card_title">Active Time of Day</span>
+        <div class="d-flex">
+          <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
+          <span class="tns_tag_value"
+            >{{ stats.most_active_time.most_active_hr }}:00 HRS</span
+          >
+        </div>
+      </div>
+      <div class="tns_card">
+        <span class="tns_card_title">Most Active User</span>
+        <div class="d-flex">
+          <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
+          <span class="tns_tag_value">{{ stats.active_user.name_phone }}</span>
+        </div>
+      </div>
+      <div class="tns_card">
+        <span class="tns_card_title">Categories of information sent</span>
+        <div class="d-flex">
+          <div id="categories_chart" style="width: 400px">&nbsp;</div>
+        </div>
+      </div>
     </div>
+    <!-- END OF COLUMN 1 -->
+
+    <!-- COLUMN 3 -->
+    <div class="col-6 col-xl-4 col-md-6 col-sm-12 mb-3">
+      <div class="tns_card">
+        <span class="tns_card_title">Most Popular emoji</span>
+        <div class="d-flex">
+          <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
+          {% if stats.emojis|length == 0 %}
+          <span class="tns_tag_value">No Emojis Sent</span>
+          {% else %}
+          <span class="tns_tag_value emoji_pop">{{ stats.emojis[0].e }}</span>
+          {% endif %}
+        </div>
+      </div>
+      <div class="tns_card">
+        <span class="tns_card_title">Active Days</span>
+        <div class="d-flex">
+          <div id="active_days" style="width: 400px">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+    <!-- second row -->
+  </div>
+  <div class="row">
+    <div class="col-6">
+      <div class="tns_card" style="width: 100%">
+        <span class="tns_card_title">Word Cloud </span>
+        <div class="d-flex">
+          <div id="word_cloud" style="width: 2000px; height: 1000px">
+            &nbsp;
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- Chat Modal -->
-<div class="modal fade" id="exampleGetChatHistory" tabindex="-1" role="dialog" aria-labelledby="exampleGetChatHistory" 
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Chat history for <span id="date_selected"></span></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body" id="chat_modal" style="overflow-y: scroll !important; height:400px !important;">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
+<div
+  class="modal fade"
+  id="exampleGetChatHistory"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="exampleGetChatHistory"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">
+          Chat history for <span id="date_selected"></span>
+        </h5>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div
+        class="modal-body"
+        id="chat_modal"
+        style="overflow-y: scroll !important; height: 400px !important"
+      ></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+          Close
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
+</body>
+</html>
+
 <!--Word Cloud Stuff-->
-<div type="hidden" class="hide" id="tokenized_text"> {{ wordCloud }}</div>
+<div type="hidden" class="hide" id="tokenized_text">{{ wordCloud }}</div>
 
-{% endblock %}
-
-{% block javascript %}
-<script type='text/javascript' src="../../../static/node_modules/highcharts/modules/drilldown.js"></script>
-<script type='text/javascript' src="../../../static/node_modules/highcharts/modules/data.js"></script>
-<script type='text/javascript' src="../../../static/node_modules/svg-gauge/dist/gauge.min.js"></script>
-<script type='text/javascript' src="../../../static/node_modules/svg-gauge/dist/gauge.min.js"></script>
+{% endblock %} {% block javascript %}
+<script
+  type="text/javascript"
+  src="analyser/static/node_modules/highcharts/modules/drilldown.js"
+></script>
+<script
+  type="text/javascript"
+  src="analyser/static/node_modules/highcharts/modules/data.js"
+></script>
+<script
+  type="text/javascript"
+  src="analyser/static/node_modules/svg-gauge/dist/gauge.min.js"
+></script>
+<script
+  type="text/javascript"
+  src="analyser/static/node_modules/svg-gauge/dist/gauge.min.js"
+></script>
 
 <script>
-    $(document).ready(function(){
-        analyser.stats = {{ stats | safe }};
-        analyser.initiatePages();
-    });
+  $(document).ready(function(){
+      analyser.stats = {{ stats | safe }};
+      analyser.initiatePages();
+  });
 </script>
 
 <style>
-    /* Chat containers */
-    .chat_item {
-      border: 2px solid #dedede;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 10px;
-      margin: 10px 0;
+  /* Chat containers */
+  .chat_item {
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+  }
+
+  /* Darker chat container */
+  .darker {
+    border-color: #ccc;
+    background-color: #ddd;
+  }
+
+  /* Clear floats */
+  .chat_item::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  /* Style images */
+  .chat_item img {
+    float: left;
+    max-width: 60px;
+    width: 100%;
+    margin-right: 20px;
+    border-radius: 50%;
+  }
+
+  /* Style the right image */
+  .chat_item img.right {
+    float: right;
+    margin-left: 20px;
+    margin-right: 0;
+  }
+
+  /* Style time text */
+  .time-right {
+    float: right;
+    color: #aaa;
+  }
+
+  /* Style time text */
+  .time-left {
+    float: left;
+    color: #999;
+  }
+</style>
+
+<style>
+  @media print {
+       .upIcon {
+           color: green;
+           background-color: green;
+       }
     }
-    
-    /* Darker chat container */
-    .darker {
-      border-color: #ccc;
-      background-color: #ddd;
-    }
-    
-    /* Clear floats */
-    .chat_item::after {
-      content: "";
-      clear: both;
-      display: table;
-    }
-    
-    /* Style images */
-    .chat_item img {
-      float: left;
-      max-width: 60px;
-      width: 100%;
-      margin-right: 20px;
-      border-radius: 50%;
-    }
-    
-    /* Style the right image */
-    .chat_item img.right {
-      float: right;
-      margin-left: 20px;
-      margin-right:0;
-    }
-    
-    /* Style time text */
-    .time-right {
-      float: right;
-      color: #aaa;
-    }
-    
-    /* Style time text */
-    .time-left {
-      float: left;
-      color: #999;
-    }
-    </style>
-    
+</style>
 
 {% endblock %}
-
-
