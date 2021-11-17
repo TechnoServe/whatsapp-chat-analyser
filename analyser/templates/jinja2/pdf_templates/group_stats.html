@@ -186,215 +186,23 @@
 </div>
 
 <!-- Charts -->
-<div class="container-fluid">
+<div class="container-fluid mt-4">
+  <!-- <div class="row">
+    <span class="tnsTitle"><center>Categories of information sent</center></span>
+  </div> -->
   <div class="row">
-    <div class="col-4">
-      <div class="tns_card">
-        <span class="tns_card_title">Categories of information sent</span>
-        <div class="d-flex">
-          <div id="categories_chart" style="width: 400px">
-            <img src="analyser/templates/jinja2/pdf_templates/pie_chart.png" alt="Pie Chart">
-          </div>
-        </div>
-        
-      </div>
-    </div>
-
-    <div class="col-8">
-
-    </div>
+    <img src="analyser/templates/jinja2/pdf_templates/pie_chart.png" width="600" alt="Pie Chart">   
   </div>
+</div>
+
+<div class="container-fluid">
+  <img src="analyser/templates/jinja2/pdf_templates/active_days.png" width="600" alt="Bar Chart">
 </div>
 <!-- End of Charts -->
 
 <div class="app-main__inner">
   <div class="row gutters-sm">
     
-
-    <!-- COLUMN 1 -->
-    <div class="col-6 col-xl-4 col-md-6 col-sm-12 mb-4 alert">
-      <div class="tns_card">
-        <span class="tns_card_title">Most Active Day</span>
-        <div class="d-flex">
-          <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
-          <span class="tns_tag_value">{{ stats.most_active_day }}</span>
-        </div>
-      </div>
-      <div class="tns_card">
-        <span class="tns_card_title">Attrition Level</span>
-        <div class="row">
-          <div class="col-5">
-            <div class="d-flex text-center">
-              <div
-                id="attrition"
-                class="gauge-container red"
-                style="height: auto"
-              ></div>
-            </div>
-          </div>
-          <div class="col-7 pl-0 pt-4">
-            <div class="row mt-4">
-              <div class="col-3">
-                <button
-                  type="button"
-                  class="btn rounded-circle btn-danger btn-soft mb-2"
-                >
-                  <i class="fi fi-arrow-down"></i>
-                </button>
-              </div>
-              <div class="col-9 pt-3">
-                <span class="tns_tag_value">{{ stats.lefties }}</span>
-                <span class="tns_tag_value">Left Users</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="tns_card">
-        <span class="tns_card_title">Joining Level</span>
-        <div class="row">
-          <div class="col-5">
-            <div class="d-flex text-center">
-              <div
-                id="joining"
-                class="gauge-container green"
-                style="height: auto"
-              ></div>
-            </div>
-          </div>
-          <div class="col-7 pl-0 pt-4">
-            <div class="row mt-4">
-              <div class="col-3">
-                <button
-                  type="button"
-                  class="btn rounded-circle btn-success btn-soft mb-2"
-                >
-                  <i class="fi fi-arrow-up"></i>
-                </button>
-              </div>
-              <div class="col-9 pt-3">
-                <span class="tns_tag_value">{{ stats.joinies }}</span>
-                <span class="tns_tag_value">New Users</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="tns_card">
-        <span class="tns_card_title">Group Name Changes</span>
-        <ul id="group_names" class="pl-0">
-          {% for change_ in name_changes %}
-          <li
-            class="
-              clearfix
-              d-block
-              dropdown-item
-              font-weight-medium
-              p-3
-              rounded
-              overflow-hidden
-              border-bottom border-light
-            "
-          >
-            <!-- badge -->
-            {% if loop.index == 1 %}
-            <span class="badge badge-success float-end font-weight-normal mt-1"
-              >current</span
-            >
-            {% endif %}
-
-            <!-- NOTIFICATION -->
-            <p class="fs--14 m-0 text-truncate font-weight-normal">
-              <i
-                class="
-                  fi fi-arrow-right-full
-                  d-middle
-                  text-success
-                  float-start
-                  fs--20
-                  bg-light
-                  w--20
-                  h--20
-                  text-center
-                "
-              ></i>
-              {{ change_.to_name }}
-            </p>
-            <p class="fs--14 m-0 text-truncate font-weight-normal">
-              <i
-                class="
-                  fi fi-arrow-left-full
-                  d-middle
-                  text-danger
-                  float-start
-                  fs--20
-                  bg-light
-                  w--20
-                  h--20
-                  text-center
-                "
-              ></i>
-              {{ change_.from_name }}
-            </p>
-
-            <!-- date -->
-            <small class="d-block fs--11 text-muted">
-              on {{ change_.change_datetime_ }}
-            </small>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-    <!-- END OF COLUMN 1 -->
-
-    <!-- COLUMN 2 -->
-    <div class="col-6 col-xl-4 col-md-6 col-sm-12 mb-3">
-      <div class="tns_card">
-        <span class="tns_card_title">Active Time of Day</span>
-        <div class="d-flex">
-          <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
-          <span class="tns_tag_value"
-            >{{ stats.most_active_time.most_active_hr }}:00 HRS</span
-          >
-        </div>
-      </div>
-      <div class="tns_card">
-        <span class="tns_card_title">Most Active User</span>
-        <div class="d-flex">
-          <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
-          <span class="tns_tag_value">{{ stats.active_user.name_phone }}</span>
-        </div>
-      </div>
-      <div class="tns_card">
-        <span class="tns_card_title">Categories of information sent</span>
-        <div class="d-flex">
-          <div id="categories_chart" style="width: 400px">&nbsp;</div>
-        </div>
-      </div>
-    </div>
-    <!-- END OF COLUMN 1 -->
-
-    <!-- COLUMN 3 -->
-    <div class="col-6 col-xl-4 col-md-6 col-sm-12 mb-3">
-      <div class="tns_card">
-        <span class="tns_card_title">Most Popular emoji</span>
-        <div class="d-flex">
-          <img src="analyser/static/images/tag.svg" alt="tag" class="tag" />
-          {% if stats.emojis|length == 0 %}
-          <span class="tns_tag_value">No Emojis Sent</span>
-          {% else %}
-          <span class="tns_tag_value emoji_pop">{{ stats.emojis[0].e }}</span>
-          {% endif %}
-        </div>
-      </div>
-      <div class="tns_card">
-        <span class="tns_card_title">Active Days</span>
-        <div class="d-flex">
-          <div id="active_days" style="width: 400px">&nbsp;</div>
-        </div>
-      </div>
-    </div>
     <!-- second row -->
   </div>
   <div class="row">
@@ -533,12 +341,11 @@
 </style>
 
 <style>
-  @media print {
-       .upIcon {
-           color: green;
-           background-color: green;
-       }
-    }
+  .tnsTitle {
+    font-size: 25px;
+  }
 </style>
+
+
 
 {% endblock %}

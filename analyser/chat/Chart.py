@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import numpy as np
+
 
 class Chart:
     def CategoriesOfInformation(data):
@@ -14,7 +14,31 @@ class Chart:
         ax1.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
 
         plt.legend(['Images', 'Messages', 'Links', 'Emojis'], loc="lower right")
+        plt.title("Categories of Information Sent")
 
         plt.savefig("analyser/templates/jinja2/pdf_templates/pie_chart.png")
+        plt.clf()
+        plt.close()
+        return True
 
-        return plt
+    
+    def activeDaysChart(data):
+        
+        fig = plt.figure(figsize = (20, 10))
+
+        plt.xlabel("Date")
+        plt.ylabel("Messages")
+        plt.xticks(rotation=90)
+
+        plt.title("Active Days")        
+
+        dates = data['dates']
+        messages = data['messages']
+        x_list = dates[::4]
+        y_list = messages[::4]
+
+        plt.bar(x_list, y_list)
+        plt.savefig("analyser/templates/jinja2/pdf_templates/active_days.png")
+        plt.clf()
+        plt.close('all')
+        return True

@@ -253,8 +253,13 @@ USE_TZ = True
 # The interval in minutes in which the notification script should be executed
 NOTIFICATIONS_INTERVAL = 5
 
+# CRONJOBS = [
+#     ('8 */2 * * *', 'django.core.management.call_command', ['process_pending_chats'], {}, '>> /tmp/autoprocess_cron.log'),
+#     ('*/1 * * * *', 'analyser.cronjobs.ReadEmails.processEmail'),
+# ]
 CRONJOBS = [
-    ('8 */2 * * *', 'django.core.management.call_command', ['process_pending_chats'], {}, '>> /tmp/autoprocess_cron.log'),
+    ('*/1 * * * *', 'analyser.cronjobs.ReadEmails.processEmail'),
 ]
+
 
 ADMIN_EMAIL = 'badili.innovations@gmail.com'

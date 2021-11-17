@@ -152,6 +152,22 @@ class ChatEmailReader:
         params['s_date'] = '2021-09-10'
         params['e_date'] = '2021-10-11'
 
+        chartData = [
+            params['stats']['images_count'],
+            params['stats']['messages_count'],
+            params['stats']['links_count'],
+            params['stats']['emojis_count'],
+        ]
+
+        activeDaysChart = {
+            'dates': params['stats']['active_dates']['dates'],
+            'messages': params['stats']['active_dates']['messages'],
+        }
+        
+        Chart.CategoriesOfInformation(chartData)
+
+        Chart.activeDaysChart(activeDaysChart)
+
         pdf = HtmlToPdf.generatePDF("pdf_templates/group_stats.html", params)
 
         self.sendEmail(pdfFile, to)
@@ -221,9 +237,17 @@ class ChatEmailReader:
             params['stats']['links_count'],
             params['stats']['emojis_count'],
         ]
+
+        activeDaysChart = {
+            'dates': params['stats']['active_dates']['dates'],
+            'messages': params['stats']['active_dates']['messages'],
+        }
+        
         Chart.CategoriesOfInformation(chartData)
 
-        HtmlToPdf.weasyPrint(params)
+        Chart.activeDaysChart(activeDaysChart)
+
+        HtmlToPdf.generatePDF(params)
 
     
     def return_graph(self):
