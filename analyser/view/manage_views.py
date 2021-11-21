@@ -257,6 +257,7 @@ def determine_user_links(request):
 
     request.session['nav_links'] = allowed_links
 
+#FIXME delete this after testing chats
 @login_required(login_url='/login')
 def getchats(request):
     params = get_basic_info(request)
@@ -265,7 +266,6 @@ def getchats(request):
     params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
     params['cur_user'] = request.user
 
-    
     data = manageUser.getCounselorsAssignedToAdvisor(request.user)
     date = '2021-09-07'
     group_id = 1
@@ -274,6 +274,24 @@ def getchats(request):
     params['assigned'] = data
     params['messages'] = messages
     return render(request, 'dashboard/chats.html', params)
+
+#FIXME delete this after testing chats
+@login_required(login_url='/login')
+def getwordcloud(request):
+    params = get_basic_info(request)
+    params = {'s_date': ''}
+    params['page_title'] = 'Assigned Counselors'
+    params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
+    params['cur_user'] = request.user
+
+    data = manageUser.getCounselorsAssignedToAdvisor(request.user)
+    date = '2021-09-07'
+    group_id = 1
+
+    messages = messageHistory.getMessageLogByDate(date,group_id)
+    params['assigned'] = data
+    params['messages'] = messages
+    return render(request, 'dashboard/cloud.html', params)
 
 @login_required(login_url='/login')
 def searchGroupChatByDate(request):

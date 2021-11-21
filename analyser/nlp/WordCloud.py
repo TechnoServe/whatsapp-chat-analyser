@@ -10,6 +10,9 @@ from nltk.probability import FreqDist
 
 class WordCloud:
     def getGroupChat(self, group_id):
+        nltk.download('punkt')
+        nltk.download('stopwords')
+
         qs = MessageLog.objects.filter(chat_file=group_id).values_list('message')
 
         # Creating a pandas dataframe out of the returned results
@@ -22,11 +25,13 @@ class WordCloud:
 
         # Filtering words from the list of tokens
         stop_words = stopwords.words('english')
+        stop_words += ['na','kwa',"'t","one","'s","the","n't",'--']
         punctuation_var = list(punctuation)
-        cleaned_tokens = [token for token in tokens if token not in stop_words and token not in punctuation_var]
+        cleaned_tokens = [token for token in tokens if token.lower() not in stop_words and token not in punctuation_var]
 
         # Frequency of tokens
         fdist = FreqDist(cleaned_tokens)
+
 
         myList1 = list(fdist.values())
         newList = sorted(myList1)
@@ -48,7 +53,10 @@ class WordCloud:
                 filteredDict[key] = value
 
         # merge all tokens to form a text
-        text_tokens  = ' '.join(filteredDict)
+        text_tokens  = ' '
+        for key,value in filteredDict.items():
+            text_tokens += (key.lower()+' ')*value
+        # print(text_tokens)
 
         return text_tokens
 
