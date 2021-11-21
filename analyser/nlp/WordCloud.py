@@ -10,6 +10,9 @@ from nltk.probability import FreqDist
 
 class WordCloud:
     def getGroupChat(self, group_id):
+        nltk.download('punkt')
+        nltk.download('stopwords')
+        
         qs = MessageLog.objects.filter(chat_file=group_id).values_list('message')
 
         # Creating a pandas dataframe out of the returned results

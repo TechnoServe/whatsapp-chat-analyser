@@ -10,6 +10,7 @@ if 'DJANGO_ADMIN_USERNAME' in os.environ:
     print ("Using the PRODUCTION settings")
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "analyser.settings.production")
     from analyser.settings.production import *
+    from analyser.settings.development import *
 else:
     print ("Using the DEVELOPMENT settings")
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "analyser.settings.development")
