@@ -8,6 +8,10 @@ from nltk.corpus import stopwords
 from string import punctuation
 from nltk.probability import FreqDist
 
+# WordCloud Imports
+from nltk.probability import FreqDist
+from wordcloud import WordCloud
+
 class WordCloud:
     def getGroupChat(self, group_id):
         nltk.download('punkt')

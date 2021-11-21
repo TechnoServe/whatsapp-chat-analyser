@@ -167,6 +167,7 @@ class ChatEmailReader:
         Chart.CategoriesOfInformation(chartData)
 
         Chart.activeDaysChart(activeDaysChart)
+        Chart.wordCloud(group_id)
 
         pdf = HtmlToPdf.generatePDF("pdf_templates/group_stats.html", params)
 
