@@ -83,7 +83,7 @@ class Chart:
 
         uniqueValues = set(newList)
         uniqueValues = list(uniqueValues)
-        len(uniqueValues)
+        #len(uniqueValues)
 
         length = len(uniqueValues) if len(uniqueValues)%2 == 0 else len(uniqueValues)+1
         length = round(length/2)

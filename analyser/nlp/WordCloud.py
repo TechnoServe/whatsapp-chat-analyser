@@ -1,4 +1,5 @@
 from analyser.models import MessageLog
+from analyser.models import WhatsAppChatFile
 
 # NLP imports
 import pandas as pd
@@ -17,7 +18,8 @@ class WordCloud:
         nltk.download('punkt')
         nltk.download('stopwords')
 
-        qs = MessageLog.objects.filter(chat_file=group_id).values_list('message')
+        chat_file = WhatsAppChatFile.objects.filter(group=group_id).values_list('id')
+        qs = MessageLog.objects.filter(chat_file=chat_file[0][0]).values_list('message')
 
         # Creating a pandas dataframe out of the returned results
         df = df = pd.DataFrame(qs, columns=['message'])

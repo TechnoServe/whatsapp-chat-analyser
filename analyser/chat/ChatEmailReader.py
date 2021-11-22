@@ -113,10 +113,10 @@ class ChatEmailReader:
                                     analyser.process_pending_chats()
 
                                     # get uploaded file id
-                                    chat_file=WhatsAppChatFile.objects.filter(title=filename).values_list('group_id', 'title')
+                                    chat_file=WhatsAppChatFile.objects.filter(title=filename).values_list('group_id', 'title', 'id')
 
                                     # Get group ID
-                                    self.getPDF(chat_file[0][0], chat_file[0][1], senderEmail)
+                                    self.getPDF(chat_file[0][0], chat_file[0][1], chat_file[0][2], senderEmail)
                     else:
                         # extract content type of email
                         content_type = msg.get_content_type()
@@ -136,7 +136,7 @@ class ChatEmailReader:
             self.readEmail()
 
     
-    def getPDF(self, group_id, fileName, to):
+    def getPDF(self, group_id, fileName, chat_file_id, to):
         analyser = Analyser()
         wordCloud = WordCloud()
 
@@ -145,7 +145,7 @@ class ChatEmailReader:
         params['name_changes'] = params['stats']['name_changes']
         params['stats'].pop('name_changes')
         params['group_id'] = group_id
-        params['wordCloud'] = wordCloud.getGroupChat(group_id)
+        params['wordCloud'] = wordCloud.getGroupChat(chat_file_id)
 
         pdfFile = fileName.replace(".txt", ".pdf")
         params['fileName'] = pdfFile
@@ -167,7 +167,7 @@ class ChatEmailReader:
         Chart.CategoriesOfInformation(chartData)
 
         Chart.activeDaysChart(activeDaysChart)
-        Chart.wordCloud(group_id)
+        Chart.wordCloud(chat_file_id)
 
         pdf = HtmlToPdf.generatePDF("pdf_templates/group_stats.html", params)
 
