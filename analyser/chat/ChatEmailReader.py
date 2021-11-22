@@ -145,8 +145,7 @@ class ChatEmailReader:
         params['name_changes'] = params['stats']['name_changes']
         params['stats'].pop('name_changes')
         params['group_id'] = group_id
-        params['wordCloud'] = wordCloud.getGroupChat(chat_file_id)
-
+        
         pdfFile = fileName.replace(".txt", ".pdf")
         params['fileName'] = pdfFile
         params['s_date'] = '2021-09-10'
