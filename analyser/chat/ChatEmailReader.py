@@ -26,8 +26,8 @@ uploadFile = UploadFile()
 
 class ChatEmailReader:
     def __init__(self):
-        self.username = "tns.sambou@gmail.com"
-        self.password = "bptxjihwdukqknws"
+        self.username = os.environ['CHAT_BOT_EMAIL']
+        self.password = os.environ['CHAT_BOT_PASSWORD']
     
     
     def readEmail(self):
