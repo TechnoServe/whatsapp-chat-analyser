@@ -190,7 +190,7 @@
   <!-- <div class="row">
     <span class="tnsTitle"><center>Categories of information sent</center></span>
   </div> -->
-  <div class="row">
+  <div class="container-fluid">
     <img src="analyser/templates/jinja2/pdf_templates/pie_chart.png" width="600" alt="Pie Chart">   
   </div>
 </div>
@@ -198,24 +198,16 @@
 <div class="container-fluid">
   <img src="analyser/templates/jinja2/pdf_templates/active_days.png" width="600" alt="Bar Chart">
 </div>
+
+<div class="container-fluid">
+  <img src="analyser/templates/jinja2/pdf_templates/word_cloud.png" width="600" alt="Bar Chart">
+</div>
 <!-- End of Charts -->
 
 <div class="app-main__inner">
   <div class="row gutters-sm">
     
     <!-- second row -->
-  </div>
-  <div class="row">
-    <div class="col-6">
-      <div class="tns_card" style="width: 100%">
-        <span class="tns_card_title">Word Cloud </span>
-        <div class="d-flex">
-          <div id="word_cloud" style="width: 2000px; height: 1000px">
-            &nbsp;
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -260,8 +252,6 @@
 </body>
 </html>
 
-<!--Word Cloud Stuff-->
-<div type="hidden" class="hide" id="tokenized_text">{{ wordCloud }}</div>
 
 {% endblock %} {% block javascript %}
 <script
