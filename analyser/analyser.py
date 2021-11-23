@@ -14,9 +14,9 @@ from hashids import Hashids
 from datetime import datetime
 from tzlocal import get_localzone
 
-from .models import Personnel, WhatsAppGroup, WhatsAppChatFile, GroupDailyStats, UserDailyStats, MessageLog, GroupNameChanges, STATUS_CHOICES
+from analyser.models import Personnel, WhatsAppGroup, WhatsAppChatFile, GroupDailyStats, UserDailyStats, MessageLog, GroupNameChanges, STATUS_CHOICES
 from analyser.serializers import GroupDailyStatsSerializer
-from .common_tasks import Notification, Terminal
+from analyser.common_tasks import Notification, Terminal
 
 # Import regex constants
 from analyser.chat.constants import *
