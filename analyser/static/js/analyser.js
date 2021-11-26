@@ -291,7 +291,7 @@ Analyser.prototype.initiateGroups = function () {
                 "data": "settings_",
                 "targets": 10,
                 render: function (data, type, row, meta) {
-                    return "<a href='#' class='group_link' data-group_id='" + row.group_id + "'>" + "Assign Counselor" + "</a>";
+                    return "<a href='#' class='assign_group_counselor' data-group_id='" + row.group_id + "'>" + "Assign Counselor" + "</a>";
                 }
             },
         ]
@@ -355,6 +355,10 @@ Analyser.prototype.initiateEngagedUsers = function () {
 
     $(document).on('click', '.user_link', function () { analyser.showItemStats(sprintf('/user_stats/%s/%s', $(this).data('group_id'), $(this).data('user_id'))); });
     $(document).on('click', '.group_link', function () { analyser.showItemStats(sprintf('/group_stats/%s', $(this).data('group_id'))); });
+    //$(document).on('click', '.assign_group_counselor', function () { alert("here"); analyser.showItemStats(sprintf('/group_stats/%s', $(this).data('group_id'))); });
+    
+    
+
 };
 
 Analyser.prototype.initiateFilesRepo = function () {

@@ -69,7 +69,29 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="assignCounselor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Assign Group to Counselor</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        group: <span id="group_info_id"></span>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
+
+
 
 {% block javascript %}
 <script type='text/javascript' src="{{ static('plugins/datatables/datatables.min.js') }}"></script>
@@ -80,6 +102,13 @@
 <script type='text/javascript' src="{{ static('node_modules/jquery-validation/dist/jquery.validate.min.js') }}"></script>
 <script type='text/javascript' src="{{ static('node_modules/bootstrap-notify/bootstrap-notify.js') }}"></script>
 
+<script>
+  $(document).on('click', '.assign_group_counselor', function () { 
+    let group_id = $(this).data('group_id')
+    $("#group_info_id").html(group_id)
+    $('#assignCounselor').modal('show')
+  });
+</script>
 <script>
     $(document).ready(function(){
         analyser.page_data = {{ data.group_info | safe }};
