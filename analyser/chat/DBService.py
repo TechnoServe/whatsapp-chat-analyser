@@ -60,6 +60,7 @@ class DBService:
 
         for grp in all_groups:
             grp['group_id'] = my_hashids.encode(grp['group_id'])
+            grp['counselor_'] = ''
             to_return['group_info'].append(grp)
         
         return to_return

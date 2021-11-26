@@ -264,14 +264,14 @@ Analyser.prototype.initiateGroups = function () {
         "data": analyser.page_data,
         "rowId": 'group_id',
         "columns": [
-            {
-                "data": "selector",
-                "orderable": false,
-                "targets": 0,
-                render: function (data, type, row, meta) {
-                    return sprintf(analyser.checkbox_template, row.group_id);
-                }
-            },
+            // {
+            //     "data": "selector",
+            //     "orderable": false,
+            //     "targets": 0,
+            //     render: function (data, type, row, meta) {
+            //         return sprintf(analyser.checkbox_template, row.group_id);
+            //     }
+            // },
             {
                 "data": "group_name",
                 "targets": 1,
@@ -284,8 +284,16 @@ Analyser.prototype.initiateGroups = function () {
             { "data": "new_users_", "targets": 4 },
             { "data": "left_users_", "targets": 5 },
             { "data": "no_messages_", "targets": 6 },
-            { "data": "no_images_", "targets": 7 },
-            { "data": "no_links_", "targets": 8 }
+            // { "data": "no_images_", "targets": 7 },
+            // { "data": "no_links_", "targets": 8 },
+            { "data": "counselor_", "targets": 9 },
+            {
+                "data": "settings_",
+                "targets": 10,
+                render: function (data, type, row, meta) {
+                    return "<a href='#' class='group_link' data-group_id='" + row.group_id + "'>" + "Assign Counselor" + "</a>";
+                }
+            },
         ]
     });
     table.columns().iterator('column', function (ctx, idx) {
