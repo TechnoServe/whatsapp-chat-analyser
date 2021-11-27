@@ -1,4 +1,4 @@
-{% extends "base_dashboard.html" %}
+{% extends "base_dashboard.ba.html" %}
 
 {% block css %}
 <link rel="stylesheet" href="{{ static('node_modules/material-design-lite/material.min.css') }}" />
@@ -30,7 +30,7 @@
             <table id='whatsapp_groups' class='mdl-data-table mdl-js-data-table mdl-shadow--2dp'>
                 <thead>
                     <tr>
-                        <!-- <th data-name='selector'>#</th> -->
+                        <th data-name='selector'>#</th>
                         <th data-name='group_name'>Group Name</th>
                         <th data-name='date_created'>Date Created</th>
                         <th data-name='created_by'>Created By</th>
@@ -40,7 +40,6 @@
                         <!-- <th data-name='no_images_'>Media</th>
                         <th data-name='no_links_'>Links</th> -->
                         <th data-name='counselor_'>Counselor</th>
-                        <th data-name='settings_'>Settings</th>
                     </tr>
                 </thead>
             </table>

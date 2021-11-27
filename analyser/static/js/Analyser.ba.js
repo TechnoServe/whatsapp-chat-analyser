@@ -29,7 +29,7 @@ function Analyser(){
 
 Analyser.prototype.initiatePages = function(){
     if(window.location.pathname == '/dashboard.ba') this.initiateDashboard();
-    else if(window.location.pathname == '/groups') this.initiateGroups();
+    else if(window.location.pathname == '/whatsapp_groups_ba') this.initiateGroups();
     else if(window.location.pathname == '/engaged_users') this.initiateEngagedUsers();
     else if(window.location.pathname.split('/')[1] == 'group_stats') this.initiateGroupStats();
     else if(window.location.pathname.split('/')[1] == 'user_stats') this.initiateUserStats();
@@ -225,7 +225,7 @@ Analyser.prototype.initiateActionButtons = function(id_){
     });
 };
 
-Analyser.prototype.initiateGroups = function(){
+Analyser.prototype.initiateGroups = function () {
     analyser.initiateSearchAutocomplete();
     analyser.initiateDateRanges();
     var table = $('#whatsapp_groups').DataTable({
@@ -237,35 +237,43 @@ Analyser.prototype.initiateGroups = function(){
             {
                 "data": "selector",
                 "orderable": false,
-                "targets": 0, 
-                render: function ( data, type, row, meta ) {
+                "targets": 0,
+                render: function (data, type, row, meta) {
                     return sprintf(analyser.checkbox_template, row.group_id);
                 }
             },
             {
                 "data": "group_name",
                 "targets": 1,
-                render: function ( data, type, row, meta ) {
-                    return "<a href='#' class='group_link' data-group_id='"+ row.group_id +"'>"+ row.group_name +"</a>";
+                render: function (data, type, row, meta) {
+                    return "<a href='#' class='group_link' data-group_id='" + row.group_id + "'>" + row.group_name + "</a>";
                 }
             },
-            {"data": "date_created", "targets": 2 },
-            {"data": "created_by", "targets": 3 },
-            {"data": "new_users_", "targets": 4 },
-            {"data": "left_users_", "targets": 5 },
-            {"data": "no_messages_", "targets": 6 },
-            {"data": "no_images_", "targets": 7 },
-            {"data": "no_links_", "targets": 8 }
+            { "data": "date_created", "targets": 2 },
+            { "data": "created_by", "targets": 3 },
+            { "data": "new_users_", "targets": 4 },
+            { "data": "left_users_", "targets": 5 },
+            { "data": "no_messages_", "targets": 6 },
+            // { "data": "no_images_", "targets": 7 },
+            // { "data": "no_links_", "targets": 8 },
+            { "data": "counselor_", "targets": 9 },
+            // {
+            //     "data": "settings_",
+            //     "targets": 10,
+            //     render: function (data, type, row, meta) {
+            //         return "<a href='#' class='assign_group_counselor' data-group_id='" + row.group_id + "'>" + "Assign Counselor" + "</a>";
+            //     }
+            // },
         ]
     });
-    table.columns().iterator( 'column', function (ctx, idx) {
-        $( table.column(idx).header() ).append('<span class="sort-icon"/>');
-    } );
+    table.columns().iterator('column', function (ctx, idx) {
+        $(table.column(idx).header()).append('<span class="sort-icon"/>');
+    });
 
     $('div.dataTables_filter input').addClass('form-control-clean');
     MicroModal.init();
 
-    $(document).on('click', '.group_link', function(){ analyser.showItemStats(sprintf('/group_stats/%s', $(this).data('group_id'))); });
+    $(document).on('click', '.group_link', function () { analyser.showItemStats(sprintf('/group_stats/%s', $(this).data('group_id'))); });
 };
 
 Analyser.prototype.initiateEngagedUsers = function(){

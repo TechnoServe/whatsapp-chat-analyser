@@ -2,9 +2,11 @@ from django.db import transaction, connection
 from django.db.models import Q, Sum, Count, IntegerField, Min, Max, Avg, F, CharField, functions
 from django.conf import settings
 
-from analyser.models import Personnel, WhatsAppGroup, WhatsAppChatFile, GroupDailyStats, UserDailyStats, MessageLog, GroupNameChanges, STATUS_CHOICES
+from analyser.models import Personnel, WhatsAppGroup, WhatsAppChatFile, GroupDailyStats, UserDailyStats, MessageLog, GroupNameChanges, STATUS_CHOICES, CounselorGroupAssignment, CounselorAdvisorAssignment
 from analyser.serializers import GroupDailyStatsSerializer
 from analyser.chat.Utilities import Utilities
+
+from analyser.chat.UserManagement import UserManagement
 
 from hashids import Hashids
 from analyser.common_tasks import Notification, Terminal
@@ -59,8 +61,48 @@ class DBService:
         to_return['group_info'] = []
 
         for grp in all_groups:
+            # get counselor assigned to group
+            qs = CounselorGroupAssignment.objects.filter(group=grp['group_id']).select_related()
+            if not qs:
+                grp['counselor_'] = ''
+            else:
+                grp['counselor_'] = qs[0].counselor.first_name + " " + qs[0].counselor.last_name
+            
             grp['group_id'] = my_hashids.encode(grp['group_id'])
-            grp['counselor_'] = ''
+
+            to_return['group_info'].append(grp)
+        
+        return to_return
+    
+    def fetch_ba_groups_info(self, advisor):
+        groups = []
+        userManagement = UserManagement()
+        # get all counselors assigned to advisor
+        counselors = CounselorAdvisorAssignment.objects.filter(advisor=advisor)
+        
+        # get all groups assigned to counselors of this advisor
+        for user in counselors:
+            counselor = Personnel.objects.filter(id=user.counselor_id).get()
+            qs = CounselorGroupAssignment.objects.filter(counselor=counselor)
+            
+            for val in qs:
+                groups.append(val.group_id)
+
+        to_return = {}
+        all_groups = GroupDailyStats.objects.filter(group_id__in=groups).select_related('group').values('group_id').annotate(group_name=F('group__group_name'), created_by=F('group__created_by'), new_users_=Sum('new_users'), left_users_=Sum('left_users'), no_messages_=Sum('no_messages'), no_images_=Sum('no_images'), no_links_=Sum('no_links'), date_created=functions.Cast('group__datetime_created', output_field=CharField() )).all()
+
+        to_return['group_info'] = []
+
+        for grp in all_groups:
+            # get counselor assigned to group
+            qs = CounselorGroupAssignment.objects.filter(group=grp['group_id']).select_related()
+            if not qs:
+                grp['counselor_'] = ''
+            else:
+                grp['counselor_'] = qs[0].counselor.first_name + " " + qs[0].counselor.last_name
+            
+            grp['group_id'] = my_hashids.encode(grp['group_id'])
+
             to_return['group_info'].append(grp)
         
         return to_return

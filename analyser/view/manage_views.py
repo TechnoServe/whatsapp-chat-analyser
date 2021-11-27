@@ -81,6 +81,21 @@ def assigned_counselors(request):
     params['assigned'] = data
     return render(request, 'dashboard/assigned_counselors.html', params)
 
+
+@login_required(login_url='/login')
+def whatsapp_groups_ba(request):
+    params = get_basic_info(request)
+    params = {'s_date': ''}
+    params['page_title'] = 'WhatsApp Groups'
+    params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
+    params['cur_user'] = request.user
+
+    
+    analyser = Analyser()
+    # get all groups belonging to Business Analyst
+    params['data'] = analyser.fetch_ba_groups_info(request.user)
+    return render(request, 'dashboard/whatsapp_groups_ba.html', params)
+
 @login_required(login_url='/login')
 def assigned_advisors(request):
     params = get_basic_info(request)
@@ -124,6 +139,17 @@ def ajax_assign_counselor_to_advisor(request):
     counselor = User.objects.filter(id=pk_id_counselor).get()
 
     data = manageUser.assignCounselorToAdvisor(counselor, advisor)
+    return JsonResponse(data, status=200, safe=False)
+
+@login_required(login_url='/login')
+def ajax_assign_counselor_to_group(request):
+    pk_id_group = my_hashids.decode(request.POST.get('group_id'))[0]
+    pk_id_counselor = my_hashids.decode(request.POST.get('counselor_id'))[0]
+
+    group = WhatsAppGroup.objects.filter(id=pk_id_group).get()
+    counselor = User.objects.filter(id=pk_id_counselor).get()
+
+    data = manageUser.assignCounselorToGroup(counselor, group)
     return JsonResponse(data, status=200, safe=False)
 
 @login_required(login_url='/login')
@@ -226,6 +252,13 @@ def determine_user_links(request):
             {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/counselor_assignment', 'link_title': 'Counselor Assignment', 'allowed_users': ['data_manager', 'system_admin'] },
             {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/advisor_assignment', 'link_title': 'Advisor Assignment', 'allowed_users': ['data_manager', 'system_admin'] }
         ]},
+        {'type': 'link', 'href': 'https://drive.google.com/drive/u/2/folders/1LPyG58hCMnMd6m9touobHPUXCPGfmD6a', 'icon': '<i class="fi fi-layers"></i>', 'link_title': 'Upload', 'allowed_users': ['business_advisor', 'business_counselor', 'program_manager']}, 
+        
+        {'type': 'link', 'href': '/assigned_counselors', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Assigned Counselors', 'allowed_users': ['business_advisor']}, 
+        {'type': 'link', 'href': '/whatsapp_groups_ba', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'WhatsApp Groups', 'allowed_users': ['business_advisor']}, 
+    
+        {'type': 'link', 'href': '/assigned_advisors', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Assigned Advisors', 'allowed_users': ['program_manager']}, 
+        
         {
         'type': 'link', 'href': '#', 'icon': '<i class="fi fi-layers-middle"></i>', 'link_title': 'Admin Section', 'allowed_users': ['data_manager', 'system_admin'], 
         'items': [
@@ -256,6 +289,8 @@ def determine_user_links(request):
             allowed_links.append(link)
 
     request.session['nav_links'] = allowed_links
+
+
 
 #FIXME delete this after testing chats
 @login_required(login_url='/login')

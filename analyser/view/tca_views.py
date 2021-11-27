@@ -129,6 +129,8 @@ def determine_user_links(request):
         {'type': 'link', 'href': 'https://drive.google.com/drive/u/2/folders/1LPyG58hCMnMd6m9touobHPUXCPGfmD6a', 'icon': '<i class="fi fi-layers"></i>', 'link_title': 'Upload', 'allowed_users': ['business_advisor', 'business_counselor', 'program_manager']}, 
         
         {'type': 'link', 'href': '/assigned_counselors', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Assigned Counselors', 'allowed_users': ['business_advisor']}, 
+        {'type': 'link', 'href': '/whatsapp_groups_ba', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'WhatsApp Groups', 'allowed_users': ['business_advisor']}, 
+    
         {'type': 'link', 'href': '/assigned_advisors', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Assigned Advisors', 'allowed_users': ['program_manager']}, 
         
         {
@@ -532,6 +534,8 @@ def dashboardBA(request, *args, **kwargs):
         analyser = Analyser()
         params['stats'] = analyser.fetch_all_meta(date_range)
         params['has_data'] = False if params['stats']['empty_db'] else True
+
+        determine_user_links(request)
 
         return render(request, 'dashboard/dashboard.ba.html', params)
     except Exception as e:

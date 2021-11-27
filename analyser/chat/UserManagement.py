@@ -1,4 +1,4 @@
-from analyser.models import Personnel, CounselorAdvisorAssignment, AdvisorManagerAssignment
+from analyser.models import Personnel, CounselorAdvisorAssignment, AdvisorManagerAssignment,  CounselorGroupAssignment
 from analyser.serializers import PersonnelSerializer, CounselorAdvisorAssignmentSerializer, AdvisorManagerAssignmentSerializer
 from django.db.models import Q
 
@@ -23,6 +23,19 @@ class UserManagement:
         assign.save()
 
         return True
+    
+    def assignCounselorToGroup(self, counselor, group):
+        qs = CounselorGroupAssignment.objects.filter(group=group)
+        if not qs:
+            assign = CounselorGroupAssignment(counselor=counselor, group=group)
+            assign.save()
+        else:
+            # update counselor
+            CounselorGroupAssignment.objects.filter(group=group).update(counselor=counselor)
+        return True
+    
+    # def getGroupsAssignedToCounselor(self, counselor):
+    #     qs = CounselorGroupAssignment.objects.filter(counselor=counselor)
 
     def assignAdvisorToManager(self, manager, advisor):
         assign = AdvisorManagerAssignment(manager=manager, advisor=advisor)

@@ -143,3 +143,11 @@ class AdvisorManagerAssignment(models.Model):
     
     advisor = models.ForeignKey(Personnel, on_delete=models.PROTECT, null=False, blank=False, related_name='r_advisor_manage')
     manager = models.ForeignKey(Personnel, on_delete=models.PROTECT, null=False, blank=False, related_name='r_manager_advisor')
+
+
+class CounselorGroupAssignment(models.Model):
+    class Meta:
+        unique_together = (('counselor', 'group'),)
+
+    counselor = models.ForeignKey(Personnel, on_delete=models.PROTECT, null=False, blank=False, related_name='r_counselor_group')
+    group = models.ForeignKey(WhatsAppGroup, on_delete=models.PROTECT, null=False, blank=False, related_name='r_group_counselor')
