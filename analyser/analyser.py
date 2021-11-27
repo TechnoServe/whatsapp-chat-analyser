@@ -242,6 +242,9 @@ class Analyser():
     def fetch_ba_groups_info(self, advisor):
         return dbService.fetch_ba_groups_info(advisor)
 
+    def fetch_bc_groups_info(self, counselor):
+        return dbService.fetch_bc_groups_info(counselor)
+
     #get all chats information
     def get_all_chats(self, request):
         return dbService.get_all_chats(request)

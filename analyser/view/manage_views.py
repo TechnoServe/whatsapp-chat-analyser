@@ -96,6 +96,20 @@ def whatsapp_groups_ba(request):
     params['data'] = analyser.fetch_ba_groups_info(request.user)
     return render(request, 'dashboard/whatsapp_groups_ba.html', params)
 
+def whatsapp_groups_bc(request):
+    params = get_basic_info(request)
+    params = {'s_date': ''}
+    params['page_title'] = 'WhatsApp Groups'
+    params['site_name'] = settings.SITE_NAME + ' - ' + params['page_title']
+    params['cur_user'] = request.user
+
+    
+    analyser = Analyser()
+    # get all groups belonging to Business Analyst
+    params['data'] = analyser.fetch_bc_groups_info(request.user)
+ 
+    return render(request, 'dashboard/whatsapp_groups_bc.html', params)
+
 @login_required(login_url='/login')
 def assigned_advisors(request):
     params = get_basic_info(request)
@@ -256,7 +270,8 @@ def determine_user_links(request):
         
         {'type': 'link', 'href': '/assigned_counselors', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Assigned Counselors', 'allowed_users': ['business_advisor']}, 
         {'type': 'link', 'href': '/whatsapp_groups_ba', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'WhatsApp Groups', 'allowed_users': ['business_advisor']}, 
-    
+        {'type': 'link', 'href': '/whatsapp_groups_bc', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'WhatsApp Groups', 'allowed_users': ['business_counselor']}, 
+
         {'type': 'link', 'href': '/assigned_advisors', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Assigned Advisors', 'allowed_users': ['program_manager']}, 
         
         {

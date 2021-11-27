@@ -107,6 +107,34 @@ class DBService:
         
         return to_return
 
+    def fetch_bc_groups_info(self, counselor):
+        groups = []
+        userManagement = UserManagement()
+        
+        qs = CounselorGroupAssignment.objects.filter(counselor=counselor)
+            
+        for val in qs:
+            groups.append(val.group_id)
+
+        to_return = {}
+        all_groups = GroupDailyStats.objects.filter(group_id__in=groups).select_related('group').values('group_id').annotate(group_name=F('group__group_name'), created_by=F('group__created_by'), new_users_=Sum('new_users'), left_users_=Sum('left_users'), no_messages_=Sum('no_messages'), no_images_=Sum('no_images'), no_links_=Sum('no_links'), date_created=functions.Cast('group__datetime_created', output_field=CharField() )).all()
+
+        to_return['group_info'] = []
+
+        for grp in all_groups:
+            # get counselor assigned to group
+            qs = CounselorGroupAssignment.objects.filter(group=grp['group_id']).select_related()
+            if not qs:
+                grp['counselor_'] = ''
+            else:
+                grp['counselor_'] = qs[0].counselor.first_name + " " + qs[0].counselor.last_name
+            
+            grp['group_id'] = my_hashids.encode(grp['group_id'])
+
+            to_return['group_info'].append(grp)
+        
+        return to_return
+
     def save_day_stats(self, cur_day_details, group_id, chat_file_id):
         # 1. Save the group
         # 2. Save the group daily stats

@@ -130,7 +130,8 @@ def determine_user_links(request):
         
         {'type': 'link', 'href': '/assigned_counselors', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Assigned Counselors', 'allowed_users': ['business_advisor']}, 
         {'type': 'link', 'href': '/whatsapp_groups_ba', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'WhatsApp Groups', 'allowed_users': ['business_advisor']}, 
-    
+        {'type': 'link', 'href': '/whatsapp_groups_bc', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'WhatsApp Groups', 'allowed_users': ['business_counselor']}, 
+
         {'type': 'link', 'href': '/assigned_advisors', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Assigned Advisors', 'allowed_users': ['program_manager']}, 
         
         {

@@ -80,7 +80,9 @@ urlpatterns = [
     re_path(r'^whatsapp_groups_ba$', views.whatsapp_groups_ba, name='whatsapp_groups_ba'),
 
 
-    
+    # Counselor Portal
+    re_path(r'^whatsapp_groups_bc$', views.whatsapp_groups_bc, name='whatsapp_groups_bc'),
+
     
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
