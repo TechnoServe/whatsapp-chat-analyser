@@ -480,6 +480,93 @@ class DBService:
         return to_return
 
 
+    def fetch_all_meta_bc(self, date_range, counselor):
+        groups = []
+        userManagement = UserManagement()
+        
+        qs = CounselorGroupAssignment.objects.filter(counselor=counselor)
+            
+        for val in qs:
+            groups.append(val.group_id)
+
+        last_date = GroupDailyStats.objects.filter(group_id__in=groups).values('stats_date').order_by('-stats_date').first()
+        first_date = GroupDailyStats.objects.filter(group_id__in=groups).values('stats_date').order_by('stats_date').first()
+        if last_date is None: return {'info_message': 'The processed database is empty. Please run the initial processing.', 'empty_db': True}
+        to_return = Utilities.determine_dateranges(date_range, first_date['stats_date'], last_date['stats_date'])
+        s_date = to_return['ss_date']
+        e_date = to_return['ee_date']
+
+        # Whatsapp groups
+        emoji_count = 0
+        all_emojis = GroupDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).values('emojis').all()
+        for al_ in all_emojis:
+            emoji_stats = Utilities.emoji_count(al_['emojis'])
+            for k in set(emoji_stats): emoji_count += emoji_stats.get(k, 0)
+
+        to_return['file_status'] = { st_[0]: 0 for st_ in STATUS_CHOICES }
+        status_counts = list(WhatsAppChatFile.objects.filter(group_id__in=groups).values('status').annotate(s_count=Count('status')).all())
+        all_count = 0
+        for st_ in status_counts:
+            to_return['file_status'][st_['status']] = st_['s_count']
+            all_count += st_['s_count']
+
+        to_return['perc_processed'] = float('{0:.1f}'.format( (( to_return['file_status']['processed'] / all_count ) * 100) )) 
+        to_return['no_groups'] = GroupDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).values('group_id').annotate(g_count=Count('group_id')).count()
+        to_return['no_users'] = UserDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).values('group_id', 'name_phone').annotate(g_count=Count('group_id'), u_count=Count('name_phone')).count()
+        to_return['no_messages'] = GroupDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).aggregate(g_count=Sum('no_messages'))['g_count']
+        to_return['no_images'] = GroupDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).aggregate(g_count=Sum('no_images'))['g_count']
+        to_return['no_links'] = GroupDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).aggregate(g_count=Sum('no_links'))['g_count']
+        to_return['no_emojis'] = emoji_count
+
+        return to_return
+
+    def fetch_all_meta_ba(self, date_range, advisor):
+        groups = []
+        userManagement = UserManagement()
+        
+        # get all counselors assigned to advisor
+        counselors = CounselorAdvisorAssignment.objects.filter(advisor=advisor)
+        
+        # get all groups assigned to counselors of this advisor
+        for user in counselors:
+            counselor = Personnel.objects.filter(id=user.counselor_id).get()
+            qs = CounselorGroupAssignment.objects.filter(counselor=counselor)
+            
+            for val in qs:
+                groups.append(val.group_id)
+
+        last_date = GroupDailyStats.objects.filter(group_id__in=groups).values('stats_date').order_by('-stats_date').first()
+        first_date = GroupDailyStats.objects.filter(group_id__in=groups).values('stats_date').order_by('stats_date').first()
+        if last_date is None: return {'info_message': 'The processed database is empty. Please run the initial processing.', 'empty_db': True}
+        to_return = Utilities.determine_dateranges(date_range, first_date['stats_date'], last_date['stats_date'])
+        s_date = to_return['ss_date']
+        e_date = to_return['ee_date']
+
+        # Whatsapp groups
+        emoji_count = 0
+        all_emojis = GroupDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).values('emojis').all()
+        for al_ in all_emojis:
+            emoji_stats = Utilities.emoji_count(al_['emojis'])
+            for k in set(emoji_stats): emoji_count += emoji_stats.get(k, 0)
+
+        to_return['file_status'] = { st_[0]: 0 for st_ in STATUS_CHOICES }
+        status_counts = list(WhatsAppChatFile.objects.filter(group_id__in=groups).values('status').annotate(s_count=Count('status')).all())
+        all_count = 0
+        for st_ in status_counts:
+            to_return['file_status'][st_['status']] = st_['s_count']
+            all_count += st_['s_count']
+
+        to_return['perc_processed'] = float('{0:.1f}'.format( (( to_return['file_status']['processed'] / all_count ) * 100) )) 
+        to_return['no_groups'] = GroupDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).values('group_id').annotate(g_count=Count('group_id')).count()
+        to_return['no_users'] = UserDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).values('group_id', 'name_phone').annotate(g_count=Count('group_id'), u_count=Count('name_phone')).count()
+        to_return['no_messages'] = GroupDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).aggregate(g_count=Sum('no_messages'))['g_count']
+        to_return['no_images'] = GroupDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).aggregate(g_count=Sum('no_images'))['g_count']
+        to_return['no_links'] = GroupDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id__in=groups).aggregate(g_count=Sum('no_links'))['g_count']
+        to_return['no_emojis'] = emoji_count
+
+        return to_return
+
+
     def fetch_engaged_users(self, request):
         start = int(request.POST['start'])
         length_ = int(request.POST['length'])

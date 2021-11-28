@@ -1,4 +1,12 @@
-{% extends "base_dashboard.html" %}
+
+
+{% if designation == "business_counselor" %}
+    {% extends "base_dashboard.bc.html" %}
+{% elif designation == "business_advisor" %}
+    {% extends "base_dashboard.ba.html" %}
+{% else %}
+    {% extends "base_dashboard.html" %}
+{% endif %}
 
 {% block css %}
 <link rel="stylesheet" href="{{ static('node_modules/material-design-lite/material.min.css') }}" />

@@ -513,7 +513,14 @@ class Analyser():
     def fetch_all_meta(self, date_range):
         
         return dbService.fetch_all_meta(date_range)
+
+    def fetch_all_meta_bc(self, date_range, counselor):
         
+        return dbService.fetch_all_meta_bc(date_range, counselor)
+
+    def fetch_all_meta_ba(self, date_range, advisor):
+        
+        return dbService.fetch_all_meta_ba(date_range, advisor)  
 
     def fetch_engaged_users(self, request):
         return dbService.fetch_engaged_users(request)

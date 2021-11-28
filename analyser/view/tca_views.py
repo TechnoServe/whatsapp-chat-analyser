@@ -533,7 +533,7 @@ def dashboardBA(request, *args, **kwargs):
             date_range = None
 
         analyser = Analyser()
-        params['stats'] = analyser.fetch_all_meta(date_range)
+        params['stats'] = analyser.fetch_all_meta_ba(date_range, request.user)
         params['has_data'] = False if params['stats']['empty_db'] else True
 
         determine_user_links(request)
@@ -561,7 +561,7 @@ def dashboardBC(request, *args, **kwargs):
             date_range = None
 
         analyser = Analyser()
-        params['stats'] = analyser.fetch_all_meta(date_range)
+        params['stats'] = analyser.fetch_all_meta_bc(date_range, request.user)
         params['has_data'] = False if params['stats']['empty_db'] else True
 
         return render(request, 'dashboard/dashboard.bc.html', params)
@@ -659,7 +659,7 @@ def show_group_stats(request, uid):
         params['group_id'] = group_id
         params['wordCloud'] = wordCloud.getGroupChat(group_id)
 
-        
+        params['designation'] = request.user.designation
 
         return render(request, 'dashboard/group_stats.html', params)
     except Exception as e:

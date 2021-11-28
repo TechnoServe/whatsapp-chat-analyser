@@ -459,7 +459,7 @@ Analyser.prototype.initiateDateRanges = function(){
     $('input[name="analysis_range"]').on('apply.daterangepicker', function(ev, picker){ analyser.showItemStats(window.location.pathname); });
 };
 
-Analyser.prototype.drawGroupStatsGraphs = function(){
+Analyser.prototype.drawGroupStatsGraphs = function () {
     Highcharts.chart('categories_chart', {
         chart: {
             plotBackgroundColor: null,
@@ -484,7 +484,7 @@ Analyser.prototype.drawGroupStatsGraphs = function(){
                 dataLabels: {
                     enabled: true,
                     distance: -50,
-                    formatter: function(){ return sprintf('%s: %.1f%%', this.point.name, (this.point.y / analyser.stats.totals) * 100); }
+                    formatter: function () { return sprintf('%s: %.1f%%', this.point.name, (this.point.y / analyser.stats.totals) * 100); }
                 }
             }
         },
@@ -509,7 +509,7 @@ Analyser.prototype.drawGroupStatsGraphs = function(){
 
     Highcharts.chart('active_days', {
         chart: { zoomType: 'xy' },
-        title: { text: ''},
+        title: { text: '' },
         xAxis: {
             categories: analyser.stats.active_dates.dates,
             crosshair: true
@@ -535,6 +535,34 @@ Analyser.prototype.drawGroupStatsGraphs = function(){
             column: {
                 pointPadding: 0.2,
                 borderWidth: 0
+            },
+            series: {
+                point: {
+                    events: {
+                        click() {
+                            let point = this;
+
+                            let date = point.category;
+                            let sent_messages = point.y;
+                            let group_id = $("#group_id").val()
+
+                            ajax_data = { 'group_id': $("#group_id").val(), date: point.category };
+                            $("#date_selected").html(date)
+                            console.log(ajax_data)
+                            $.ajax({
+                                type: "POST", url: '/searchGroupChatByDate', dataType: 'json', data: ajax_data,
+                                
+                                success: function (data) {
+                                    console.log(data)
+                                    populateChatDiv(data)
+                                }
+                            });
+
+                            $("#exampleGetChatHistory").modal('show')
+                            //console.log(sent_messages)
+                        }
+                    }
+                }
             }
         },
         series: [{
@@ -551,33 +579,82 @@ Analyser.prototype.drawGroupStatsGraphs = function(){
         }]
     });
 
+    stopwords = ['and','i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now','na',
+                'kwa',"'t"]
+
+
+    
+    let words = $("#tokenized_text").html()
+    // const text = words
+    // console.log(text)
+    const text = words,
+        lines = text.split(/[,\. ]+/g),
+        data = lines.reduce((arr, word) => {
+            let obj = Highcharts.find(arr, obj => obj.name === word);
+
+            if (obj) {
+                obj.weight += 1;
+            } else {
+                obj = {
+                    name: word,
+                    weight: 1
+                };
+            arr.push(obj);
+            }
+            return arr;
+        }, []);
+
+    Highcharts.chart('word_cloud', {
+        accessibility: {
+            screenReaderSection: {
+                beforeChartFormat: '<h5>{chartTitle}</h5>' +
+                    '<div>{chartSubtitle}</div>' +
+                    '<div>{chartLongdesc}</div>' +
+                    '<div>{viewTableButton}</div>'
+            }
+        },
+        series: [{
+            type: 'wordcloud',
+            data,
+            name: 'Occurrences'
+        }],
+        title: {
+            text: 'Wordcloud from WhatsApp group chat '
+        }
+    });
+
+    // highcharts.chart('word_cloud', 
+
+    // );
+
 
     var gauge1 = Gauge(
-      document.getElementById("attrition"), {
+        document.getElementById("attrition"), {
         max: 100,
         dialStartAngle: -90,
         dialEndAngle: -90.001,
         value: 100,
-        label: function(value) {
-          return (Math.round(value * 100) / 100) + '%';
+        label: function (value) {
+            return (Math.round(value * 100) / 100) + '%';
         }
-      }
+    }
     );
-    gauge1.setValueAnimated(((analyser.stats.lefties / analyser.stats.no_users)*100).toFixed(1), 1);
+    gauge1.setValueAnimated(((analyser.stats.lefties / analyser.stats.no_users) * 100).toFixed(1), 1);
 
     var gauge2 = Gauge(
-      document.getElementById("joining"), {
+        document.getElementById("joining"), {
         max: 100,
         dialStartAngle: -90,
         dialEndAngle: -90.001,
         value: 100,
-        label: function(value) {
-          return (Math.round(value * 100) / 100) + '%';
+        label: function (value) {
+            return (Math.round(value * 100) / 100) + '%';
         }
-      }
+    }
     );
-    gauge2.setValueAnimated(((analyser.stats.joinies / analyser.stats.no_users)*100).toFixed(1), 1);
+    gauge2.setValueAnimated(((analyser.stats.joinies / analyser.stats.no_users) * 100).toFixed(1), 1);
 };
+
 
 Analyser.prototype.initiateUserStats = function(){
     analyser.initiateSearchAutocomplete();
