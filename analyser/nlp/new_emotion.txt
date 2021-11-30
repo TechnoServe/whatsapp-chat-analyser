@@ -1,0 +1,26 @@
+ 'victimized': 'cheated',
+
+kudhulumiwa:cheated,
+ 'accused': 'cheated',
+
+mtuhumiwa:cheated,
+ 'acquitted': 'singled out',
+
+kuachiliwa huru:singledout,
+ 'adorable': 'loved',
+
+ya kupendeza:loved,
+ 'adored': 'loved',
+
+kuabudiwa:loved,
+ 'affected': 'attracted',
+
+walioathirika:attracted,
+ 'afflicted': 'sad',
+
+kuteswa:sad,
+ 'aghast': 'fearful',
+
+mshtuko:fearful,
+ 'agog': 'attracted',
+

@@ -192,13 +192,33 @@
             <div class='tns_card'style='width:100%;'>
                 <span class="tns_card_title">Word Cloud </span>
                 <div class='d-flex'>
-                    <div id='word_cloud' style='width:2000px;height: 1000px;'>&nbsp;</div>
+                    <div id='word_cloud' style='width:2000px;height: 800px;'>&nbsp;</div>
                 </div>
             </div>
         </div>
 
     </div>
-</div>
+    <div class="row ">
+        <div class="col-12">
+            <div class='tns_card' style='width:100%;'>
+                <span class="tns_card_title">Bar graph</span>
+                <div class='d-flex'>
+                    <div id='bar_emotions' style='width:2000px;height: 800px;'>&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row ">
+        <div class="col-12">
+            <div class='tns_card' style='width:100%;'>
+                <span class="tns_card_title">Bar graph</span>
+                <div class='d-flex'>
+                    <div id='bar_sentiment' style='width:1000px;height: 500px;'>&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <!-- Chat Modal -->
 <div class="modal fade" id="exampleGetChatHistory" tabindex="-1" role="dialog" aria-labelledby="exampleGetChatHistory" 
@@ -222,6 +242,8 @@
 
 <!--Word Cloud Stuff-->
 <div type="hidden" class="hide" id="tokenized_text"> {{ wordCloud }}</div>
+
+<div type="hidden" class="hide" id="emotions"> {{ emotions }}</div>
 
 {% endblock %}
 

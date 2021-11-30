@@ -1,0 +1,99 @@
+
+{% extends "base_dashboard.html" %}
+
+{% block main_content %}
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleGetChatHistory">
+    Get the chat
+</button>
+<!-- {% for msg in messages %}
+<span>{{ msg.user.name_phone }}</span> <br> <span>{{ msg.dt }}</span> <br>
+{% endfor %} -->
+<!-- Modal -->
+<div class="modal fade" id="exampleGetChatHistory" tabindex="-1" role="dialog" aria-labelledby="exampleGetChatHistory" 
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Chat history for this week</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="page-content page-container" id="page-content">
+                    <div class="padding">
+                        <div class="ps-container ps-theme-default ps-active-y" id="chat-content"
+                            style="overflow-y: scroll !important; height:400px !important;">
+                            <div class="media media-chat"> <img class="avatar"
+                                    src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
+                                <div class="media-body">
+                                    <p>Hi</p>
+                                    <p>How are you ...???</p>
+                                    <p>What are you doing tomorrow?<br> Can we come up a bar?</p>
+                                    <p class="meta"><time datetime="2018">23:58</time></p>
+                                </div>
+                            </div>
+                            <div class="media media-meta-day">Today</div>
+                            <div class="media media-chat media-chat-reverse">
+                                <div class="media-body">
+                                    <p>Hiii, I'm good.</p>
+                                    <p>How are you doing?</p>
+                                    <p>Long time no see! Tomorrow office. will be free on sunday.</p>
+                                    <p class="meta"><time datetime="2018">00:06</time></p>
+                                </div>
+                            </div>
+                            <div class="media media-chat"> <img class="avatar"
+                                    src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
+                                <div class="media-body">
+                                    <p>Okay</p>
+                                    <p>We will go on sunday? </p>
+                                    <p class="meta"><time datetime="2018">00:07</time></p>
+                                </div>
+                            </div>
+                            <div class="media media-chat media-chat-reverse">
+                                <div class="media-body">
+                                    <p>That's awesome!</p>
+                                    <p>I will meet you Sandon Square sharp at 10 AM</p>
+                                    <p>Is that okay?</p>
+                                    <p class="meta"><time datetime="2018">00:09</time></p>
+                                </div>
+                            </div>
+                            <div class="media media-chat"> <img class="avatar"
+                                    src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
+                                <div class="media-body">
+                                    <p>Okay i will meet you on Sandon Square </p>
+                                    <p class="meta"><time datetime="2018">00:10</time></p>
+                                </div>
+                            </div>
+                            <div class="media media-chat media-chat-reverse">
+                                <div class="media-body">
+                                    <p>Do you have pictures of Matley Marriage?</p>
+                                    <p class="meta"><time datetime="2018">00:10</time></p>
+                                </div>
+                            </div>
+                            <div class="media media-chat"> <img class="avatar"
+                                    src="https://img.icons8.com/color/36/000000/administrator-male.png" alt="...">
+                                <div class="media-body">
+                                    <p>Sorry I don't have. i changed my phone.</p>
+                                    <p class="meta"><time datetime="2018">00:12</time></p>
+                                </div>
+                            </div>
+                            <div class="media media-chat media-chat-reverse">
+                                <div class="media-body">
+                                    <p>Okay then see you on sunday!!</p>
+                                    <p class="meta"><time datetime="2018">00:12</time></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -613,8 +613,22 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
         }]
     });
 
+    console.log(analyser.emotions)
     stopwords = ['and','i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now','na',
-                'kwa',"'t"]
+                'kwa',"'t","mimi", "yangu", "mwenyewe", "sisi", "yetu", "wenyewe",
+         "wewe", "yako", "yeye", "wake", "ni", "yake", "yenyewe", "wao" ,
+          "nini", "yupi", "nani", "huyu", "huyo", "hawa", "wale", "wapo",
+           "ilikuwa", "walikuwa", "kuwa", "amekuwa", "alikuwa", "na", "kufanya" ,
+            "anafanya", "alifanya", "alifanya", "hiyo", "lakini", "ikiwa", "au",
+             "kwa sababu", "kama", " mpaka", "wakati", "ya", "kwa", "pamoja na",
+              "karibu", "dhidi ya", "kati", 
+             "ndani", "kupitia", "kabla", "baada ya", "juu", "chini", "hadi", "kutoka", "nje",
+              "washa", "zima", "tena", "zaidi", "basi", "mara moja", "hapa", "hapo", "wakati",
+               "wapi", "kwa nini", "vipi", "wote" , "yoyote", "kila", "wachache",
+                "zaidi", "wengi", "nyingine",
+                "baadhi", "kama", "hapana", "wala",
+              "sio", "tu ", "miliki", "sawa", "hivyo", "kuliko", "pia", "sana", "naweza",
+               "unaweza", "anaweza", "tu", "lazima", "sasa "]
 
 
     
@@ -638,6 +652,7 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
             return arr;
         }, []);
 
+
     Highcharts.chart('word_cloud', {
         accessibility: {
             screenReaderSection: {
@@ -657,10 +672,77 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
         }
     });
 
-    // highcharts.chart('word_cloud', 
 
-    // );
 
+
+    ajax_data = { 'group_id': $("#group_id").val() };
+                            
+    $.ajax({
+        type: "POST", url: '/ajax_getemotions', dataType: 'json', data: ajax_data,
+        success: function (data) {
+            labels = Object.keys(data)
+            values = Object.values(data)
+
+
+            console.log(labels)
+
+            Highcharts.chart('bar_emotions', {
+                title: {
+                    text: 'Emotion analysis for the group chat'
+                },
+                xAxis: {
+                    categories: labels,
+                    crosshair: true,
+                },
+                yAxis: {
+                    title:{
+                    text: 'Occurances'
+                    }
+                },
+                series: [{
+                    name: 'emotions',
+                    type: 'column',
+                    data: values,
+
+                }],
+            });
+        }
+    });
+
+
+    ajax_data = { 'group_id': $("#group_id").val() };
+                            
+    $.ajax({
+        type: "POST", url: '/ajax_getsentiment', dataType: 'json', data: ajax_data,
+        success: function (data) {
+            labels = Object.keys(data)
+            values = Object.values(data)
+
+
+            console.log(labels)
+
+            Highcharts.chart('bar_sentiment', {
+                title: {
+                    text: 'Sentiment analysis for the group chat'
+                },
+                xAxis: {
+                    categories: labels,
+                    crosshair: true,
+                },
+                yAxis: {
+                    title:{
+                    text: 'Occurances'
+                    }
+                },
+                series: [{
+                    name: 'sentiments',
+                    type: 'column',
+                    data: values,
+
+                }],
+            });
+        }
+    });
 
     var gauge1 = Gauge(
         document.getElementById("attrition"), {

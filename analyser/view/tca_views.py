@@ -32,6 +32,7 @@ from analyser.common_tasks import Notification, Terminal
 from analyser.analyser import Analyser
 from analyser.serializers import PersonnelSerializer, WhatsAppGroupSerializer, WhatsAppChatFileSerializer, UserDailyStatsSerializer
 
+from analyser.chat.MessageHistory import MessageHistory
 # NLP Related Imports
 from analyser.nlp.WordCloud import WordCloud
 
@@ -652,12 +653,15 @@ def show_group_stats(request, uid):
         except:
             date_range = None
 
+        Chat = MessageHistory()
+        emotions = Chat.getEmotions(group_id = group_id)
         analyser = Analyser()
         params['stats'] = analyser.fetch_group_meta(group_id, date_range)
         params['name_changes'] = params['stats']['name_changes']
         params['stats'].pop('name_changes')
         params['group_id'] = group_id
         params['wordCloud'] = wordCloud.getGroupChat(group_id)
+        params['emotions'] = emotions
 
         params['designation'] = request.user.designation
 

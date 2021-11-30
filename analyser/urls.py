@@ -73,12 +73,15 @@ urlpatterns = [
     # TODO this urls are for tests, will be deleted after
     re_path(r'^chats$', views.getchats, name='assigned_counselors'),
     re_path(r'^wordcloud$', views.getwordcloud, name='assigned_counselors'),
-
+    # re_path(r'^emotions$', views.getemotions, name='sentiments'),
+    re_path(r'^sentiment$', views.getsentiments, name='sentiments'),
 
     # Advisor Portal
     re_path(r'^assigned_counselors$', views.assigned_counselors, name='assigned_counselors'),
     re_path(r'^whatsapp_groups_ba$', views.whatsapp_groups_ba, name='whatsapp_groups_ba'),
-
+    re_path(r'^ajax_getemotions$', views.ajax_getemotions, name='ajax_getemotions'),
+    re_path(r'^ajax_getsentiment$', views.ajax_getsentiment, name='ajax_getsentiment'),
+    
 
     # Counselor Portal
     re_path(r'^whatsapp_groups_bc$', views.whatsapp_groups_bc, name='whatsapp_groups_bc'),
