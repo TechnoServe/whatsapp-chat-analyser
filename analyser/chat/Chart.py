@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from datetime import datetime
 from analyser.models import MessageLog
+from analyser.chat.MessageHistory import MessageHistory
 
 import nltk
 import itertools
@@ -9,6 +10,8 @@ from string import punctuation
 from nltk.probability import FreqDist
 import pandas as pd
 from wordcloud import WordCloud
+
+msgHistory = MessageHistory()
 
 class Chart:
     def CategoriesOfInformation(data):
@@ -110,3 +113,29 @@ class Chart:
         plt.close('all')
 
         return True
+    
+
+    def emotionsGraph(group_id):
+        emotions = msgHistory.getEmotions(group_id)
+
+        fig = plt.figure(figsize = (20, 10))
+        plt.suptitle('Graph of Emotions', fontsize=45)
+
+        plt.bar(range(len(emotions)), list(emotions.values()), align='center')
+        plt.xticks(range(len(emotions)), list(emotions.keys()))
+        plt.xticks(rotation=70)
+
+        plt.savefig("analyser/templates/jinja2/pdf_templates/emotions.png")
+        plt.close('all')
+        
+
+    def sentimentGraph(group_id):
+        sentiment = msgHistory.getSentiment(group_id)
+        fig = plt.figure(figsize = (20, 10))
+        plt.suptitle('Graph of Sentiment', fontsize=45)
+
+        plt.bar(range(len(sentiment)), list(sentiment.values()), align='center')
+        plt.xticks(range(len(sentiment)), list(sentiment.keys()))
+
+        plt.savefig("analyser/templates/jinja2/pdf_templates/sentiment.png")
+        plt.close('all')

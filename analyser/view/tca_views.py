@@ -661,7 +661,7 @@ def show_group_stats(request, uid):
         params['stats'].pop('name_changes')
         params['group_id'] = group_id
         params['wordCloud'] = wordCloud.getGroupChat(group_id)
-        params['emotions'] = emotions
+        #params['emotions'] = emotions
 
         params['designation'] = request.user.designation
 

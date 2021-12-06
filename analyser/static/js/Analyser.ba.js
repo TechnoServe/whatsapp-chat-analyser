@@ -694,7 +694,7 @@ Analyser.prototype.showItemStats = function(url){
     $('.hidden-form').submit();
 };
 
-Analyser.prototype.drawUserStatsGraphs = function(){
+Analyser.prototype.drawGroupStatsGraphs = function () {
     Highcharts.chart('categories_chart', {
         chart: {
             plotBackgroundColor: null,
@@ -714,17 +714,17 @@ Analyser.prototype.drawUserStatsGraphs = function(){
                 allowPointSelect: true,
                 cursor: 'pointer',
                 size: '80%',
+                center: ['50%', '50%'],
                 showInLegend: true,
                 dataLabels: {
-                    enabled: false,
-                    crop: false,
-                    format: '<b>{point.name}</b>: {point.y}',
-                    connectorShape: 'crookedLine',
-                    crookDistance: '90%'
+                    enabled: true,
+                    distance: -50,
+                    formatter: function () { return sprintf('%s: %.1f%%', this.point.name, (this.point.y / analyser.stats.totals) * 100); }
                 }
             }
         },
         series: [{
+
             // minPointSize: 10,
             // maxPointSize: 200,
             innerSize: '20%',
@@ -733,6 +733,7 @@ Analyser.prototype.drawUserStatsGraphs = function(){
             // zMin: 0,
             name: 'information',
             data: [
+
                 { name: 'Messages', y: analyser.stats.messages_count },
                 { name: 'Images', y: analyser.stats.images_count },
                 { name: 'Links', y: analyser.stats.links_count },
@@ -742,23 +743,25 @@ Analyser.prototype.drawUserStatsGraphs = function(){
     });
 
     Highcharts.chart('active_days', {
-        chart: { type: 'column' },
-        title: { text: ''},
+        chart: { zoomType: 'xy' },
+        title: { text: '' },
         xAxis: {
             categories: analyser.stats.active_dates.dates,
             crosshair: true
         },
         credits: analyser.graph_credits,
-        yAxis: {
+        yAxis: [{
             min: 0,
-            title: {
-                text: 'No of messages'
-            }
-        },
+            title: { text: 'No of messages' }
+        }, {
+            min: 0,
+            title: { text: 'Active users' },
+            opposite: true
+        }],
         tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y} messages</b></td></tr>',
+                '<td style="padding:0"><b>{point.y}</b></td></tr>',
             footerFormat: '</table>',
             shared: true,
             useHTML: true
@@ -767,27 +770,206 @@ Analyser.prototype.drawUserStatsGraphs = function(){
             column: {
                 pointPadding: 0.2,
                 borderWidth: 0
+            },
+            series: {
+                point: {
+                    events: {
+                        click() {
+                            let point = this;
+
+                            let date = point.category;
+                            let sent_messages = point.y;
+                            let group_id = $("#group_id").val()
+
+                            ajax_data = { 'group_id': $("#group_id").val(), date: point.category };
+                            $("#date_selected").html(date)
+                            console.log(ajax_data)
+                            $.ajax({
+                                type: "POST", url: '/searchGroupChatByDate', dataType: 'json', data: ajax_data,
+                                
+                                success: function (data) {
+                                    console.log(data)
+                                    populateChatDiv(data)
+                                }
+                            });
+
+                            $("#exampleGetChatHistory").modal('show')
+                            //console.log(sent_messages)
+                        }
+                    }
+                }
             }
         },
         series: [{
             name: 'Sent Messages',
+            type: 'column',
             data: analyser.stats.active_dates.messages
+
+        }, {
+            name: 'Active Users',
+            yAxis: 1,
+            type: 'spline',
+            data: analyser.stats.active_dates.users
 
         }]
     });
 
+    console.log(analyser.emotions)
+    stopwords = ['and','i','me','my','myself','we','our','ours','ourselves','you','your','yours','yourself','yourselves','he','him','his','himself','she','her','hers','herself','it','its','itself','they','them','their','theirs','themselves','what','which','who','whom','this','that','these','those','am','is','are','was','were','be','been','being','have','has','had','having','do','does','did','doing','a','an','the','and','but','if','or','because','as','until','while','of','at','by','for','with','about','against','between','into','through','during','before','after','above','below','to','from','up','down','in','out','on','off','over','under','again','further','then','once','here','there','when','where','why','how','all','any','both','each','few','more','most','other','some','such','no','nor','not','only','own','same','so','than','too','very','s','t','can','will','just','don','should','now','na',
+                'kwa',"'t","mimi", "yangu", "mwenyewe", "sisi", "yetu", "wenyewe",
+         "wewe", "yako", "yeye", "wake", "ni", "yake", "yenyewe", "wao" ,
+          "nini", "yupi", "nani", "huyu", "huyo", "hawa", "wale", "wapo",
+           "ilikuwa", "walikuwa", "kuwa", "amekuwa", "alikuwa", "na", "kufanya" ,
+            "anafanya", "alifanya", "alifanya", "hiyo", "lakini", "ikiwa", "au",
+             "kwa sababu", "kama", " mpaka", "wakati", "ya", "kwa", "pamoja na",
+              "karibu", "dhidi ya", "kati", 
+             "ndani", "kupitia", "kabla", "baada ya", "juu", "chini", "hadi", "kutoka", "nje",
+              "washa", "zima", "tena", "zaidi", "basi", "mara moja", "hapa", "hapo", "wakati",
+               "wapi", "kwa nini", "vipi", "wote" , "yoyote", "kila", "wachache",
+                "zaidi", "wengi", "nyingine",
+                "baadhi", "kama", "hapana", "wala",
+              "sio", "tu ", "miliki", "sawa", "hivyo", "kuliko", "pia", "sana", "naweza",
+               "unaweza", "anaweza", "tu", "lazima", "sasa "]
+
+
+    
+    let words = $("#tokenized_text").html()
+    // const text = words
+    // console.log(text)
+    const text = words,
+        lines = text.split(/[,\. ]+/g),
+        data = lines.reduce((arr, word) => {
+            let obj = Highcharts.find(arr, obj => obj.name === word);
+
+            if (obj) {
+                obj.weight += 1;
+            } else {
+                obj = {
+                    name: word,
+                    weight: 1
+                };
+            arr.push(obj);
+            }
+            return arr;
+        }, []);
+
+
+    Highcharts.chart('word_cloud', {
+        accessibility: {
+            screenReaderSection: {
+                beforeChartFormat: '<h5>{chartTitle}</h5>' +
+                    '<div>{chartSubtitle}</div>' +
+                    '<div>{chartLongdesc}</div>' +
+                    '<div>{viewTableButton}</div>'
+            }
+        },
+        series: [{
+            type: 'wordcloud',
+            data,
+            name: 'Occurrences'
+        }],
+        title: {
+            text: 'Wordcloud from WhatsApp group chat '
+        }
+    });
+
+
+
+
+    ajax_data = { 'group_id': $("#group_id").val() };
+                            
+    $.ajax({
+        type: "POST", url: '/ajax_getemotions', dataType: 'json', data: ajax_data,
+        success: function (data) {
+            labels = Object.keys(data)
+            values = Object.values(data)
+
+
+            console.log(labels)
+
+            Highcharts.chart('bar_emotions', {
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: labels,
+                    crosshair: true,
+                },
+                yAxis: {
+                    title:{
+                    text: 'Occurances'
+                    }
+                },
+                series: [{
+                    name: 'emotions',
+                    type: 'column',
+                    data: values,
+
+                }],
+            });
+        }
+    });
+
+
+    ajax_data = { 'group_id': $("#group_id").val() };
+                            
+    $.ajax({
+        type: "POST", url: '/ajax_getsentiment', dataType: 'json', data: ajax_data,
+        success: function (data) {
+            labels = Object.keys(data)
+            values = Object.values(data)
+
+
+            console.log(labels)
+
+            Highcharts.chart('bar_sentiment', {
+                title: {
+                    text: ''
+                },
+                xAxis: {
+                    categories: labels,
+                    crosshair: true,
+                },
+                yAxis: {
+                    title:{
+                    text: 'Occurances'
+                    }
+                },
+                series: [{
+                    name: 'sentiments',
+                    type: 'column',
+                    data: values,
+
+                }],
+            });
+        }
+    });
+
     var gauge1 = Gauge(
-      document.getElementById("group_interaction"), {
+        document.getElementById("attrition"), {
         max: 100,
         dialStartAngle: -90,
         dialEndAngle: -90.001,
         value: 100,
-        label: function(value) {
-          return (Math.round(value * 100) / 100) + '%';
+        label: function (value) {
+            return (Math.round(value * 100) / 100) + '%';
         }
-      }
+    }
     );
-    gauge1.setValueAnimated(analyser.stats.grp_interaction, 1);
+    gauge1.setValueAnimated(((analyser.stats.lefties / analyser.stats.no_users) * 100).toFixed(1), 1);
+
+    var gauge2 = Gauge(
+        document.getElementById("joining"), {
+        max: 100,
+        dialStartAngle: -90,
+        dialEndAngle: -90.001,
+        value: 100,
+        label: function (value) {
+            return (Math.round(value * 100) / 100) + '%';
+        }
+    }
+    );
+    gauge2.setValueAnimated(((analyser.stats.joinies / analyser.stats.no_users) * 100).toFixed(1), 1);
 };
 
 Analyser.prototype.communicationError = function(){

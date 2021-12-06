@@ -15,6 +15,7 @@ import sentry_sdk
 from datetime import datetime
 from tzlocal import get_localzone
 
+import matplotlib.pyplot as plt
 
 import string
 from  collections import Counter
@@ -84,7 +85,7 @@ class MessageHistory:
 
         # find emotions from chat
         emotion_list = []
-        with open('/home/egide/Documents/TechnoServe/whatsapp-chat-analyser/analyser/chat/emotions_en_sw.txt','r') as file:
+        with open('analyser/chat/emotions_en_sw.txt','r') as file:
             for line in file:
                 clear_line = line.replace('\n','').replace("'",'').replace("'","").replace(" ",'').strip()
                 word, emotion = clear_line.split(':')
@@ -126,10 +127,5 @@ class MessageHistory:
         data = {"Polarity":sentiment_list}
         sentiment_count = dict(Counter(sentiment_list))
         df = pd.DataFrame(data)
-        df.Polarity.value_counts().plot(kind='bar',title="Sentiment Analysis")
-        # plt.show()
-        print(sentiment_count)
 
         return sentiment_count
-Message = MessageHistory()
-Message.getSentiment(6)
