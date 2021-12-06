@@ -132,7 +132,7 @@ class Chart:
     def sentimentGraph(group_id):
         sentiment = msgHistory.getSentiment(group_id)
         fig = plt.figure(figsize = (20, 10))
-        plt.suptitle('Graph of Sentiment', fontsize=45)
+        plt.suptitle('Graph of Sentiment Analysis', fontsize=45)
 
         plt.bar(range(len(sentiment)), list(sentiment.values()), align='center')
         plt.xticks(range(len(sentiment)), list(sentiment.keys()))

@@ -106,17 +106,6 @@
     >
     Analysis
   </h5>
-  <small class="d-block text-muted fs--14"
-    >{{ stats.s_date }} - {{ stats.e_date }}</small
-  >
-
-  {% if error %}
-  <div class="portlet-header border-bottom text-danger">{{ message }}</div>
-  {% elif stats.info_message %}
-  <div class="portlet-header border-bottom text-primary">
-    {{ stats.info_message }}
-  </div>
-  {% endif %}
 </div>
 
 <!-- /section header -->
@@ -199,14 +188,17 @@
   <img src="analyser/templates/jinja2/pdf_templates/active_days.png" width="600" alt="Bar Chart">
 </div>
 
+<br>
 <div class="container-fluid">
   <img src="analyser/templates/jinja2/pdf_templates/word_cloud.png" width="600" alt="Bar Chart">
 </div>
 
+<br>
 <div class="container-fluid">
   <img src="analyser/templates/jinja2/pdf_templates/sentiment.png" width="600" alt="Bar Chart">
 </div>
 
+<br>
 <div class="container-fluid">
   <img src="analyser/templates/jinja2/pdf_templates/emotions.png" width="600" alt="Bar Chart">
 </div>
