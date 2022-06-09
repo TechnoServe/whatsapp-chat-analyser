@@ -695,7 +695,7 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
                 },
                 yAxis: {
                     title:{
-                    text: 'Occurances'
+                    text: 'Occurrences'
                     }
                 },
                 series: [{
@@ -730,7 +730,7 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
                 },
                 yAxis: {
                     title:{
-                    text: 'Occurances'
+                    text: 'Occurrences'
                     }
                 },
                 series: [{
