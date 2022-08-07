@@ -63,11 +63,81 @@
 			.bg-cover .bg-fixed 			- both classes used with .layout-boxed to set a background image via style="background-image:url(...)"
 	-->
 	<body class=''>
+		<div class="container-fluid d-flex" style="background-color: #00b0af42;">
+            <div class="row align-self-center" style="height:100vh">
+                <div class="col-12 col-md-6 d-flex" style="background-color: #ffffff">
+                    <div class="sign_in_container align-self-center">
+						<p class=""><img src="{{ static('images/left-long-solid.svg') }}"  height="20px"/><a class="text12 light_gray ml-2" href="/">Back</a></p>
+                       <!-- SIGN IN -->
+								<form class=" my_form collapse bs-validate {{'' if recover_token else 'show' }}" novalidate method="post" action="/login" id="accordionAccountSignIn" data-parent="#accordionAccount">
+								<div class="row">
+									<div class="col-12 text-center">
+										<!-- <img src="{{ static('images/short-logo.png') }}" class="mabo16" height="48px"/> -->
+										<p class="header_title">
+											<span class="blue">Login</span> 
+											
+										</p>
+										<p class="text12">To access the admin dashboard sign in here</p>
+									</div>
+									<div class="col-12 mabo16">
+										<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
+										<!-- ALERT -->
+										{% if error %}
+										<p class="alert alert-mini alert-danger mabo8 text12">
+											<strong>Oh snap!</strong> {{ message if message else error }}
+										</p>
+										{% elif message %}
+										<p class="alert alert-mini alert-primary mabo8 text12">
+											{{ message }}
+										</p>
+										{% else %}
+										<!-- <p class="mb-5 font-weight-medium b-0">
+											Type your email and password to continue
+										</p> -->
+										{% endif %}
+										<!-- /ALERT -->
+									</div>
+									<div class="col-12">
+										<!-- <input class="form-control"/> -->
+										<div class="mabo16">
+											<span class="text12 fowe700">Email :</span>
+											<input required placeholder="Email" id="username" name="username" type="email" class="form-control my_input full_width" />
+										</div>
+											<div class="mabo32">
+												<span class="text12 fowe700">Password :</span>
+												<input required placeholder="Password" id="pass" name="pass" type="password" class="form-control my_input full_width"/>
+											</div>
+											<button type="submit" class="btn btn_full_blue full_width mabo16">Sign In</button>
+											
+												<a href="#accordionAccountPasswd" class="d-block text12 black fowe700 text-underline text-center" data-toggle="collapse" aria-expanded="true" aria-controls='accordionAccountPasswd'>
+													<u>Forgot your password</u>?
+												</a>
+									</div>
+								</div>		
+								</form>
+								<!-- /SIGN IN -->
+                    </div>   
+                </div>
+
+
+
+
+
+                <div class="col-12 col-md-6 d-flex">
+                    <div class="align-self-center">
+                        <img width="600" height="400" class="img-fluid " src="{{ static('images/using_product.svg') }}" alt="Introductory image"><br/>
+                        <p class="caption">Powered by <img src="{{ static('images/TNS-Labs-Logo-v2.png') }}" height="12px"/></p> 
+                    </div> 
+                </div>
+            </div>  
+        </div>
+
+
 
 
 		<div id="wrapper">
 
-			<section class="bg-light p-0">
+			<!-- <section class="bg-light p-0">
 				<div class="container py-5">
 
 					<h1 class="h3">
@@ -82,7 +152,7 @@
 					</nav>
 
 				</div>
-			</section>
+			</section> -->
 
 
 			<!-- FORM -->
@@ -145,7 +215,7 @@
 								<form class="collapse bs-validate {{'' if recover_token else 'show' }}" novalidate method="post" action="/login" id="accordionAccountSignIn" data-parent="#accordionAccount">
 									<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
 
-									<!-- title -->
+								
 									<h2 class="text-primary mb-1">
 										<span class="font-weight-normal">Sign</span> In
 									</h2>
@@ -170,12 +240,6 @@
 
 									<div class="p-5 rounded shadow-xs">
 
-
-										<!--
-										<p class="text-danger">
-											Ups! Please check again
-										</p>
-										-->
 
 
 										<div class="form-label-group mb-3">
@@ -217,7 +281,7 @@
 										<span class="font-weight-normal">Password</span> Reset
 									</h2>
 									<p class="mb-5 font-weight-medium b-0">
-										Type your email and password to continue
+										Type your email and password to continue Gladys
 									</p>
 
 									<div class="p-5 rounded shadow-xs">
@@ -276,6 +340,112 @@
 		</div><!-- /#wrapper -->
 
 		<script src="{{ static('plugins/smarty/js/core.min.js') }}"></script>
+		<style>
+            .header_title{
+                color: #3a3a3a;
+                font-size: 32px;
+                font-weight: 700;
+				margin-bottom: 8px !important;
+            }
+			.light_gray{
+				color:#6c757d
+			}
+			.black{
+				color:#3a3a3a
+			}
+            .green{
+                color:#00b0af
+            }
+            .blue{
+                color: #393cb5
+            }
+			
+			.text12{
+				font-size:12px
+			}
+			.text14{
+				font-size:14px
+			}
+			.fowe700{
+				font-weight: 700;
+			}
+            .pad0{
+                padding:0
+            }
+			.mabo8{
+				margin-bottom: 8px;
+			}
+			.mabo16{
+				margin-bottom: 16px;
+			}
+			.mabo32{
+				margin-bottom: 32px;
+			}
+            .header_subtitle{
+                padding: 0px 32px 16px 0px;
+            }
+            .btn_full_blue{
+				background-color: #393cb5;
+                color: #ffffff;
+                font-size: 14px;
+                font-weight: 700;
+                padding: 12px 36px;
+            }
+            .btn_full_blue:hover{
+				border: 1px solid #393cb5;
+                color: #393cb5;
+                background-color: transparent;
+               
+            }
+			.btn_outlined_link_green{
+				background-color: #00b0af;
+                color: #ffffff;
+
+               
+                font-size: 14px;
+                font-weight: 700;
+                padding: 12px 36px;
+            }
+            .btn_outlined_link_green:hover{
+				background-color: transparent;
+                border: 1px solid #00b0af;
+                color: #00b0af;
+               
+            }
+            a{
+                /* text-decoration: none !important; */
+                color:none !important;
+            }
+            .sign_in_container{
+                padding:64px 128px!important
+            }
+            .caption{
+                font-size: 10px;
+                float:right
+            }
+			.full_width{
+				width:100%;
+			}
+			.my_form{
+				border: 1px solid #efefef;
+				padding: 32px 32px 48px 32px;
+				border-radius: 4px;
+				-webkit-box-shadow: 5px 5px 46px -21px #bbb9b9!important; 
+				box-shadow: 5px 5px 46px -21px #bbb9b9!important;
+			}
+			.my_input{
+				height: 48px!important
+			}
+			.my_input:focus{
+				font-size: 12px;
+				color:#3a3a3a
+			}
+			::placeholder{
+				font-size: 12px;
+				color:#3a3a3a
+			}
+			
+        </style>
 		
 	</body>
 </html>

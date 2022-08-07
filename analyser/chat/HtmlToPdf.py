@@ -49,6 +49,11 @@ class HtmlToPdf:
         pdf = htmldoc.write_pdf()
         Path('pdfFiles/'+data['fileName']).write_bytes(pdf)
 
+        f = open("/tmp/test.txt", "w")
+        f.write("Hello")
+        f.close()        
+        print("Saving to storage")
+
         return pdf
 
     

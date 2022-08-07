@@ -650,7 +650,7 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
             values = Object.values(data)
 
 
-            console.log(labels)
+            console.log(labels,values)
 
             Highcharts.chart('bar_emotions', {
                 title: {
