@@ -63,23 +63,64 @@
 			.bg-cover .bg-fixed 			- both classes used with .layout-boxed to set a background image via style="background-image:url(...)"
 	-->
 	<body class=''>
-		<div class="container-fluid d-flex" style="background-color: #00b0af42;">
+		<div class="container-fluid d-flex" style="background-color: #00b0af42;height:100vh">
             <div class="row align-self-center" style="height:100vh">
                 <div class="col-12 col-md-6 d-flex" style="background-color: #ffffff">
                     <div class="sign_in_container align-self-center">
-						<p class=""><img src="{{ static('images/left-long-solid.svg') }}"  height="20px"/><a class="text12 light_gray ml-2" href="/">Back</a></p>
-                       <!-- SIGN IN -->
-								<form class=" my_form collapse bs-validate {{'' if recover_token else 'show' }}" novalidate method="post" action="/login" id="accordionAccountSignIn" data-parent="#accordionAccount">
+						<p class=""><a class="text12 light_gray ml-2" href="/"><img src="{{ static('images/left-long-solid.svg') }}"  height="20px"/>  Home</a></p>
+                    
+					   <div class="accordion" id="accordionAccount">
+							<!-- NEW PASSWORD -->
+							<form class="my_form collapse bs-validate {{'show' if recover_token else '' }}" novalidate method="post" action="/save_user_password" id="accordionRecoverPasswd" data-parent="#accordionAccount">
+								<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
+								<input type='hidden' name='uuid' value='{{ recover_user }}'>
+								<input type='hidden' name='uu_token' value='{{ recover_token }}'>
+								
+			
+
 								<div class="row">
 									<div class="col-12 text-center">
-										<!-- <img src="{{ static('images/short-logo.png') }}" class="mabo16" height="48px"/> -->
-										<p class="header_title">
-											<span class="blue">Login</span> 
-											
-										</p>
-										<p class="text12">To access the admin dashboard sign in here</p>
+										<img src="{{ static('images/short-logo.png') }}" class="mabo16" height="48px"/>
+									<h2 class="alert alert-mini alert-primary mabo8 text12 {{'collapse' if recover_token else 'show' }}">
+										Password Reset instructions are sent to your email.
+									</h2>
 									</div>
+									
+
 									<div class="col-12 mabo16">
+										<span class="text12 fowe700" for="reset_email">New Password:</span>
+										<input type="password" name="pass" class="form-control my_input full_width" placeholder="Password" required="" autocomplete="off">
+									
+									</div>
+
+									<div class="col-12 mabo16">
+										<span class="text12 fowe700" for="reset_email">Repeat Password:</span>
+										<input type="password" name="repeat_pass" class="form-control my_input full_width" placeholder="Repeat Password" required="" autocomplete="off">
+										
+									</div>
+									<div class="col-12">
+										<button type="submit" class="btn btn_full_green full_width mabo16">
+											Set New Password
+										</button>
+										<span class="d-block text12 black fowe300 text-underline text-center">Nevermind,<a href="#accordionAccountSignIn" class="text12 black fowe300 text-underline text-center" data-toggle="collapse" aria-expanded="true" aria-controls="accordionAccountSignIn">
+											<u> back to Sign In</u></span>
+										</a>
+									</div>
+
+		
+									
+								</div>
+
+							</form>
+							<!-- /NEW PASSWORD -->
+								<!-- SIGN IN -->
+								<form class="  collapse bs-validate {{'' if recover_token else 'show' }}" novalidate method="post" action="/login" id="accordionAccountSignIn" data-parent="#accordionAccount">
+								<div class="my_form row">
+									<div class="col-12 text-center">
+										<img src="{{ static('images/short-logo.png') }}" class="mabo16" height="48px"/>
+										<p class="text12">To access the admin dashboard login in here</p>
+									</div>
+									<div class="col-12 mabo0">
 										<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
 										<!-- ALERT -->
 										{% if error %}
@@ -98,24 +139,57 @@
 										<!-- /ALERT -->
 									</div>
 									<div class="col-12">
-										<!-- <input class="form-control"/> -->
 										<div class="mabo16">
-											<span class="text12 fowe700">Email :</span>
+											<span class="text12 fowe700">Email:</span>
 											<input required placeholder="Email" id="username" name="username" type="email" class="form-control my_input full_width" />
 										</div>
-											<div class="mabo32">
-												<span class="text12 fowe700">Password :</span>
-												<input required placeholder="Password" id="pass" name="pass" type="password" class="form-control my_input full_width"/>
-											</div>
-											<button type="submit" class="btn btn_full_blue full_width mabo16">Sign In</button>
-											
-												<a href="#accordionAccountPasswd" class="d-block text12 black fowe700 text-underline text-center" data-toggle="collapse" aria-expanded="true" aria-controls='accordionAccountPasswd'>
-													<u>Forgot your password</u>?
-												</a>
+										<div class="mabo32">
+											<span class="text12 fowe700">Password:</span>
+											<input required placeholder="Password" id="pass" name="pass" type="password" class="form-control my_input full_width"/>
+										</div>
+										<button type="submit" class="btn btn_full_green full_width mabo16">Sign In</button>	
+										<a href="#accordionAccountPasswd" class="d-block text12 black fowe700 text-underline text-center" data-toggle="collapse" aria-expanded="true" aria-controls='accordionAccountPasswd'>
+											<u>Forgot your password</u>?
+										</a>
 									</div>
 								</div>		
 								</form>
 								<!-- /SIGN IN -->
+
+
+								<!-- PASSWD RESET -->
+								<form class=" collapse bs-validate" novalidate method="post" action="/new_user_password" id="accordionAccountPasswd" data-parent="#accordionAccount">
+									<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
+									<div class=" my_form row">
+										<div class="col-12 text-center">
+											<img src="{{ static('images/short-logo.png') }}" class="mabo16" height="48px"/>
+											<p class="text12">Type your email and password to continue </p>
+											<p class="alert alert-mini alert-primary mabo8 text12 {{'collapse' if recover_token else 'show' }}">
+												Password Reset instructions are sent to your email.
+											</p>
+										</div>
+
+										<div class="col-12">
+											<div class="mabo16">
+												<span for="reset_email" class="text12 fowe700">Email:</span>
+												<input  required placeholder="Email" id="email" name="email" type="email" class="form-control my_input full_width" />
+											</div>
+											
+										</div>
+										<div class="col-12">
+											<button type="submit" class="btn btn_full_green full_width mabo16">Reset Password</button>	
+											<span class="d-block text12 black fowe300 text-underline text-center">Nevermind,<a href="#accordionAccountSignIn" class="text12 black fowe300 text-underline text-center" data-toggle="collapse" aria-expanded="true" aria-controls="accordionAccountSignIn">
+												<u> back to Sign In</u>
+											</a></span>
+										</div>
+										
+
+									</div>
+
+								</form>
+								<!-- /PASSWD RESET -->
+
+								</div>
                     </div>   
                 </div>
 
@@ -135,7 +209,7 @@
 
 
 
-		<div id="wrapper">
+		<!-- <div id="wrapper"> -->
 
 			<!-- <section class="bg-light p-0">
 				<div class="container py-5">
@@ -156,22 +230,16 @@
 
 
 			<!-- FORM -->
-			<section class='pt-10'>
+			<!-- <section class='pt-10'>
 				<div class="container">
-
 					<div class="row">
-
 						<div class="col-12 col-sm-12 offset-sm-0 col-md-8 offset-md-2 col-lg-6 offset-lg-0 order-2 order-lg-1">
-
 							<div class="accordion" id="accordionAccount">
 
-								<!-- NEW PASSWORD -->
 								<form class="collapse bs-validate {{'show' if recover_token else '' }}" novalidate method="post" action="/save_user_password" id="accordionRecoverPasswd" data-parent="#accordionAccount">
 									<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
                                     <input type='hidden' name='uuid' value='{{ recover_user }}'>
                                     <input type='hidden' name='uu_token' value='{{ recover_token }}'>
-									
-									<!-- title -->
 									<h2 class="text-primary mb-1">
 										<span class="font-weight-normal">New</span> Password
 									</h2>
@@ -208,10 +276,7 @@
 									</div>
 
 								</form>
-								<!-- /NEW PASSWORD -->
-
-
-								<!-- SIGN IN -->
+								
 								<form class="collapse bs-validate {{'' if recover_token else 'show' }}" novalidate method="post" action="/login" id="accordionAccountSignIn" data-parent="#accordionAccount">
 									<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
 
@@ -220,7 +285,6 @@
 										<span class="font-weight-normal">Sign</span> In
 									</h2>
 									
-									<!-- ALERT -->
 		                            {% if error %}
 		                            <p class="alert alert-mini alert-danger mb-30">
 		                                <strong>Oh snap!</strong> {{ message if message else error }}
@@ -234,7 +298,6 @@
 										Type your email and password to continue
 									</p>
 		                            {% endif %}
-		                            <!-- /ALERT -->
 
 									
 
@@ -268,76 +331,19 @@
 									</div>
 									
 								</form>
-								<!-- /SIGN IN -->
-
-
-
-								<!-- PASSWD RESET -->
-								<form class="collapse bs-validate" novalidate method="post" action="/new_user_password" id="accordionAccountPasswd" data-parent="#accordionAccount">
-									<input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
-									
-									<!-- title -->
-									<h2 class="text-primary mb-1">
-										<span class="font-weight-normal">Password</span> Reset
-									</h2>
-									<p class="mb-5 font-weight-medium b-0">
-										Type your email and password to continue Gladys
-									</p>
-
-									<div class="p-5 rounded shadow-xs">
-
-										<h2 class="h5 text-center mb-5 mt-3">
-											Password Reset instructions are sent to your email.
-										</h2>
-
-
-										<!--
-										<p class="text-danger">
-											Ups! Please check again
-										</p>
-										-->
-
-
-										<div class="form-label-group mb-4">
-											<input required placeholder="Email" id="email" name="email" type="email" class="form-control">
-											<label for="reset_email">Email</label>
-										</div>
-
-										<button type="submit" class="btn btn-primary btn-soft btn-block">
-											Reset Password
-										</button>
-
-										<div class="text-center mt--30">
-											<a href="#accordionAccountSignIn" class="d-block text-success text-decoration-none" data-toggle="collapse" aria-expanded="true" aria-controls="accordionAccountSignIn">
-												Nevermind, back to Sign In
-											</a>
-										</div>
-
-									</div>
-
-								</form>
-								<!-- /PASSWD RESET -->
-
 
 							</div>
-
 						</div>
-
 						<div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-0 order-1 order-lg-2">
-
-							<!-- remove .mt--n50 if image has no top margin -->
 							<img class="img-fluid mt--n50" src="{{ static('images/using_product.svg') }}" alt="Chat analyser image">
-
 						</div>
-
 					</div>
-
 				</div>
-			</section>
+			</section> -->
 			<!-- /FORM -->
 
 
-		</div><!-- /#wrapper -->
+		<!-- </div> -->
 
 		<script src="{{ static('plugins/smarty/js/core.min.js') }}"></script>
 		<style>
@@ -397,6 +403,20 @@
                 background-color: transparent;
                
             }
+			.btn_full_green{
+				background-color: #00b0af;
+                color: #ffffff;
+                font-size: 14px;
+                font-weight: 700;
+                padding: 12px 36px;
+            }
+            .btn_full_green:hover{
+				border: 1px solid #00b0af;
+                color: #00b0af;
+                background-color: transparent;
+               
+            }
+
 			.btn_outlined_link_green{
 				background-color: #00b0af;
                 color: #ffffff;

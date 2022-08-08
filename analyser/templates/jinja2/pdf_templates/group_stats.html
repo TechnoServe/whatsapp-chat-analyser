@@ -116,7 +116,7 @@
           </td>
 
           <td class="right" >
-            <p class="mabo16"><span class="group_label">Whatsapp Group Name:</span><br/>
+            <p class="mabo16"><span class="group_label">Whatsapp group name:</span><br/>
             <span class="group_name_label">{{ stats.group_name }}</span></p>
           </td>
         </table>
@@ -128,7 +128,7 @@
 
     <tr class="" >
       <td class=" full_width">
-        <p class="blue pad8 mabo64 report_title"><span class=" blue " >TAFITI CHAT ANALYSER REPORT</span></p>
+        <p class="blue pad8 mabo32 report_title"><span class=" blue " >TAFITI CHAT ANALYSER REPORT</span></p>
       </td> 
     </tr>
    
@@ -137,19 +137,19 @@
         <table class="full_width table_for_stats_cards" cellpadding="8" cellspacing="2">
           <td class="stats_card_width" width="33.33%" >
             <p class="stats_descr">
-             <span class="stats_descr_label">Most Active Day</span><br><span class="stats_desc_numbers blue">{{ stats.most_active_day }}</span></p>
+             <span class="stats_descr_label">Most active day</span><br><span class="stats_desc_numbers blue">{{ stats.most_active_day }}</span></p>
            </td>
  
            <td class="stats_card_width"  width="33.33%" >
             <p class="stats_descr">
-             <span class="stats_descr_label">Active Time of Day</span><br><span class="stats_desc_numbers blue">{{ stats.most_active_time.most_active_hr }}:00 HRS</span></p>
+             <span class="stats_descr_label">Active time of day</span><br><span class="stats_desc_numbers blue">{{ stats.most_active_time.most_active_hr }}:00 HRS</span></p>
            </td>
  
            <td class="stats_card_width" width="33.33%" >
              <p class="stats_descr">
-             <span class="stats_descr_label">Most Popular emoji</span><br/>
+             <span class="stats_descr_label">Most popular emoji</span><br/>
                {% if stats.emojis|length == 0 %}
-               <span sclass="stats_descr_label">No Emojis Sent</span>
+               <span sclass="stats_descr_label">No emojis sent</span>
                {% else %}
                <span>{{ stats.emojis[0].e }}</span>
              {% endif %}
@@ -160,17 +160,17 @@
         <table class="full_width table_for_stats_cards mabo64" cellpadding="8" cellspacing="2" >
           <td class="stats_card_width"  width="33.33%">
             <p class="stats_descr">
-            <span class="stats_descr_label">Joining Level</span><br/><span class="stats_desc_numbers blue">{{ stats.joinies }} New Users</span></p>
+            <span class="stats_descr_label">Joining level</span><br/><span class="stats_desc_numbers blue">{{ stats.joinies }} New users</span></p>
           </td>
 
           <td class="stats_card_width"  width="33.33%">
             <p class="stats_descr">
-            <span class="stats_descr_label">Attrition Level</span><br/><span class="stats_desc_numbers blue">{{ stats.lefties }} Users Left</span></p>
+            <span class="stats_descr_label">Attrition level</span><br/><span class="stats_desc_numbers blue">{{ stats.lefties }} Users left</span></p>
           </td>
 
           <td class="stats_card_width" width="33.33%">
             <p class="stats_descr">
-            <span class="stats_descr_label">Most Active User</span><br><span class="stats_desc_numbers blue">{{ stats.active_user.name_phone }}</span></p>
+            <span class="stats_descr_label">Most active user</span><br><span class="stats_desc_numbers blue">{{ stats.active_user.name_phone }}</span></p>
           </td>
         </table>
       </td> 
@@ -207,7 +207,7 @@
         <table class="full_width" cellpadding="8" cellspacing="2">
           <tr class="center" >
             <td class="full_width">
-           <p class="subtitle_chart mabo0"><span>Self Information Categories</span></p>
+           <p class="subtitle_chart mabo0"><span>Self information categories</span></p>
          </td>
          </tr>
             <tr>
@@ -230,7 +230,7 @@
         </tr>
         <tr class="center" >
            <td class="full_width">
-          <p class="subtitle_chart mabo0"><span>World Cloud</span></p>
+          <p class="subtitle_chart mabo0"><span>World cloud</span></p>
         </td>
         </tr>
             <tr>
@@ -250,7 +250,7 @@
         <table class="full_width" cellpadding="8" cellspacing="2">
         </tr>
         <tr class="center" >
-           <td class="full_width subtitle_chart mabo0"><span>Graph of emotions</span></td>
+           <td class="full_width subtitle_chart mabo0"><span>Emotions analysis</span></td>
         </tr>
             <tr>
               <td class="full_width"> 
@@ -269,7 +269,7 @@
         </tr>
         <tr class="center " >
            <td class="full_width ">
-          <p class="subtitle_chart mabo0"><span>Graph of sentiments</span></p>
+          <p class="subtitle_chart mabo0"><span>Sentiments analysis</span></p>
         </td>
         </tr>
             <tr>
