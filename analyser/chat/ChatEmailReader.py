@@ -28,6 +28,7 @@ class ChatEmailReader:
     def __init__(self):
         self.username = os.environ['CHAT_BOT_EMAIL']
         self.password = os.environ['CHAT_BOT_PASSWORD']
+        self.tmp_subjectname = ""
     
     
     def readEmail(self):
@@ -67,7 +68,14 @@ class ChatEmailReader:
 
                     print("Sender email = " + senderEmail)
                     print("Subject:", subject)
+                    self.tmp_subjectname =  subject
                     print("From:", From)
+
+                    #Validate the source of an email address (from tns.org and tnslabs.org only)
+                    if not senderEmail.endswith(('tns.org', 'tnslabs.org')):
+                        print("Sender Email not from TNS")
+                        return 
+
                     # if the email message is multipart
                     if msg.is_multipart():
                         # iterate over email parts
@@ -162,11 +170,16 @@ class ChatEmailReader:
             'dates': params['stats']['active_dates']['dates'],
             'messages': params['stats']['active_dates']['messages'],
         }
+       
         
         Chart.CategoriesOfInformation(chartData)
 
         Chart.activeDaysChart(activeDaysChart)
         Chart.wordCloud(chat_file_id)
+
+        Chart.emotionsGraph(group_id)
+        Chart.sentimentGraph(group_id)
+
 
         pdf = HtmlToPdf.generatePDF("pdf_templates/group_stats.html", params)
 
@@ -181,7 +194,7 @@ class ChatEmailReader:
         msg = MIMEMultipart()
         txt = MIMEText('Kindly find attached, a copy of the generated report.')
 
-        msg['Subject'] = 'Chat Analysis'
+        msg['Subject'] = 'Chat Analysis for ' + " "+ self.tmp_subjectname
         msg['From'] = sender
         msg['To'] = ', '.join(targets)
 
@@ -242,10 +255,14 @@ class ChatEmailReader:
             'dates': params['stats']['active_dates']['dates'],
             'messages': params['stats']['active_dates']['messages'],
         }
+
+       
         
         Chart.CategoriesOfInformation(chartData)
 
         Chart.activeDaysChart(activeDaysChart)
+        Chart.emotionsGraph(params['group_id'])
+        Chart.sentimentGraph(params['group_id'])
 
         HtmlToPdf.generatePDF(params)
 

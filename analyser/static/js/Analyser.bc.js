@@ -650,7 +650,7 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
             values = Object.values(data)
 
 
-            console.log(labels)
+            console.log(labels,values)
 
             Highcharts.chart('bar_emotions', {
                 title: {
@@ -662,7 +662,7 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
                 },
                 yAxis: {
                     title:{
-                    text: 'Occurances'
+                    text: 'Occurrences'
                     }
                 },
                 series: [{
@@ -694,7 +694,7 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
                 },
                 yAxis: {
                     title:{
-                    text: 'Occurances'
+                    text: 'Occurrences'
                     }
                 },
                 series: [{

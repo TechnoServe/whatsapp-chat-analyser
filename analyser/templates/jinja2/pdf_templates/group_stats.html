@@ -82,7 +82,15 @@
 <link rel="stylesheet" href="analyser/static/css/data_table.css" />
 <link rel="stylesheet" href="analyser/static/main.css" />
 
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+
+
+
 <!-- FOR WORD CLOUD -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous"></script>
+
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/wordcloud.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -96,9 +104,371 @@
 <!-- -->
 <input type="hidden" id="group_id" value="{{ group_id }}" />
 </head>
-<body>
+<body class="my_pdf_body center">
+
+  <table class="main_table" align="center" border="0" cellpadding="0" cellspacing="0" >
+
+    <tr>
+      <td>
+        <table class="full_width mabo32">
+          <td class="left" >
+            <span><img src="analyser/static/images/TNS-Labs-Logo-v2.png" class=""  alt="Technoserve Logo"> </span> 
+          </td>
+
+          <td class="right" >
+            <p class="mabo16"><span class="group_label">Whatsapp group name:</span><br/>
+            <span class="group_name_label">{{ stats.group_name }}</span></p>
+          </td>
+        </table>
+      </td>
+              
+    </tr>
+
+
+
+    <tr class="" >
+      <td class=" full_width">
+        <p class="blue pad8 mabo32 report_title"><span class=" blue " >TAFITI CHAT ANALYSER REPORT</span></p>
+      </td> 
+    </tr>
+   
+    <tr class="pad0">
+      <td>
+        <table class="full_width table_for_stats_cards" cellpadding="8" cellspacing="2">
+          <td class="stats_card_width" width="33.33%" >
+            <p class="stats_descr">
+             <span class="stats_descr_label">Most active day</span><br><span class="stats_desc_numbers blue">{{ stats.most_active_day }}</span></p>
+           </td>
+ 
+           <td class="stats_card_width"  width="33.33%" >
+            <p class="stats_descr">
+             <span class="stats_descr_label">Active time of day</span><br><span class="stats_desc_numbers blue">{{ stats.most_active_time.most_active_hr }}:00 HRS</span></p>
+           </td>
+ 
+           <td class="stats_card_width" width="33.33%" >
+             <p class="stats_descr">
+             <span class="stats_descr_label">Most popular emoji</span><br/>
+               {% if stats.emojis|length == 0 %}
+               <span sclass="stats_descr_label">No emojis sent</span>
+               {% else %}
+               <span>{{ stats.emojis[0].e }}</span>
+             {% endif %}
+           </p>
+           </td>
+        </table>
+    
+        <table class="full_width table_for_stats_cards mabo64" cellpadding="8" cellspacing="2" >
+          <td class="stats_card_width"  width="33.33%">
+            <p class="stats_descr">
+            <span class="stats_descr_label">Joining level</span><br/><span class="stats_desc_numbers blue">{{ stats.joinies }} New users</span></p>
+          </td>
+
+          <td class="stats_card_width"  width="33.33%">
+            <p class="stats_descr">
+            <span class="stats_descr_label">Attrition level</span><br/><span class="stats_desc_numbers blue">{{ stats.lefties }} Users left</span></p>
+          </td>
+
+          <td class="stats_card_width" width="33.33%">
+            <p class="stats_descr">
+            <span class="stats_descr_label">Most active user</span><br><span class="stats_desc_numbers blue">{{ stats.active_user.name_phone }}</span></p>
+          </td>
+        </table>
+      </td> 
+    </tr>
+
+ </tr>
+
+
+
+    <tr>
+      <td>
+        <table class="full_width" cellpadding="8" cellspacing="2">
+          <tr class="center" >
+            <td class="full_width">
+           <p class="subtitle_chart mabo0"><span>Active days</span></p>
+         </td>
+         </tr>
+            <tr>
+              <td class="full_width"> 
+                <img src="analyser/templates/jinja2/pdf_templates/active_days.png"  class="full_width mab64 image_chart" alt="Bar Chart">
+              </td>
+              
+            </tr>           
+        </table>
+      </td>
+    </tr>
+
+  </tr>
+
+
+
+    <tr>
+      <td>
+        <table class="full_width" cellpadding="8" cellspacing="2">
+          <tr class="center" >
+            <td class="full_width">
+           <p class="subtitle_chart mabo0"><span>Self information categories</span></p>
+         </td>
+         </tr>
+            <tr>
+              <td class="full_width"> 
+                <img src="analyser/templates/jinja2/pdf_templates/pie_chart.png"  class="full_width image_chart" alt="Bar Chart">
+              </td>
+              
+            </tr>           
+        </table>
+      </td>
+    </tr>
+
+
+
+
+
+    <tr>
+      <td>
+        <table class="full_width" cellpadding="8" cellspacing="2">
+        </tr>
+        <tr class="center" >
+           <td class="full_width">
+          <p class="subtitle_chart mabo0"><span>World cloud</span></p>
+        </td>
+        </tr>
+            <tr>
+              <td class="full_width"> 
+                <img src="analyser/templates/jinja2/pdf_templates/word_cloud.png"  class="full_width image_chart" alt="Bar Chart">
+              </td>
+              
+            </tr>           
+        </table>
+      </td>
+    </tr>
+
+
+
+    <tr>
+      <td>
+        <table class="full_width" cellpadding="8" cellspacing="2">
+        </tr>
+        <tr class="center" >
+           <td class="full_width subtitle_chart mabo0"><span>Emotions analysis</span></td>
+        </tr>
+            <tr>
+              <td class="full_width"> 
+                <img src="analyser/templates/jinja2/pdf_templates/emotions.png"  class="full_width image_chart" alt="Bar Chart">
+              </td>
+              
+            </tr>           
+        </table>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td>
+        <table class="full_width" cellpadding="8" cellspacing="2">
+        </tr>
+        <tr class="center " >
+           <td class="full_width ">
+          <p class="subtitle_chart mabo0"><span>Sentiments analysis</span></p>
+        </td>
+        </tr>
+            <tr>
+              <td class="full_width"> 
+                <img src="analyser/templates/jinja2/pdf_templates/sentiment.png"  class="full_width image_chart" alt="Bar Chart">
+              </td>
+              
+            </tr>           
+        </table>
+      </td>
+    </tr>
+ 
+  </table>
+
+
+
+<!-- TEXTING TEMPLATES -->
+
+  <!-- <table class="main_table" align="center" border="0" cellpadding="0" cellspacing="0" >
+
+    <tr>
+      <td>
+         <table class="full_width">
+          <td class="left" >
+            <span><img src="/home/gladys/Downloads/TechnoServe/Tafiti/whatsapp-chat-analyser/analyser/static/images/TNS-Labs-Logo-v2.png"  class="logo mabo64" alt="Technoserve Logo"> </span> 
+          </td>
+
+          <td class="right">
+            <p class="mabo64"><span class="group_label" >Whatsapp Group Name:</span><br/>
+            <span class="group_name_label" >mSPARK Duka Owners</span></p>
+          </td>
+        </table>
+      </td>
+              
+    </tr>
+
+
+
+    <tr class="" >
+      <td class=" blue full_width">
+        <p class="blue pad8 mabo64 report_title"><span class=" blue " >TAFITI CHAT ANALYSER REPORT</span></p>
+      </td>
+      
+    </tr>
+  
+   
+    <tr class="pad0" >
+      <td>
+        <table class="full_width table_for_stats_cards" cellpadding="8" cellspacing="2">
+          <td class="stats_card_width" width="33.33%" >
+              <p class="stats_descr">
+             <span class="stats_descr_label">Most Active Day</span><br>11/11/2020, Wednesday</p>
+           </td>
+ 
+           <td class="stats_card_width" width="33.33%" >
+              <p class="stats_descr"><span class="stats_descr_label">Active Time of Day</span><br>9:00 HRS
+             </p>
+           </td>
+ 
+           <td class="stats_card_width" width="33.33%" >
+             <p class="stats_descr">
+            
+           <span class="stats_descr_label">Most Popular emoji</span> <br><span>👋&nbsp;</span></p>
+           </td>
+        </table>
+    
+        <table class="full_width table_for_stats_cards mabo64" cellpadding="8" cellspacing="2" >
+          <td class="stats_card_width"  width="33.33%">
+              <p class="stats_descr">
+            <span class="stats_descr_label">Joining Level</span><br>44 New Users</p>
+          </td>
+
+          <td class="stats_card_width"  width="33.33%">
+              <p class="stats_descr">
+            <span class="stats_descr_label">Attrition Level</span><br/>42 Users Left</p>
+          </td>
+
+          <td class="stats_card_width"  width="33.33%">
+              <p class="stats_descr">
+            <span class="stats_descr_label">Most Active User</span><br/>Alube</p>
+          </td>
+        </table>
+      </td> 
+    </tr>
+
+
+  </tr>
+  <tr class="center" >
+     <td class="full_width">
+    <p class="subtitle_chart "><span>Active days</span></p>
+  </td>
+  </tr>
+
+    <tr>
+      <td>
+        <table class="full_width" cellpadding="8" cellspacing="2" style="border-collapse: collapse">
+            <tr>
+              <td class="full_width">
+                <img src="https://www.mongodb.com/docs/charts/images/charts/grouped-column-chart-reference-small.png"  class="full_width image_chart"  alt="Bar Chart">
+              </td>
+              
+            </tr>           
+        </table>
+      </td>
+    </tr>
+
+
+  </tr>
+
+
+   <tr class="center" >
+     <td class="full_width">
+    <p class="subtitle_chart mabo0"><span>Self Information Categories</span></p>
+  </td>
+  </tr>
+
+
+    <tr>
+      <td>
+        <table class="full_width" cellpadding="8" cellspacing="2">
+            <tr>
+              <td class="full_width"> 
+                <img src="https://www.mongodb.com/docs/charts/images/charts/grouped-column-chart-reference-small.png"  class="full_width mabo64 image_chart" alt="Bar Chart">
+              </td>
+              
+            </tr>           
+        </table>
+      </td>
+    </tr>
+
+
+  </tr>
+  <tr class="center" >
+     <td class="full_width">
+    <p class="subtitle_chart mabo0"><span>World Cloud</span></p>
+  </td>
+  </tr>
+
+
+    <tr>
+      <td>
+        <table class="full_width" cellpadding="8" cellspacing="2">
+            <tr>
+              <td class="full_width"> 
+                <img src="https://www.mongodb.com/docs/charts/images/charts/grouped-column-chart-reference-small.png"  class="full_width image_chart" alt="Bar Chart">
+              </td>
+              
+            </tr>           
+        </table>
+      </td>
+    </tr>
+
+
+    <tr class="pad0" >
+      <td class="pad320">
+        <table  cellpadding="8" cellspacing="2" class="full_width table_for_stats_cards">
+          <tr> 
+            <td class="half_width left" width="50%" style="text-align:left">
+            <p class="subtitle_chart "><span>Self Information Categories</span></p>
+          </td>
+          <td class="half_width left" width="50%" style="text-align:left">
+            <p class="subtitle_chart "><span>World Cloud</span></p>
+          </td>
+          </tr>
+
+            <tr> 
+              <td class="half_width center" width="50%" style="text-align:center">
+                <span><img src="https://www.mongodb.com/docs/charts/images/charts/grouped-column-chart-reference-small.png"  class="full_width" alt="Pie Chart"> </span> 
+              </td>
+
+              <td class="half_width center" width="50%" style="text-align:center">
+                <span><img src="https://www.mongodb.com/docs/charts/images/charts/grouped-column-chart-reference-small.png"  class="full_width" alt="Bar Chart"></span>
+              </td>
+          </tr>            
+        </table>
+      </td>
+    </tr>
+
+
+  </table> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- section header -->
-<div class="bg-white rounded clearfix p-3 mb-4">
+<!-- <div class="bg-white rounded clearfix p-3 mb-4">
+ 
   <h5 class="title">
     <span class=""><i class="fi fi-layers"></i></span>&nbsp;&nbsp;<span
       class="text-primary"
@@ -106,12 +476,12 @@
     >
     Analysis
   </h5>
-</div>
+</div> -->
 
 <!-- /section header -->
 
 
-<div class="container-fluid">
+<!-- <div class="container-fluid">
   <div class="row">
     <div class="col-4 alert alert-danger tns_card">
       <span class="">Most Active Day</span>
@@ -144,9 +514,9 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
-<div class="container-fluid">
+<!-- <div class="container-fluid">
   <div class="row">
     <div class="col-4 alert alert-secondary tns_card">
       <span class="">Joining Level</span>
@@ -172,19 +542,16 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 <!-- Charts -->
-<div class="container-fluid mt-4">
-  <!-- <div class="row">
-    <span class="tnsTitle"><center>Categories of information sent</center></span>
-  </div> -->
+<!-- <div class="container-fluid mt-4">
   <div class="container-fluid">
     <img src="analyser/templates/jinja2/pdf_templates/pie_chart.png" width="600" alt="Pie Chart">   
   </div>
-</div>
+</div> -->
 
-<div class="container-fluid">
+<!-- <div class="container-fluid">
   <img src="analyser/templates/jinja2/pdf_templates/active_days.png" width="600" alt="Bar Chart">
 </div>
 
@@ -201,18 +568,16 @@
 <br>
 <div class="container-fluid">
   <img src="analyser/templates/jinja2/pdf_templates/emotions.png" width="600" alt="Bar Chart">
-</div>
+</div> -->
 <!-- End of Charts -->
 
-<div class="app-main__inner">
+<!-- <div class="app-main__inner">
   <div class="row gutters-sm">
-    
-    <!-- second row -->
   </div>
-</div>
+</div> -->
 
 <!-- Chat Modal -->
-<div
+<!-- <div
   class="modal fade"
   id="exampleGetChatHistory"
   tabindex="-1"
@@ -247,7 +612,7 @@
       </div>
     </div>
   </div>
-</div>
+</div> -->
 
 </body>
 </html>
@@ -303,9 +668,7 @@
 
   /* Style images */
   .chat_item img {
-    float: left;
     max-width: 60px;
-    width: 100%;
     margin-right: 20px;
     border-radius: 50%;
   }
@@ -328,12 +691,143 @@
     float: left;
     color: #999;
   }
-</style>
 
-<style>
   .tnsTitle {
     font-size: 25px;
   }
+  .black{
+    color:#000000!important;
+  }
+  .gray{
+    color:#7f7f7f!important;
+  }
+  .fowe900{
+    font-weight: 900;
+  }
+  .blue{
+    color:#1F2171!important;
+  }
+  .stats_descr{ 
+    padding: 24px 24px 24px 24px!important;
+  }
+
+  .stats_descr_label{ 
+    font-family: 'Roboto'!important;
+    font-size: 16px!important;
+    font-weight: 300!important;
+    line-height: 32px!important;
+  }
+  .stats_desc_numbers{
+    font-family: 'Roboto'!important;
+    font-size: 24px!important;
+    font-weight: 700!important;
+    line-height: 32px!important;
+  }
+  table {
+    border: none !important;
+  }
+  .red{
+    background-color: red !important;
+  }
+  .full_width{
+    width:100% !important
+  }
+  .half_width{
+    width: 50% !important
+  }
+  .stats_card_width{
+    width: 33.333% !important;
+    border: 1px solid #e8e8e8!important;
+    border-radius:4px!important;
+    text-align: center!important;
+  }
+  .left{
+    text-align: left !important;
+  }
+  .right{
+    text-align: right !important;
+  }
+  .center{
+    text-align: center !important;
+  }
+  .main_table{
+    text-align: center!important;
+    border-collapse: collapse!important;
+    max-width: 900px!important;
+  }
+  .logo{
+    height:144px !important;
+  }
+  .group_label{
+    font-family: 'Roboto'!important;
+    font-weight: 300!important; 
+    font-size: 14px!important;
+    line-height: 32px!important;
+  }
+  .group_name_label{ 
+   color:#3a3a3a!important; 
+   font-size: 14px!important;
+   font-weight: 700!important;
+   font-family: 'Roboto'!important;
+  }
+  .pad6432{
+    padding:64px 32px!important;
+  }
+  .pad1280{
+    padding:128px 0px!important;
+  }
+  .pad0{
+    padding: 0px!important;
+  }
+  .pad8{
+    padding:8px!important;
+  }
+  .pad320{
+    padding:32px 0!important;
+  }
+  .mabo0{
+    margin-bottom: 0px!important;
+  }
+  .mabo32{
+    margin-bottom: 32px!important;
+  }
+  .mabo64{
+    margin-bottom: 64px!important;
+  }
+  .report_title{
+    /* color:#1F2171!important;  */
+    font-size: 32px!important;
+    font-weight: 500!important;
+    font-family: 'Roboto'!important;
+    text-align: center!important;
+    line-height: 32px!important;
+  }
+  
+  .table_for_stats_cards{
+    border-spacing: 24px 12px!important;
+    border-collapse:separate!important;;
+  }
+  .my_pdf_body{
+    padding: 0px 16px !important;
+  }
+.subtitle_chart{
+    font-size: 28px!important;
+    padding: 32px 16px 32px 16px!important;
+    color: #7f7f7f!important;
+    font-family: 'Roboto'!important;
+    font-weight: 300!important;
+    margin-top: 8px !important
+}
+
+  .image_chart{
+    border: 1px solid #e8e8e8!important;
+    border-radius: 4px!important;
+    background: #ffffff;
+    padding: 32px!important;
+    -webkit-box-shadow: 5px 5px 46px -21px #000000!important; 
+    box-shadow: 5px 5px 46px -21px #000000!important;
+  }
+ 
 </style>
 
 

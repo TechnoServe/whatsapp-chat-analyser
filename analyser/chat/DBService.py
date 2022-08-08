@@ -1,6 +1,7 @@
 from django.db import transaction, connection
 from django.db.models import Q, Sum, Count, IntegerField, Min, Max, Avg, F, CharField, functions
 from django.conf import settings
+from requests import request
 
 from analyser.models import Personnel, WhatsAppGroup, WhatsAppChatFile, GroupDailyStats, UserDailyStats, MessageLog, GroupNameChanges, STATUS_CHOICES, CounselorGroupAssignment, CounselorAdvisorAssignment
 from analyser.serializers import GroupDailyStatsSerializer
@@ -14,7 +15,7 @@ from analyser.common_tasks import Notification, Terminal
 import pandas as pd
 import sentry_sdk
 
-from datetime import datetime
+from datetime import datetime, timedelta
 from tzlocal import get_localzone
 
 import json
@@ -322,8 +323,18 @@ class DBService:
         # most active user
         most_active_user = UserDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id=group_id).values('name_phone').annotate(sum_messages=Sum('no_messages')).order_by('-sum_messages').first()
         
+
+        #Most Active users # Gladys
+        week_2_before = last_date['stats_date'] - timedelta(days=14)
+        month_before = last_date['stats_date'] - timedelta(days=30)
+        last_active_users_2_week_before = UserDailyStats.objects.filter(stats_date__gte=week_2_before, stats_date__lte=last_date['stats_date'], group_id=group_id).values('name_phone').annotate(sum_messages=Sum('no_messages')).order_by('-sum_messages')[:10]
+        last_active_users_month_before = UserDailyStats.objects.filter(stats_date__gte=month_before, stats_date__lte=last_date['stats_date'], group_id=group_id).values('name_phone').annotate(sum_messages=Sum('no_messages')).order_by('-sum_messages')[:10]
+        
+
         # most active time of the day
         most_active_time = GroupDailyStats.objects.filter(stats_date__gte=s_date, stats_date__lte=e_date, group_id=group_id).exclude(most_active_hr=-1).values('most_active_hr').annotate(messages_count=Count('most_active_hr')).order_by('-messages_count').first()
+
+
 
         # active days
         datelist = pd.date_range(s_date, e_date).tolist()
@@ -369,6 +380,12 @@ class DBService:
         to_return['most_active_day'] = most_active_day['stats_date'].strftime('%d/%m/%Y, %A')
         to_return['most_active_time'] = most_active_time
         to_return['active_dates'] = {'dates': cool_dates, 'messages': cool_messages, 'users': cool_users}
+
+
+        #Gladys
+        to_return['last_active_users_2_week_before'] = last_active_users_2_week_before
+        to_return['last_active_users_month_before'] = last_active_users_month_before
+
 
         to_return = {**to_return, **period_stats}
         
@@ -505,6 +522,7 @@ class DBService:
 
         to_return['file_status'] = { st_[0]: 0 for st_ in STATUS_CHOICES }
         status_counts = list(WhatsAppChatFile.objects.filter(group_id__in=groups).values('status').annotate(s_count=Count('status')).all())
+        # print(status_counts)
         all_count = 0
         for st_ in status_counts:
             to_return['file_status'][st_['status']] = st_['s_count']

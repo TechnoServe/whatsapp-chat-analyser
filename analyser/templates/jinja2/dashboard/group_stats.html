@@ -23,6 +23,8 @@
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
+
+
 <!-- -------------- -->
 
 
@@ -50,6 +52,7 @@
         </div>
     {% endif %}
 </div>
+
 
 <!-- /section header -->
 
@@ -143,7 +146,7 @@
         <!-- COLUMN 2 -->
         <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-3">
             <div class='tns_card'>
-                <span class="tns_card_title">Active Time of Day</span>
+                <span class="tns_card_title">Active Time of Day </span>
                 <div class='d-flex'>
                     <img src="{{ static('images/tag.svg') }}" alt='tag' class="tag" >
                     <span class="tns_tag_value">{{ stats.most_active_time.most_active_hr }}:00 HRS</span>
@@ -154,6 +157,35 @@
                 <div class='d-flex'>
                     <img src="{{ static('images/tag.svg') }}" alt='tag' class="tag" >
                     <span class="tns_tag_value">{{ stats.active_user.name_phone }}</span>
+                </div>
+            </div>
+            <div class='tns_card'>
+                <span class="tns_card_title">Current group size</span>
+                <div class='d-flex'>
+                    <img src="{{ static('images/tag.svg') }}" alt='tag' class="tag" >
+                    <span class="tns_tag_value">{{ stats.joinies - stats.lefties}} members</span>
+                </div>
+            </div>
+          
+            <div class='tns_card' style="text-align:center">
+                <span class="tns_card_title" style="margin-bottom: 32px;">Top 10 Active users Last 2 weeks </span>
+                <div class='d-flex'>
+                    <ul>
+                        {% for item in stats.last_active_users_2_week_before %}
+                            <li>{{ item.name_phone }}: {{ item.sum_messages }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class='tns_card'  style="text-align:center">
+                <span class="tns_card_title ">Top 10 Active users Last Month </span>
+                <div class='d-flex'>
+                    <ul>
+                        {% for item in stats.last_active_users_month_before %}
+                            <li>{{ item.name_phone }}: {{ item.sum_messages }}</li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
             <div class='tns_card'>
@@ -201,7 +233,7 @@
     <div class="row ">
         <div class="col-12">
             <div class='tns_card' style='width:100%;'>
-                <span class="tns_card_title">Graph of Emotions</span>
+                <span class="tns_card_title">Graph of Emotions </span>
                 <div class='d-flex'>
                     <div id='bar_emotions' style='width:2000px;height: 800px;'>&nbsp;</div>
                 </div>
@@ -248,15 +280,16 @@
 {% endblock %}
 
 {% block javascript %}
-<script type='text/javascript' src="{{ static('node_modules/highcharts/modules/drilldown.js') }}"></script>
-<script type='text/javascript' src="{{ static('node_modules/highcharts/modules/data.js') }}"></script>
-<script type='text/javascript' src="{{ static('node_modules/svg-gauge/dist/gauge.min.js') }}"></script>
-<script type='text/javascript' src="{{ static('node_modules/svg-gauge/dist/gauge.min.js') }}"></script>
 
-<script>
+
+
+
+
+
+<script type="text/javascript">
     $(document).ready(function(){
         analyser.stats = {{ stats | safe }};
-        analyser.initiatePages();
+        analyPropser.initiatePages();
     });
 </script>
 

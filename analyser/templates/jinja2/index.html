@@ -57,56 +57,46 @@
 
             .bg-cover .bg-fixed             - both classes used with .layout-boxed to set a background image via style="background-image:url(...)"
     -->
-    <body class=''>
+    <body>
 
-        <section>
 
-            <div class="container min-h-50vh pt-5"> 
-
-                <div class="row text-center-xs d-middle">
+        <div class="container-fluid d-flex" style="background-color: #00b0af42;">
+            <div class="row align-self-center" style="height:100vh">
+                <div class="col-12 col-md-6 d-flex" style="background-color: #ffffff">
+                    <div class="header_descr align-self-center">
+                        <p class="header_title">
+                            <span class="green">Tafiti</span> Chat Analyzer<br> 
+                        </p>
+                        <p class="header_subtitle">Tafiti is a smart and automated WhatsApp chat
+                            analyser that processes, analyses and visualizes
+                            WhatsApp chats</p>
+                            <a href="/signin" class="btn btn_outlined_link_green">EXPLORE</a>
+                    </div>
+                   
+                        
                     
-                    <div class="col-12 col-md-6 order-2 order-md-1 pb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="0">
-
-                        <div class="mb-5">
-                            
-                            <h1 class="h2-xs font-weight-light mb-0">
-                                Welcome to the <span class="text-primary font-weight-medium">smart</span>, 
-                                <span class="font-weight-medium">WhatsApp chat analyser</span>!
-                            </h1>
-                            
-                            <p class="lead">
-                                Mchambuzi is a smart and automated WhatsApp chat analyser that processes, analyses and visualizes WhatsApp chats
-                            </p>
-
-                            <div class="mt-4">
-
-                                <a href="/signin" class="btn btn-primary transition-hover-top btn-soft mb-3 d-block-xs">
-                                    Admin Panel
-                                </a>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                    <div class="col-12 col-md-6 order-1 order-md-2 pb-5 aos-init aos-animate" data-aos="fade-up" data-aos-delay="200">
-
-                        <!-- svg image -->
-                        <img width="600" height="400" class="img-fluid" src="{{ static('images/production.svg') }}" alt="Introductory image">
-
-                    </div>
-
+                    
                 </div>
-
-
+                <div class="col-12 col-md-6 d-flex">
+                    <div class="align-self-center">
+                        <img width="600" height="400" class="img-fluid " src="{{ static('images/production.svg') }}" alt="Introductory image"><br/>
+                        <p class="caption">Powered by <img src="{{ static('images/TNS-Labs-Logo-v2.png') }}" height="12px"/></p> 
+                    </div>
+                   
+                </div>
             </div>
+            
+        </div>
 
-        </section>
 
+
+
+
+
+
+
+<!-- 
         <footer id="footer" class="footer-dark bg-darkblue">
-
-                <!-- expandable : hidden by default -->
                 <div id="footer_expand" class="collapse show" style="">
                     <div class="container py-5">
 
@@ -125,7 +115,6 @@
 
                     </div>
                 </div>
-                <!-- /expandable : hidden by default -->
 
 
                 <div class="bg-distinct py-3 clearfix">
@@ -134,15 +123,11 @@
 
 
                         <div class="clearfix float-start float-none-xs">
-
-                            <!-- badge expand info -->
                             <span id="footer_expand_badge" class="badge badge-secondary badge-pill p-2 position-absolute start-0 mt--n50 mx-2 position-relative fs--13 font-weight-normal hide-force">
                                 <i class="arrow arrow-bottom border-secondary mx-1 mb--5"></i>
                                 click to expand
                             </span>
 
-
-                            <!-- footer expand toggler -->
                             <a href="#footer_expand" data-toggle-target="#footer_expand_badge" data-toggle-container-class="hide-force" data-offset="-100%" data-speed="600" class="scroll-to btn-toggle btn float-start overlay-dark overlay-opacity-2 overflow-hidden text-decoration-none px-3 rounded mt--n8 mb--n8 js-togglified js-scrolltoified active" data-toggle="collapse" rel="noopener" aria-expanded="true">
                                 
                                 <span class="group-icon">
@@ -151,22 +136,75 @@
                                 </span>
 
                             </a>
-
-                            <!-- copyright -->
                             <div class="fs--14 py-2 float-start float-none-xs m-0-xs">
                                 TechnoServe - mSPARK program
                             </div>
 
-                            <div class="clearfix mt-2 d-block d-sm-none"><!-- mobile spacer --></div>
+                            <div class="clearfix mt-2 d-block d-sm-none"></div>
                         </div>
 
                     </div>
 
                 </div>
 
-            </footer>
+            </footer> -->
 
         <script src="{{ static('plugins/smarty/js/core.min.js') }}"></script>
-        
+        <style>
+            .header_title{
+                color: #3a3a3a;
+                font-size: 48px;
+                font-weight: 700;
+            }
+            .green{
+                color:#00b0af
+            }
+            .blue{
+                color: #393cb5
+            }
+            .pad0{
+                padding:0
+            }
+            .header_subtitle{
+                padding: 0px 32px 16px 0px;
+            }
+            .btn_outlined_link_blue{
+                
+
+                border: 1px solid #393cb5;
+                color: #393cb5;
+                background-color: transparent;
+                font-size: 14px;
+                font-weight: 700;
+                padding: 12px 36px;
+            }
+            .btn_outlined_link_blue:hover{ 
+                background-color: #393cb5;
+                color: #ffffff;
+            }
+            .btn_outlined_link_green{
+                border: 1px solid #00b0af;
+                color: #00b0af;
+                background-color: transparent;
+                font-size: 14px;
+                font-weight: 700;
+                padding: 12px 36px;
+            }
+            .btn_outlined_link_green:hover{  
+                background-color: #00b0af;
+                color: #ffffff;
+            }
+            a{
+                text-decoration: none !important;
+                color:none !important;
+            }
+            .header_descr{
+                padding:128px 64px
+            }
+            .caption{
+                font-size: 10px;
+                float:right
+            }
+        </style>
     </body>
 </html>
