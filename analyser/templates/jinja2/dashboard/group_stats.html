@@ -11,12 +11,13 @@
 {% block css %}
 <link rel="stylesheet" href="{{ static('node_modules/material-design-lite/material.min.css') }}" />
 <link rel="stylesheet" href="{{ static('node_modules/parsleyjs/src/parsley.css') }}" />
-<link rel="stylesheet" href="{{ static('node_modules/font-awesome/css/font-awesome.min.css') }}">
-
-<link rel="stylesheet" href="{{ static('css/data_table.css') }}">
-<link rel="stylesheet" href="{{ static('main.css') }}">
+<link rel="stylesheet" href="{{ static('node_modules/font-awesome/css/font-awesome.min.css') }}"/>
+<link rel="stylesheet" href="{{ static('css/data_table.css') }}"/>
+<!-- <link rel="stylesheet" href="{{ static('main.css') }}"/> -->
 
 <!-- FOR WORD CLOUD -->
+
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script> -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/wordcloud.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -25,18 +26,252 @@
 
 
 
-<!-- -------------- -->
 
 
 {% endblock %}
 
+
+<body style="font-family: 'Roboto';">
 {% block main_content %}
-
-<!-- -->
 <input type="hidden" id="group_id" value="{{ group_id }}">
+<input type="hidden" id="stats" value="{{ stats }}">
 
-<!-- section header -->
-<div class="bg-white rounded clearfix p-3 mb-4">
+
+<div class="container-fluid">
+    <!-- -->
+    
+   
+    <div class="row mt-4 mb-4">
+        <!-- GROUP NAME CHANGES SECTIONS -->
+        <!-- This section is showing the different name changes of the whatsapp group -->
+        <!-- <div class="col-4">
+            <div class='tns_card' style="margin: 0px; border-radius: 4px; padding:32px 16px">
+                <p style="color: #3a3a3a;font-size: 24px;font-weight: 700; margin-bottom: 16px;" >Group Name Changes</p>
+                <ul id='group_names' class='pl-0'>
+                    {% for change_ in name_changes %}
+                    <li class="clearfix d-block dropdown-item font-weight-medium p-3 rounded overflow-hidden border-bottom border-light">
+
+                       
+                        {% if loop.index == 1 %}
+                        <span class="badge badge-success float-end font-weight-normal mt-1">current</span>
+                        {% endif %}
+
+                       
+                        <p class="fs--12 m-0 text-truncate font-weight-normal" style="color:#000000">
+                            <i class="fi fi-arrow-right-full d-middle text-success float-start fs--14 bg-light  text-center"></i>
+                           <b>{{ change_.to_name }}</b> 
+                        </p>
+                        <p class="fs--12 m-0 text-truncate font-weight-normal">
+                            <i class="fi fi-arrow-left-full d-middle text-danger float-start fs--14 bg-light  text-center"></i>
+                            {{ change_.from_name }}
+                        </p>
+                       
+                        <p class="d-block fs--10 text-muted">
+                            <i class="fi fi-calendar d-middle  float-start fs--14  text-center"></i>Date: {{ change_.change_datetime_ }}
+                        </p>
+
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div> -->
+        <!-- STATISTICS SECTION -->
+        <div class="col-12">
+            <div class="row mb-4">
+                <div class="col-12 ">
+                    <div class="my_card bg-white" style="padding: 32px 16px; border-radius:4px"> 
+                        <p style="font-size: 16px; font-weight: 300; margin-bottom: 8px;">
+                          
+                            <span style="color: #3a3a3a;
+                            font-size: 24px;
+                            font-weight: 700;">{{ stats.group_name }}</span> Chat Analysis
+                        </p>
+                        <p class="" style="font-size:12px">{{ stats.s_date }} - {{ stats.e_date }}</p>
+                    
+                       
+                        {% if error %}
+                            <div class="alert alert-info" role="alert">
+                            {{ message }}
+                            </div>
+                        {% elif stats.info_message %}
+                            <div class="alert alert-warning" role="alert">
+                            {{ stats.info_message }}
+                            </div>
+                        {% endif %}
+                    </div> 
+                </div>
+            </div>
+
+            <!-- STATS CARDS STARTS -->
+
+            <div class="row mb-4">
+                <div class="col">
+                    <div class="my_card_small_stats" >
+                        <p class="fs--12 m-0 text-truncate" style="color:#777; font-weight: 400;"><i class="fi fi-calendar d-middle  float-start fs--14  text-center" style="color:#777"></i>Most Active Day</p>
+                        <p class="tns_tag_value" style="font-size: 14px;color:#1F2171">{{ stats.most_active_day }}</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="my_card_small_stats">
+                        <p class="fs--12 m-0 text-truncate" style="color:#777; font-weight: 400;"><i class="fi fi-calendar d-middle  float-start fs--14  text-center" style="color:#777"></i>Active Time of Day</p>
+                        <p class="tns_tag_value" style="font-size: 14px;color:#1F2171">{{ stats.most_active_time.most_active_hr }}:00 HRS</p>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="my_card_small_stats">
+                        <p class="fs--12 m-0 text-truncate" style="color:#777; font-weight: 400;"><i class="fi fi-calendar d-middle  float-start fs--14  text-center" style="color:#777"></i>Most Popular emoji</p>
+                        <div class='d-flex'>
+                            {% if stats.emojis|length == 0 %}
+                            <span class="tns_tag_value" style="color:#777; font-weight: 400;font-size:12px">No Emojis Sent</span>
+                            {% else %}
+                            <span class="tns_tag_value emoji_pop" style="font-size: 24px;">{{ stats.emojis[0].e }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            <!-- </div>
+            <div class="row mb-4"> -->
+                <div class="col">
+                    <div class="my_card_small_stats">
+                                <p class="fs--12 m-0 text-truncate" style="color:#777; font-weight: 400;"><i class="fi fi-users d-middle  float-start fs--14  text-center" style="color:#777"></i>Current group size</p>
+                                <p class="tns_tag_value" style="font-size: 14px;color:#1F2171">{{ stats.joinies - stats.lefties}} members</p>
+                         
+                       
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="my_card_small_stats">
+                        <p class="fs--12 m-0 text-truncate" style="color:#777; font-weight: 400;"><i class="fi fi-user d-middle  float-start fs--14  text-center" style="color:#777"></i>Most Active User</p>
+                        <p class="tns_tag_value" style="font-size: 14px;color:#1F2171">{{ stats.active_user.name_phone }}</p>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-3">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="my_card_small_stats">
+                                <p class="fs--12 m-0 text-truncate" style="color:#777; font-weight: 400;"><i class="fi fi-users d-middle  float-start fs--14  text-center" style="color:#777"></i>Joining Level</p>
+                                <p class="tns_tag_value" style="font-size: 14px;color:#1F2171">{{ stats.joinies }}</p>
+                                <div id="joining" class="gauge-container green" style="height:auto;display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="my_card_small_stats">
+                                <p class="fs--12 m-0 text-truncate" style="color:#777; font-weight: 400;"><i class="fi fi-users d-middle  float-start fs--14  text-center" style="color:#777"></i>Attrition Level</p>
+                                <p class="tns_tag_value" style="font-size: 14px;color:#1F2171"> {{ stats.lefties }}</p>
+                                <div id="attrition" class="gauge-container red" style="height:auto;display: none;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="my_card_small_stats">
+                        <p class="fs--14 m-0 text-truncate" style="color:#000000;"><i class="fi fi-users d-middle  float-start fs--14  text-center" style="color:#777"></i><b>Top 10 Active users Last 2 weeks</b></p>
+                        <p class="tns_tag_value" style="font-size: 14px;color:#1F2171"> 
+                            <div class='d-flex'>
+                                <ul>
+                                    {% for item in stats.last_active_users_2_week_before %}
+                                        <li class="fs--12 m-0" style="color:#000; font-weight: 400;">{{ item.name_phone }} <span style="color:#777">({{ item.sum_messages }} times)</span></li>
+                                    {% endfor %}
+                                </ul>
+                        </div></p>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="my_card_small_stats">
+                        <p class="fs--14 m-0 text-truncate" style="color:#000000;"><i class="fi fi-users d-middle  float-start fs--14  text-center" style="color:#777"></i><b>Top 10 Active users Last Month</b></p>
+                        <p class="tns_tag_value" style="font-size: 14px;color:#1F2171">
+                            <div class='d-flex'>
+                                <ul>
+                                    {% for item in stats.last_active_users_month_before %}
+                                        <li class="fs--12 m-0" style="color:#000; font-weight: 400;">{{ item.name_phone }} 
+                                            <span style="color:#777">({{ item.sum_messages }} times)</span>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+             <!-- STATS CARDS ENDS -->
+        </div>
+    </div>
+
+    <!-- ACTIVE DAYS  GRAPHS -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class='tns_card' style="margin: 0px; border-radius: 4px; padding:32px 16px">
+                <p style="color: #3a3a3a;font-size: 24px;font-weight: 700; margin-bottom: 16px;" >Active Days</p>
+                <div class='d-flex'>
+                    <div id='active_days' style='height:500px;width:100%'>&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row mb-4">
+        <!-- WORLD CLOUD SECTION -->
+        <div class="col-6">
+            <div class='tns_card' style="margin: 0px; border-radius: 4px; padding:32px 16px">
+                <p style="color: #3a3a3a;font-size: 24px;font-weight: 700; margin-bottom: 16px;" >Word Cloud </p>
+                <div class='d-flex'>
+                    <div id='word_cloud' style='height: 400px;width:100%'>&nbsp;</div>
+                </div>
+            </div>
+        </div>
+        <!-- SENTIMENT OF INFORMATIONS SENT GRAPHS -->
+        <div class="col-6">
+            <div class='tns_card' style="margin: 0px; border-radius: 4px; padding:32px 16px">
+                <p style="color: #3a3a3a;font-size: 24px;font-weight: 700; margin-bottom: 16px;" >Categories of information sent</p>
+                <div class='d-flex'>
+                    <div id='categories_chart' style='height:400px;width:100%'>&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<!-- EMOTIONS AND SENTIMENT GRAPHS ANALYSIS -->
+        <div class="row mb-4">
+            <div class="col-6">
+                <div class='tns_card' style="margin: 0px; border-radius: 4px; padding:32px 16px">
+                    <p style="color: #3a3a3a;font-size: 24px;font-weight: 700; margin-bottom: 16px;" >Graph of Emotions </p>
+                    <div class='d-flex'>
+                        <div id='bar_emotions' style='height: 400px;width:100%'>&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class='tns_card' style="margin: 0px; border-radius: 4px; padding:32px 16px">
+                    <p style="color: #3a3a3a;font-size: 24px;font-weight: 700; margin-bottom: 16px;" >Graph of Sentiment Analysis</p>
+                    <div class='d-flex'>
+                        <div id='bar_sentiment' style='height: 400px;width:100%'>&nbsp;</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+</div>
+
+
+
+
+
+
+<!-- ===========================OLD VERSION=============================== -->
+
+
+<!-- <div class="bg-white rounded clearfix p-3 mb-4">
     <h5 class='title'>
         <span class=''><i class="fi fi-layers"></i></span>&nbsp;&nbsp;<span class='text-primary'>{{ stats.group_name }}</span> Analysis
     </h5>
@@ -54,12 +289,12 @@
 </div>
 
 
-<!-- /section header -->
+
 
 <div class="app-main__inner">
     <div class="row gutters-sm">
 
-        <!-- COLUMN 1 -->
+      
         <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-4">
             <div class='tns_card'>
                 <span class="tns_card_title">Most Active Day</span>
@@ -116,12 +351,12 @@
                     {% for change_ in name_changes %}
                     <li class="clearfix d-block dropdown-item font-weight-medium p-3 rounded overflow-hidden border-bottom border-light">
 
-                        <!-- badge -->
+                     
                         {% if loop.index == 1 %}
                         <span class="badge badge-success float-end font-weight-normal mt-1">current</span>
                         {% endif %}
 
-                        <!-- NOTIFICATION -->
+                      
                         <p class="fs--14 m-0 text-truncate font-weight-normal">
                             <i class="fi fi-arrow-right-full d-middle text-success float-start fs--20 bg-light w--20 h--20 text-center"></i>
                             {{ change_.to_name }}
@@ -131,7 +366,7 @@
                             {{ change_.from_name }}
                         </p>
 
-                        <!-- date -->
+                       
                         <small class="d-block fs--11 text-muted">
                             on {{ change_.change_datetime_ }}
                         </small>
@@ -141,9 +376,7 @@
                 </ul>
             </div>
         </div>
-        <!-- END OF COLUMN 1 -->
-
-        <!-- COLUMN 2 -->
+        
         <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-3">
             <div class='tns_card'>
                 <span class="tns_card_title">Active Time of Day </span>
@@ -195,9 +428,7 @@
                 </div>
             </div>
         </div>
-        <!-- END OF COLUMN 1 -->
-
-        <!-- COLUMN 3 -->
+       
         <div class="col-12 col-xl-4 col-md-6 col-sm-12 mb-3">
             <div class='tns_card'>
                 <span class="tns_card_title">Most Popular emoji</span>
@@ -217,7 +448,7 @@
                 </div>
             </div>
         </div>
-        <!-- second row -->
+      
     </div>
     <div class="row ">
         <div class="col-12">
@@ -250,7 +481,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
 <!-- Chat Modal -->
 <div class="modal fade" id="exampleGetChatHistory" tabindex="-1" role="dialog" aria-labelledby="exampleGetChatHistory" 
@@ -279,17 +510,52 @@
 
 {% endblock %}
 
+
+</body>
+
 {% block javascript %}
 
 
 
-
+<script
+    type="text/javascript"
+    src="../../../static/node_modules/highcharts/modules/drilldown.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../../../static/node_modules/highcharts/modules/data.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../../../static/node_modules/svg-gauge/dist/gauge.min.js"
+  ></script>
+  <script
+    type="text/javascript"
+    src="../../../static/node_modules/svg-gauge/dist/gauge.min.js"
+  ></script>
 
 
 <script type="text/javascript">
+    
     $(document).ready(function(){
-        analyser.stats = {{ stats | safe }};
-        analyPropser.initiatePages();
+        let stats = ($('#stats').val() || '').replace(/<QuerySet /ig, '');
+        stats = (stats || '').replace(/>/ig, '');
+        stats = stats.replace(/\'/ig, "\"")
+        stats =  JSON.parse(stats)
+
+     
+        // stats = JSON.stringify(stats);
+        // stats = JSON.parse(stats)
+        console.log('stats', stats);
+        // console.log("JSON: ", JSON.parse(stats))
+        // console.log('safe', safe);
+       
+        analyser.stats = stats;
+        analyser.initiatePages();
+        // console.log(/<QuerySet/.test(stats));
+        // console.log(/>/.test(stats));
+        // console.log('stats', stats.active_dates);
+        
     });
 </script>
 
@@ -342,6 +608,14 @@
     .time-left {
       float: left;
       color: #999;
+    }
+    .my_card_small_stats{
+        padding:16px 16px;
+        box-shadow: 0 3px 6px 0 rgb(39 45 59 / 20%);
+        background-color: #fff;
+        height: 100%;
+        border-radius:4px;
+        
     }
     </style>
     

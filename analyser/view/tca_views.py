@@ -127,6 +127,7 @@ def determine_user_links(request):
             {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/counselor_assignment', 'link_title': 'Counselor Assignment', 'allowed_users': ['data_manager', 'system_admin'] },
             {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/advisor_assignment', 'link_title': 'Advisor Assignment', 'allowed_users': ['data_manager', 'system_admin'] }
         ]},
+
         {'type': 'link', 'href': 'https://drive.google.com/drive/u/2/folders/1LPyG58hCMnMd6m9touobHPUXCPGfmD6a', 'icon': '<i class="fi fi-layers"></i>', 'link_title': 'Upload', 'allowed_users': ['business_advisor', 'business_counselor', 'program_manager']}, 
         
         {'type': 'link', 'href': '/assigned_counselors', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Assigned Counselors', 'allowed_users': ['business_advisor']}, 
@@ -469,7 +470,7 @@ def get_ajax_data(request, d_type, filter_ = None):
 def dashboard(request, *args, **kwargs):
     try:
         params = get_basic_info(request)
-
+       
         if 'error' in kwargs:
             params['error'] = kwargs['error']
             params['message'] = kwargs['message']
@@ -482,6 +483,7 @@ def dashboard(request, *args, **kwargs):
             date_range = None
 
         analyser = Analyser()
+
         params['stats'] = analyser.fetch_all_meta(date_range)
         params['has_data'] = False if params['stats']['empty_db'] else True
 

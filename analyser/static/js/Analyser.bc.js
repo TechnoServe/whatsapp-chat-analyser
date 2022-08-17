@@ -461,6 +461,7 @@ Analyser.prototype.initiateDateRanges = function(){
 
 Analyser.prototype.drawGroupStatsGraphs = function () {
     Highcharts.chart('categories_chart', {
+        colors :['#00b0af','#d1e97b','#f4e61e','#470f61'],
         chart: {
             plotBackgroundColor: null,
             plotBorderWidth: null,
@@ -511,7 +512,7 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
         chart: { zoomType: 'xy' },
         title: { text: '' },
         xAxis: {
-            categories: analyser.stats.active_dates.dates,
+            categories: (analyser.stats.active_dates && analyser.stats.active_dates.dates) || '' ,
             crosshair: true
         },
         credits: analyser.graph_credits,
@@ -545,16 +546,18 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
                             let date = point.category;
                             let sent_messages = point.y;
                             let group_id = $("#group_id").val()
-
+                           
                             ajax_data = { 'group_id': $("#group_id").val(), date: point.category };
+                           
                             $("#date_selected").html(date)
-                            console.log(ajax_data)
+                          
                             $.ajax({
                                 type: "POST", url: '/searchGroupChatByDate', dataType: 'json', data: ajax_data,
                                 
                                 success: function (data) {
                                     console.log(data)
                                     populateChatDiv(data)
+                                    
                                 }
                             });
 
@@ -568,13 +571,15 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
         series: [{
             name: 'Sent Messages',
             type: 'column',
-            data: analyser.stats.active_dates.messages
+            color:'#d1e97b',
+            data: (analyser.stats.active_dates && analyser.stats.active_dates.messages) || []
 
         }, {
             name: 'Active Users',
             yAxis: 1,
             type: 'spline',
-            data: analyser.stats.active_dates.users
+            color:'#00b0af',
+            data: (analyser.stats.active_dates && analyser.stats.active_dates.users) || []
 
         }]
     });
@@ -631,18 +636,19 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
         series: [{
             type: 'wordcloud',
             data,
-            name: 'Occurrences'
+            name: 'Occurrences',
+           colors :['#f4e61e','#00b0af','#d1e97b','#470f61'],
+            
         }],
         title: {
-            text: 'Wordcloud from WhatsApp group chat '
+            text: ''
         }
     });
 
 
 
 
-    ajax_data = { 'group_id': $("#group_id").val() };
-                            
+    ajax_data = { 'group_id': $("#group_id").val() };                   
     $.ajax({
         type: "POST", url: '/ajax_getemotions', dataType: 'json', data: ajax_data,
         success: function (data) {
@@ -650,7 +656,8 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
             values = Object.values(data)
 
 
-            console.log(labels,values)
+            console.log('heere',labels,values)
+            console.log('data',data)
 
             Highcharts.chart('bar_emotions', {
                 title: {
@@ -669,6 +676,7 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
                     name: 'emotions',
                     type: 'column',
                     data: values,
+                    color:'#00b0af'
 
                 }],
             });
@@ -701,12 +709,14 @@ Analyser.prototype.drawGroupStatsGraphs = function () {
                     name: 'sentiments',
                     type: 'column',
                     data: values,
+                    color:'#d1e97b'
 
                 }],
             });
         }
     });
 
+   
     var gauge1 = Gauge(
         document.getElementById("attrition"), {
         max: 100,
@@ -748,7 +758,6 @@ Analyser.prototype.initiateSearchAutocomplete = function(){
         dataType: 'json',
         onSelect: function(selection){
             console.log(selection);
-
             // show the detail of this thing
             if(selection.data.category == 'Group') url = sprintf('/group_stats/%s', selection.data.id);
             else if(selection.data.category == 'User') url = sprintf('/user_stats/%s/%s', selection.data.group_id, selection.data.user);
@@ -760,7 +769,7 @@ Analyser.prototype.initiateSearchAutocomplete = function(){
 };
 
 Analyser.prototype.showItemStats = function(url){
-    range = $('[name=analysis_range]').val();
+    range = $('[name=analysis_range]').val()|| '';
     $(
         sprintf(
             "<form class='hidden-form' action='%s' method='post' style='display: none;'><input type='hidden' name='range' value='%s'><input type='hidden' name='csrfmiddlewaretoken' value='%s'></form>", 
@@ -809,6 +818,7 @@ Analyser.prototype.drawUserStatsGraphs = function(){
             // colorByPoint: true,
             credits: { enabled: false },
             // zMin: 0,
+            
             name: 'information',
             data: [
                 { name: 'Messages', y: analyser.stats.messages_count },
