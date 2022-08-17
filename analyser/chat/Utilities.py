@@ -46,7 +46,8 @@ class Utilities:
 
     def determine_dateranges(date_range, first_date, last_date):
         # fetch the group metadata
-        if date_range is None:
+        
+        if date_range is None or date_range == '':
             s_date = first_date
             e_date = last_date
 
