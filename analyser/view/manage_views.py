@@ -14,7 +14,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ValidationError
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, Http404
 from django.http.response import HttpResponseRedirect
 from django.middleware import csrf
 from django_registration.exceptions import ActivationError
@@ -36,6 +36,14 @@ from analyser.serializers import PersonnelSerializer, WhatsAppGroupSerializer, W
 from analyser.chat.UserManagement import UserManagement
 
 from analyser.chat.MessageHistory import MessageHistory
+from analyser.chat.DownloadPdfReport import DownloadPdfReport
+
+# Import mimetypes module
+import mimetypes
+#Import message notifications
+from django.template import RequestContext
+
+
 
 terminal = Terminal()
 sentry_sdk.init(settings.SENTRY_DSN)
@@ -384,3 +392,41 @@ def searchGroupChatByDate(request):
 
     data = messageHistory.getMessageLogByDate(request.POST.get('date'), request.POST.get('group_id'))
     return JsonResponse(data, status=200, safe=False)
+
+
+# Download file endpoint
+
+def download_file(request):
+    msg= request.GET.get('filename')
+    # Define Django project base directory
+    BASE_DIR = (os.getcwd())
+    
+    # Define text file name
+    filename = msg.replace(".txt", ".pdf")
+
+   
+    # Define the full file path
+    filepath = BASE_DIR + '/pdfFiles/' + filename
+    if os.path.exists(filepath):
+        # Open the file for reading content
+        path = open(filepath, 'rb')
+        # Set the mime type
+        mime_type, _ = mimetypes.guess_type(filepath)
+        # Set the return value of the HttpResponse
+        response = HttpResponse(path, content_type=mime_type)
+        # Set the HTTP header for sending to browser
+        response['Content-Disposition'] = "attachment; filename=%s" % filename
+        # Return the response value
+        return response
+    else :
+        filepath = BASE_DIR + '/pdfFiles/PDF-Placeholder.pdf'
+        
+        path = open(filepath, 'rb')
+        # Set the mime type
+        mime_type, _ = mimetypes.guess_type(filepath)
+        # Set the return value of the HttpResponse
+        response = HttpResponse(path, content_type=mime_type)
+        # Set the HTTP header for sending to browser
+        response['Content-Disposition'] = "attachment; filename=%s" % filename
+        # Return the response value
+        return response
