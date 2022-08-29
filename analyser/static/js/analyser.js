@@ -5,7 +5,8 @@ function Analyser() {
     this.activate_template = "<button title='Deactivate' class='%s btn btn-%s btn-sm' data-object_type='%s' data-row-id='%s' data-toggle='modal' data-action='%s' data-target='#confirmModal'><i class='fa fa-power-off'></i></button>";
 
     this.resend_link = "<button title='Resend Link' class='%s btn btn-success btn-sm' data-row-id='%s' ><i class='fa fa-repeat'></i></button>";
-
+    this.download_template = "<a href='/download_file?filename=%s'  title='Download' class='%s btn btn-info btn-sm' data-target='%s' data-object_type='%s' data-row-id='%s' data-action='download'>Download</a>";
+    this.download_disabled = "<a href='/download_file?filename=%s'  title='Scan before download' class='%s btn btn-dark btn-sm disabled' data-target='%s' data-object_type='%s' data-row-id='%s' data-action='scan'>Process</a>",
     //<button type="button" class="btn btn-info btn-sm" title="Edit"><i class="fa fa-edit"></i></button>
     // add the csrf token before ajax requests
     this.csrftoken = $('meta[name=csrf-token]').attr('content');
@@ -393,8 +394,14 @@ Analyser.prototype.initiateFilesRepo = function () {
                 "data": "actions",
                 "targets": 7,
                 render: function (data, type, row, meta) {
-                    edit_btn = sprintf(analyser.edit_template, 'reprocess_file', '#reprocessFile', 'reprocess_file', row.pk_id);
-                    return edit_btn;
+                    download_disabled_btn = sprintf(analyser.download_disabled, 'reprocess_file', '#reprocessFile', 'reprocess_file', row.pk_id);
+                    download_btn = sprintf(analyser.download_template, row.title , 'reprocess_file', '#reprocessFile', 'reprocess_file', row.pk_id);
+                    if(row.status =='processed')
+                        return download_btn;
+                       else return download_disabled_btn 
+                    
+                    // edit_btn = sprintf(analyser.edit_template, 'reprocess_file', '#reprocessFile', 'reprocess_file', row.pk_id);
+                    // return edit_btn;
                 }
             }
 

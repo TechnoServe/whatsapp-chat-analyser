@@ -85,8 +85,9 @@ urlpatterns = [
 
     # Counselor Portal
     re_path(r'^whatsapp_groups_bc$', views.whatsapp_groups_bc, name='whatsapp_groups_bc'),
-
     
+    # download file
+    re_path(r'^download_file$', views.download_file, name='download_file'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
