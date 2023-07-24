@@ -1,5 +1,10 @@
 from analyser.chat.ChatEmailReader import ChatEmailReader
+import traceback
+
 
 def processEmail():
-    reader = ChatEmailReader()
-    reader.readEmail()
+    try:
+        reader = ChatEmailReader()
+        reader.readEmail()
+    except Exception as e:
+        traceback.print_exc()

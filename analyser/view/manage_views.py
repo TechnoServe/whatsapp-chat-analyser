@@ -36,7 +36,7 @@ from analyser.serializers import PersonnelSerializer, WhatsAppGroupSerializer, W
 from analyser.chat.UserManagement import UserManagement
 
 from analyser.chat.MessageHistory import MessageHistory
-from analyser.chat.DownloadPdfReport import DownloadPdfReport
+# from analyser.chat.DownloadPdfReport import DownloadPdfReport
 
 # Import mimetypes module
 import mimetypes

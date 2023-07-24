@@ -4,7 +4,7 @@ import os.path
 import emoji
 import json
 import pandas as pd
-
+import traceback
 from django.db import transaction, connection
 from django.db.models import Q, Sum, Count, IntegerField, Min, Max, Avg, F, CharField, functions
 from django.conf import settings
@@ -75,15 +75,20 @@ class Analyser():
         chats_list = self.get_chats_list()
         for chat in chats_list:
             self.chat_file_comments = None
-            chat_file = self.pre_process_chatfile(chat)
+            try:
+                chat_file = self.pre_process_chatfile(chat)
 
-            if chat_file is None or chat_file.status not in ['pending', 'to_reprocess']:
-                if os.path.exists('tmpfiles/%s' % chat['title']): os.remove('tmpfiles/%s' % chat['title'])
-                continue        # nothing to do with this chat file
+                if chat_file is None or chat_file.status not in ['pending', 'to_reprocess']:
+                    if os.path.exists('tmpfiles/%s' % chat['title']): os.remove('tmpfiles/%s' % chat['title'])
+                    continue        # nothing to do with this chat file
+
+            except:
+                print(f"Error processing chat {str(chat)}")
 
     def pre_process_chatfile(self, chat):
         """given a chat object, this function preprocess it by fetching/creating a whatsapp group object 
         and its associated file object """
+        print(chat)
         try:
             chat_file = WhatsAppChatFile.objects.get(google_id=chat['google_id'])
         except WhatsAppChatFile.DoesNotExist:
@@ -202,7 +207,8 @@ class Analyser():
         if not os.path.exists('tmpfiles/%s' % file_name):
             self.download_file(file_id, file_name)
 
-        with open('tmpfiles/%s' % file_name, 'rt') as fh:
+        with open('tmpfiles/%s' % file_name, 'rt', encoding="utf8") as fh:
+            print("File read ", fh)
             # get the first line and check whether we have something like '3/17/20, 9:38 PM - Rachel Tns created group "SMART DUKA WINNERS"'
             first_line = fh.readline().strip()
             second_line = fh.readline().strip()
@@ -258,13 +264,21 @@ class Analyser():
                     self.process_chat(item, '%m/%d')
                 except ValueError as e:
                     if str(e) == "Possible Wrong Date Format": self.process_chat(item, '%d/%m')
-                    else: raise
-                except Exception: raise
+                    else: 
+                        print(f"Error processing chat as else {item}")
+                        traceback.print_exc()
+                except Exception:
+                    # TODO: Changed this
+                    print(f"Error processing chat here {item}")
+                    traceback.print_exc()
 
         except Exception as e:
-            if settings.DEBUG: terminal.tprint(str(e), 'fail')
-            sentry_sdk.capture_exception(e)
-            raise
+            # TODO : Changed this
+            print("Error processing pending chat items")
+            traceback.print_exc()
+            # if settings.DEBUG: terminal.tprint(str(e), 'fail')
+            # sentry_sdk.capture_exception(e)
+            # raise
 
     def process_chat(self, chat_file, date_format):
         try:
@@ -279,7 +293,7 @@ class Analyser():
                 self.download_file(google_id, filename)
 
             i = 0
-            with open('tmpfiles/%s' % filename, 'rt') as fh:
+            with open('tmpfiles/%s' % filename, 'rt', encoding="utf8") as fh:
                 print('\n```````````````\nProcessing %s' % filename)
                 transaction.set_autocommit(False)
                 self.cur_file_messages = []
@@ -291,6 +305,7 @@ class Analyser():
                 found_creator = False
                 found_disclaimer = False
                 cur_day_details = None
+                cur_day_backup = None
                 all_statuses = []
 
                 for line_ in fh:
@@ -312,9 +327,19 @@ class Analyser():
                     if re.findall('^\d{1,2}\/\d{1,2}\/\d{1,2}', line_, re.IGNORECASE):
                         # we have some date...
                         cur_line_parts = re.findall(msg_line_regex, line_, re.IGNORECASE)
-                        cur_date = self.extract_date_from_message(line_, date_format)
 
-                       
+                        # TODO: Changed this make sure you debug it back
+                        try:
+                            cur_date = self.extract_date_from_message(line_, '%d/%m')
+                        except ValueError as e:
+                            if str(e) == "Possible Wrong Date Format": 
+                                cur_date = self.extract_date_from_message(line_, '%m/%d')
+                            else: 
+                                traceback.print_exc()
+                                print("It is a different kind of error 💀💀")
+                        except Exception: 
+                            print("Error reformatting the date 💀💀")
+                            traceback.print_exc()                       
 
                         if len(cur_line_parts) == 0:
                             # we have a message starting with a date but not really a message
@@ -399,16 +424,30 @@ class Analyser():
                         elif user_left: cur_day_details['left_users'] += 1
                         elif removed_user: cur_day_details['removed_users'] += 1
                         
+                        # TODO (Done) Fix the issue here
+                        # If a chat happened in one day the daily stats don't get saved
+                        # TODO (Done) Added cur_day_backup
+                        if cur_day_details is not None:
+                            cur_day_backup = cur_day_details
+
                         if cur_date.strftime('%Y-%m-%d') != prev_date.strftime('%Y-%m-%d'):
                             # we have a new day
                             status_ = self.save_day_stats(cur_day_details, chat_file['group_id'], chat_file['id'])
                             if status_ not in all_statuses: all_statuses.append(status_)
+                            print(f"Daily Stats were saved for {chat_file['id']}")
                             cur_day_details = None
 
                     prev_message = (cur_message[0], cur_message[1].strip(' -'), cur_message[2])
                     prev_date = cur_date
                     # if i == 100: break
 
+
+                # TODO Added to fix the above mentioned issue
+                # save stats for message
+                if cur_day_backup is not None:
+                    status_ = self.save_day_stats(cur_day_backup, chat_file['group_id'], chat_file['id'])
+                    if status_ not in all_statuses: all_statuses.append(status_)
+                
                 if len(self.cur_file_messages) != 0:
                     email_settings = {
                         'template': 'emails/general-email.html',
@@ -435,14 +474,17 @@ class Analyser():
                 transaction.commit()
 
         except ValueError as e:
+            # TODO changed here
+            traceback.print_exc()
             transaction.rollback()
-            raise ValueError(str(e))
 
         except Exception as e:
             transaction.rollback()
             if settings.DEBUG: terminal.tprint(str(e), 'fail')
             sentry_sdk.capture_exception(e)
-            raise Exception('There was an error while processing the chat with id %s' % google_id)
+            # TODO changed here
+            traceback.print_exc()
+            print(f'There was an error while processing the chat with id {google_id}')
 
     def emoji_list(self, text):
         return Utilities.emoji_list(text)
@@ -466,7 +508,10 @@ class Analyser():
                     user_add = len(user_added[0][1].split('added')[1].split(', '))
                 except IndexError:
                     user_add = 1
-                except: raise
+                except: 
+                    # TODO: Changed here
+                    print(f"Error processing a chat message {message}")
+                    raise
 
                 is_event = True
         elif len(re.findall(user_left_regex, message, re.IGNORECASE)) != 0:
@@ -485,7 +530,14 @@ class Analyser():
         return (is_event, has_image, has_link, user_add, user_left, removed_user, emojis)
 
     def extract_date_from_message(self, message, date_format):
-        return Utilities.extract_date_from_message(message, date_format)
+        try:
+            return Utilities.extract_date_from_message(message, date_format)
+        except:
+            if date_format == '%d/%m':
+                date_format = '%m/%d'
+            else:
+                date_format = '%d/%m'
+            return Utilities.extract_date_from_message(message, date_format)
 
     def process_dated_non_message(self, chat_mssg):
         return Utilities.process_dated_non_message(chat_mssg)

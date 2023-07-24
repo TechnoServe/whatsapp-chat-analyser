@@ -35,6 +35,8 @@ class Utilities:
                 mssg_date = datetime.strptime(date_part, date_format + '/%Y, %H:%M')
         
             else:
+                # TODO 
+                print("I can't extract the datetime ")
                 raise Exception("I can't extract the datetime from '%s' - %s" % (message, date_part))
 
             return mssg_date

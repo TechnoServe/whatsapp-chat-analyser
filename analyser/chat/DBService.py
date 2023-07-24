@@ -206,6 +206,10 @@ class DBService:
         grp_stats.full_clean()
         grp_stats.save()
 
+        # TODO Added this line
+        print(f"Group stats saved {str(grp_stats)}")
+
+
         for u_name_phone, us in cur_day_details['users'].items():
             us_count = {'hr': -1, 'count': -1}
             for hr_, count_ in us['active_hrs'].items(): us_count={'hr':hr_, 'count':count_} if count_>us_count['count'] else us_count

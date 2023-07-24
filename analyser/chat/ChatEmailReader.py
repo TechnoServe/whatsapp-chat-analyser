@@ -18,24 +18,24 @@ from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 
 from analyser.chat.Chart import Chart
-
-
+import traceback
 
 analyser = Analyser()
 uploadFile = UploadFile()
 
+
 class ChatEmailReader:
     def __init__(self):
-        self.username = os.environ['CHAT_BOT_EMAIL']
-        self.password = os.environ['CHAT_BOT_PASSWORD']
+        self.username = os.environ["CHAT_BOT_EMAIL"]
+        self.password = os.environ["CHAT_BOT_PASSWORD"]
         self.tmp_subjectname = ""
-    
-    
+
     def readEmail(self):
+        print("STARTED READING EMAILS")
         imap = imaplib.IMAP4_SSL("imap.gmail.com")
         # authenticate
         imap.login(self.username, self.password)
-        
+
         # Select folder to read messages from
         status, messages = imap.select("INBOX")
 
@@ -43,11 +43,14 @@ class ChatEmailReader:
         result, data = imap.search(None, "UNSEEN")
 
         # data returned is in bytes hence we have to convert it to string
-        message_ids = (str(data[0], 'UTF8'))
+        message_ids = str(data[0], "UTF8")
         message_ids = message_ids.split()
-        
+
+        # TODO DElete this
+        message_ids = ["391"]
+
         for i in message_ids:
-        # fetch the email message by ID
+            # fetch the email message by ID
             res, msg = imap.fetch(str(i), "(RFC822)")
             for response in msg:
                 if isinstance(response, tuple):
@@ -62,19 +65,19 @@ class ChatEmailReader:
                     From, encoding = decode_header(msg.get("From"))[0]
                     if isinstance(From, bytes):
                         From = From.decode(encoding)
-                    
+
                     # Extract sender email
                     senderEmail = email.utils.parseaddr(From)[1]
 
                     print("Sender email = " + senderEmail)
                     print("Subject:", subject)
-                    self.tmp_subjectname =  subject
+                    self.tmp_subjectname = subject
                     print("From:", From)
 
-                    #Validate the source of an email address (from tns.org and tnslabs.org only)
-                    if not senderEmail.endswith(('tns.org', 'tnslabs.org')):
+                    # Validate the source of an email address (from tns.org and tnslabs.org only)
+                    if not senderEmail.endswith(("tns.org", "tnslabs.org")):
                         print("Sender Email not from TNS")
-                        return 
+                        return
 
                     # if the email message is multipart
                     if msg.is_multipart():
@@ -88,7 +91,10 @@ class ChatEmailReader:
                                 body = part.get_payload(decode=True).decode()
                             except:
                                 pass
-                            if content_type == "text/plain" and "attachment" not in content_disposition:
+                            if (
+                                content_type == "text/plain"
+                                and "attachment" not in content_disposition
+                            ):
                                 # print text/plain emails and skip attachments
                                 print(body)
                             elif "attachment" in content_disposition:
@@ -98,7 +104,7 @@ class ChatEmailReader:
                                     # folder_name = clean(subject)
 
                                     # Download file
-                                    folder_name = 'tmpfiles'
+                                    folder_name = "tmpfiles"
 
                                     if not os.path.isdir(folder_name):
                                         # make a folder for this email (named after the subject)
@@ -106,25 +112,43 @@ class ChatEmailReader:
                                     filepath = os.path.join(folder_name, filename)
 
                                     # download attachment and save it
-                                    open(filepath, "wb").write(part.get_payload(decode=True))
+                                    open(filepath, "wb").write(
+                                        part.get_payload(decode=True)
+                                    )
 
                                     # Upload new chat to google drive
                                     uploadFile.upload(filename)
 
                                     # Delete file from tmpfiles
-                                    os.remove("tmpfiles/"+filename)
+                                    os.remove("tmpfiles/" + filename)
 
                                     # Process uploaded files
-                                    analyser.process_uploaded_files()
+                                    try:
+                                        analyser.process_uploaded_files()
+                                    except:
+                                        print("Met an error while uploading files")
+                                        traceback.print_exc()
+
 
                                     # Process pending chats
-                                    analyser.process_pending_chats()
+                                    try:
+                                        analyser.process_pending_chats()
+                                    except:
+                                        print("Met an error while processing pending charts")
+                                        traceback.print_exc()
 
                                     # get uploaded file id
-                                    chat_file=WhatsAppChatFile.objects.filter(title=filename).values_list('group_id', 'title', 'id')
+                                    chat_file = WhatsAppChatFile.objects.filter(
+                                        title=filename
+                                    ).values_list("group_id", "title", "id")
 
                                     # Get group ID
-                                    self.getPDF(chat_file[0][0], chat_file[0][1], chat_file[0][2], senderEmail)
+                                    self.getPDF(
+                                        chat_file[0][0],
+                                        chat_file[0][1],
+                                        chat_file[0][2],
+                                        senderEmail,
+                                    )
                     else:
                         # extract content type of email
                         content_type = msg.get_content_type()
@@ -138,40 +162,38 @@ class ChatEmailReader:
         imap.logout()
         time.sleep(1)
 
-    
     def initiateInfiniteLoop(self):
         while True:
             self.readEmail()
 
-    
     def getPDF(self, group_id, fileName, chat_file_id, to):
         analyser = Analyser()
         wordCloud = WordCloud()
 
         params = {}
-        params['stats'] = analyser.fetch_group_meta(group_id, None)
-        params['name_changes'] = params['stats']['name_changes']
-        params['stats'].pop('name_changes')
-        params['group_id'] = group_id
-        
+        params["stats"] = analyser.fetch_group_meta(group_id, None)
+
+        params["name_changes"] = params["stats"]["name_changes"]
+        params["stats"].pop("name_changes")
+        params["group_id"] = group_id
+
         pdfFile = fileName.replace(".txt", ".pdf")
-        params['fileName'] = pdfFile
-        params['s_date'] = '2021-09-10'
-        params['e_date'] = '2021-10-11'
+        params["fileName"] = pdfFile
+        params["s_date"] = "2021-09-10"
+        params["e_date"] = "2021-10-11"
 
         chartData = [
-            params['stats']['images_count'],
-            params['stats']['messages_count'],
-            params['stats']['links_count'],
-            params['stats']['emojis_count'],
+            params["stats"]["images_count"],
+            params["stats"]["messages_count"],
+            params["stats"]["links_count"],
+            params["stats"]["emojis_count"],
         ]
 
         activeDaysChart = {
-            'dates': params['stats']['active_dates']['dates'],
-            'messages': params['stats']['active_dates']['messages'],
+            "dates": params["stats"]["active_dates"]["dates"],
+            "messages": params["stats"]["active_dates"]["messages"],
         }
-       
-        
+
         Chart.CategoriesOfInformation(chartData)
 
         Chart.activeDaysChart(activeDaysChart)
@@ -180,33 +202,34 @@ class ChatEmailReader:
         Chart.emotionsGraph(group_id)
         Chart.sentimentGraph(group_id)
 
-
         pdf = HtmlToPdf.generatePDF("pdf_templates/group_stats.html", params)
 
         self.sendEmail(pdfFile, to)
 
     def sendEmail(self, pdf_filename, to):
-        smtp_ssl_host = 'smtp.gmail.com'
+        smtp_ssl_host = "smtp.gmail.com"
         smtp_ssl_port = 465
         sender = self.username
-        targets = [to, ]
+        targets = [
+            to,
+        ]
 
         msg = MIMEMultipart()
-        txt = MIMEText('Kindly find attached, a copy of the generated report.')
+        txt = MIMEText("Kindly find attached, a copy of the generated report.")
 
-        msg['Subject'] = 'Chat Analysis for ' + " "+ self.tmp_subjectname
-        msg['From'] = sender
-        msg['To'] = ', '.join(targets)
+        msg["Subject"] = "Chat Analysis for " + " " + self.tmp_subjectname
+        msg["From"] = sender
+        msg["To"] = ", ".join(targets)
 
         msg.attach(txt)
 
-        filepath = 'pdfFiles/' + pdf_filename
-        with open(filepath, 'rb') as f:
-            pdf = MIMEImage(f.read(),  _subtype="pdf")
+        filepath = "pdfFiles/" + pdf_filename
+        with open(filepath, "rb") as f:
+            pdf = MIMEImage(f.read(), _subtype="pdf")
 
-        pdf.add_header('Content-Disposition',
-                    'attachment',
-                    filename=os.path.basename(filepath))
+        pdf.add_header(
+            "Content-Disposition", "attachment", filename=os.path.basename(filepath)
+        )
         msg.attach(pdf)
 
         server = smtplib.SMTP_SSL(smtp_ssl_host, smtp_ssl_port)
@@ -214,74 +237,69 @@ class ChatEmailReader:
         server.sendmail(sender, targets, msg.as_string())
         server.quit()
 
-   
     def printPDF(self):
         analyser = Analyser()
         wordCloud = WordCloud()
         params = {}
-        params['stats'] = analyser.fetch_group_meta(6, None)
-        params['name_changes'] = params['stats']['name_changes']
-        params['stats'].pop('name_changes')
-        params['group_id'] = 6
-        params['wordCloud'] = wordCloud.getGroupChat(6)
+        params["stats"] = analyser.fetch_group_meta(6, None)
+        params["name_changes"] = params["stats"]["name_changes"]
+        params["stats"].pop("name_changes")
+        params["group_id"] = 6
+        params["wordCloud"] = wordCloud.getGroupChat(6)
         HtmlToPdf.pdfKit(params)
 
-    
     def weasyPrint(self):
         analyser = Analyser()
         wordCloud = WordCloud()
         params = {}
 
-        params['s_date'] = '2021-10-09'
-        params['e_date'] = '2021-09-09'
-        params['page_title'] = 'Group Statistics'
-        params['request'] = {}
+        params["s_date"] = "2021-10-09"
+        params["e_date"] = "2021-09-09"
+        params["page_title"] = "Group Statistics"
+        params["request"] = {}
 
-        params['stats'] = analyser.fetch_group_meta(6, None)
-        params['name_changes'] = params['stats']['name_changes']
-        params['stats'].pop('name_changes')
-        params['group_id'] = 6
-        params['wordCloud'] = wordCloud.getGroupChat(6)
-        params['graph'] = self.return_graph()
+        params["stats"] = analyser.fetch_group_meta(6, None)
+        params["name_changes"] = params["stats"]["name_changes"]
+        params["stats"].pop("name_changes")
+        params["group_id"] = 6
+        params["wordCloud"] = wordCloud.getGroupChat(6)
+        params["graph"] = self.return_graph()
 
         chartData = [
-            params['stats']['images_count'],
-            params['stats']['messages_count'],
-            params['stats']['links_count'],
-            params['stats']['emojis_count'],
+            params["stats"]["images_count"],
+            params["stats"]["messages_count"],
+            params["stats"]["links_count"],
+            params["stats"]["emojis_count"],
         ]
 
         activeDaysChart = {
-            'dates': params['stats']['active_dates']['dates'],
-            'messages': params['stats']['active_dates']['messages'],
+            "dates": params["stats"]["active_dates"]["dates"],
+            "messages": params["stats"]["active_dates"]["messages"],
         }
 
-       
-        
         Chart.CategoriesOfInformation(chartData)
 
         Chart.activeDaysChart(activeDaysChart)
-        Chart.emotionsGraph(params['group_id'])
-        Chart.sentimentGraph(params['group_id'])
+        Chart.emotionsGraph(params["group_id"])
+        Chart.sentimentGraph(params["group_id"])
 
         HtmlToPdf.generatePDF(params)
 
-    
     def return_graph(self):
         import matplotlib.pyplot as plt
         from io import StringIO
         import numpy as np
-        
-        x = np.arange(0,np.pi*3,.1)
+
+        x = np.arange(0, np.pi * 3, 0.1)
         y = np.sin(x)
 
         fig = plt.figure()
-        plt.plot(x,y)
+        plt.plot(x, y)
 
         plt.savefig("analyser/templates/jinja2/pdf_templates/pie_chart.png")
 
         imgdata = StringIO()
-        fig.savefig(imgdata, format='svg')
+        fig.savefig(imgdata, format="svg")
         imgdata.seek(0)
 
         data = imgdata.getvalue()

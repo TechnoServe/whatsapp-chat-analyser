@@ -10,3 +10,6 @@ mycreds.txt
 client_secrets.json
 out.json
 *.DS_Store
+
+venv
+env
