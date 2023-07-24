@@ -46,9 +46,6 @@ class ChatEmailReader:
         message_ids = str(data[0], "UTF8")
         message_ids = message_ids.split()
 
-        # TODO DElete this
-        message_ids = ["391"]
-
         for i in message_ids:
             # fetch the email message by ID
             res, msg = imap.fetch(str(i), "(RFC822)")
