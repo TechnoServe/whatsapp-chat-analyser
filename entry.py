@@ -16,14 +16,14 @@ from analyser.chat.Chart import Chart
 from analyser.analyser import Analyser
 import traceback
 
-# ReadEmails.processEmail()
+ReadEmails.processEmail()
 
-analyser = Analyser()
+# analyser = Analyser()
 
-whatsap_file_id = 462
-item = WhatsAppChatFile.objects.values("id", "google_id", "title", "group_id").get(
-    id=whatsap_file_id
-)
+# whatsap_file_id = 462
+# item = WhatsAppChatFile.objects.values("id", "google_id", "title", "group_id").get(
+#     id=whatsap_file_id
+# )
 
 """
 Process all pending chats
@@ -50,4 +50,4 @@ Process a certain pending chat
 #     traceback.print_exc()
 
 
-Chart.wordCloud(whatsap_file_id)
+# Chart.wordCloud(whatsap_file_id)

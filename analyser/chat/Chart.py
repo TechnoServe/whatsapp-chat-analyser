@@ -50,7 +50,7 @@ class Chart:
 
         # plt.title('Active Days', fontsize=48, fontweight='bold')
 
-        plt.xlabel('Date',fontsize= 10, color="#bfbfbf",labelpad=10)
+        plt.xlabel('Date',fontsize= 6, color="#bfbfbf", labelpad=5)
         plt.ylabel('Messages Count', fontsize=10,color="#bfbfbf", labelpad=20)      
 
         dates = data['dates']
@@ -59,6 +59,8 @@ class Chart:
         messages = data['messages']
 
         plt.bar(dates, messages, color='#00b0af')
+        plt.xticks(rotation=80, fontsize=6)
+
         plt.savefig("analyser/templates/jinja2/pdf_templates/active_days.png")
         plt.clf()
         plt.close('all')
@@ -155,7 +157,7 @@ class Chart:
         plt.bar(range(len(emotions)), emotions_list,color = col)
 
         plt.xticks(range(len(emotions)), list(emotions.keys()))
-        plt.xticks(rotation=90)
+        plt.xticks(rotation=80)
 
         plt.savefig("analyser/templates/jinja2/pdf_templates/emotions.png")
         plt.close('all')

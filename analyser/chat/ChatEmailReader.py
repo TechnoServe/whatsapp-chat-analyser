@@ -45,6 +45,9 @@ class ChatEmailReader:
         # data returned is in bytes hence we have to convert it to string
         message_ids = str(data[0], "UTF8")
         message_ids = message_ids.split()
+    
+        # TODO: Delete this (for testing)
+        message_ids = [397]
 
         for i in message_ids:
             # fetch the email message by ID

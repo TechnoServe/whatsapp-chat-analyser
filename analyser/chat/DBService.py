@@ -193,7 +193,7 @@ class DBService:
                 notify.send_sentry_message(stats_mismatch_comments, 'info', [{'tag': 'saved_stats', 'value': sgs_data}, {'tag':'new_stats', 'value': json.dumps(current_stats, indent=3)}])
 
                 # TODO: Commented out this below line to help process error earlier on some files
-                # return 'Mismatched GroupStats'
+                print('Mismatched GroupStats')
 
         # the stats dont exist which is good
         except GroupDailyStats.DoesNotExist: 
