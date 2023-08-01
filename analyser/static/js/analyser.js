@@ -315,7 +315,7 @@ Analyser.prototype.initiateEngagedUsers = function () {
         "serverSide": true,
         "ajax": $.fn.dataTable.pipeline({
             url: 'data/engaged_users',
-            pages: 5,                       // number of pages to cache
+            pages: 2,                       // number of pages to cache
             type: 'POST'
         }),
         "rowId": 'pk_id',
@@ -371,7 +371,7 @@ Analyser.prototype.initiateFilesRepo = function () {
         "serverSide": true,
         "ajax": $.fn.dataTable.pipeline({
             url: 'data/exported_files',
-            pages: 5,                       // number of pages to cache
+            pages: 2,                       // number of pages to cache
             type: 'POST'
         }),
         "rowId": 'id',

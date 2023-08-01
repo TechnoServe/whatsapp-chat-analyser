@@ -433,8 +433,9 @@ def get_ajax_data(request, d_type, filter_ = None):
 
         elif d_type == 'exported_files':
             analyser = Analyser()
-            analyser.process_uploaded_files()
-
+            # TODO: (Done) instead of processing uploaded files again on route change
+            # This was commented out because it was causing performance issues (delay in listing of files)
+            # analyser.process_uploaded_files()
             to_return = analyser.get_all_chats(request)
 
         elif d_type == 'search':

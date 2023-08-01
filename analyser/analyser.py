@@ -88,7 +88,6 @@ class Analyser():
     def pre_process_chatfile(self, chat):
         """given a chat object, this function preprocess it by fetching/creating a whatsapp group object 
         and its associated file object """
-        print(chat)
         try:
             chat_file = WhatsAppChatFile.objects.get(google_id=chat['google_id'])
         except WhatsAppChatFile.DoesNotExist:
@@ -265,12 +264,12 @@ class Analyser():
                 except ValueError as e:
                     if str(e) == "Possible Wrong Date Format": self.process_chat(item, '%d/%m')
                     else: 
-                        print(f"Error processing chat as else {item}")
                         traceback.print_exc()
+                        print(f"Error processing chat as else {item}")
                 except Exception:
                     # TODO: Changed this
-                    print(f"Error processing chat here {item}")
                     traceback.print_exc()
+                    print(f"Error processing chat here {item}")
 
         except Exception as e:
             # TODO : Changed this
@@ -332,10 +331,10 @@ class Analyser():
                         try:
                             cur_date = self.extract_date_from_message(line_, '%d/%m')
                         except ValueError as e:
+                            traceback.print_exc()
                             if str(e) == "Possible Wrong Date Format": 
                                 cur_date = self.extract_date_from_message(line_, '%m/%d')
                             else: 
-                                traceback.print_exc()
                                 print("It is a different kind of error 💀💀")
                         except Exception: 
                             print("Error reformatting the date 💀💀")
@@ -447,7 +446,8 @@ class Analyser():
                 if cur_day_backup is not None:
                     status_ = self.save_day_stats(cur_day_backup, chat_file['group_id'], chat_file['id'])
                     if status_ not in all_statuses: all_statuses.append(status_)
-                
+                print(f"Daily cur_day_backup Stats were saved for {chat_file['id']}")
+
                 if len(self.cur_file_messages) != 0:
                     email_settings = {
                         'template': 'emails/general-email.html',
@@ -479,12 +479,12 @@ class Analyser():
             transaction.rollback()
 
         except Exception as e:
+            traceback.print_exc()
+            print(f"There was an error while processing the chat {chat_file}")
             transaction.rollback()
             if settings.DEBUG: terminal.tprint(str(e), 'fail')
             sentry_sdk.capture_exception(e)
             # TODO changed here
-            traceback.print_exc()
-            print(f'There was an error while processing the chat with id {google_id}')
 
     def emoji_list(self, text):
         return Utilities.emoji_list(text)

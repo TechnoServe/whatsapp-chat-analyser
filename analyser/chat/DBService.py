@@ -2,6 +2,7 @@ from django.db import transaction, connection
 from django.db.models import Q, Sum, Count, IntegerField, Min, Max, Avg, F, CharField, functions
 from django.conf import settings
 from requests import request
+import traceback
 
 from analyser.models import Personnel, WhatsAppGroup, WhatsAppChatFile, GroupDailyStats, UserDailyStats, MessageLog, GroupNameChanges, STATUS_CHOICES, CounselorGroupAssignment, CounselorAdvisorAssignment
 from analyser.serializers import GroupDailyStatsSerializer
@@ -152,7 +153,10 @@ class DBService:
                 sgs.no_messages == cur_day_details['no_messages'] and sgs.no_images == cur_day_details['no_images'] and sgs.no_links == cur_day_details['no_links']
             ):
                 # we have a duplicate stat from another file... ignore it for noww
-                return 'Duplicate GroupStats'
+                # TODO: Commented out this and added two lines to help process early error files
+                # return 'Duplicate GroupStats'
+                print('Duplicate GroupStats')
+                pass
             else:
                 # we have a mismatch.... so lets email the admins
                 # sgs_serial= GroupDailyStatsSerializer(sgs, many=True)
@@ -187,27 +191,35 @@ class DBService:
                 self.cur_file_messages.append(stats_mismatch_comments)
                 notify = Notification()
                 notify.send_sentry_message(stats_mismatch_comments, 'info', [{'tag': 'saved_stats', 'value': sgs_data}, {'tag':'new_stats', 'value': json.dumps(current_stats, indent=3)}])
-                return 'Mismatched GroupStats'
 
-        except GroupDailyStats.DoesNotExist: pass   # the stats dont exist which is good
+                # TODO: Commented out this below line to help process error earlier on some files
+                # return 'Mismatched GroupStats'
 
-        grp_stats = GroupDailyStats(
-            group_id=group_id,
-            chat_file_id=chat_file_id,
-            stats_date=cur_day_details['date_'],
-            new_users=cur_day_details['new_users'],
-            left_users=cur_day_details['left_users'],
-            most_active_hr=max_count['hr'],
-            emojis=cur_day_details['emojis'],
-            no_messages=cur_day_details['no_messages'],
-            no_images=cur_day_details['no_images'],
-            no_links=cur_day_details['no_links']
-        )
-        grp_stats.full_clean()
-        grp_stats.save()
-
-        # TODO Added this line
-        print(f"Group stats saved {str(grp_stats)}")
+        # the stats dont exist which is good
+        except GroupDailyStats.DoesNotExist: 
+            traceback.print_exc()
+        
+        try:
+            grp_stats = GroupDailyStats(
+                group_id=group_id,
+                chat_file_id=chat_file_id,
+                stats_date=cur_day_details['date_'],
+                new_users=cur_day_details['new_users'],
+                left_users=cur_day_details['left_users'],
+                most_active_hr=max_count['hr'],
+                emojis=cur_day_details['emojis'],
+                no_messages=cur_day_details['no_messages'],
+                no_images=cur_day_details['no_images'],
+                no_links=cur_day_details['no_links']
+            )
+            grp_stats.full_clean()
+            grp_stats.save()
+            
+            # TODO Added this line
+            print(f"Group stats saved {str(grp_stats)}")
+        
+        except:
+            pass
 
 
         for u_name_phone, us in cur_day_details['users'].items():
@@ -219,7 +231,8 @@ class DBService:
 
                 # check if its a duplicate
                 if uds.most_active_hr == us_count['hr'] and uds.emojis == us['emojis'] and uds.no_messages == us['no_messages'] and uds.no_images == us['no_images'] and uds.no_links == us['no_links']:
-                    return 'Duplicate UserStats'
+                    # return 'Duplicate UserStats'
+                    pass
                 else:
                     cur_file = WhatsAppChatFile.objects.get(id=chat_file_id)
                     cur_filename = cur_file.title
@@ -248,24 +261,31 @@ class DBService:
                     self.cur_file_messages.append(stats_mismatch_comments)
                     notify = Notification()
                     notify.send_sentry_message(stats_mismatch_comments, 'info', [{'tag': 'saved_stats', 'value': uds_data}, {'tag':'new_stats', 'value': json.dumps(current_stats, indent=3)}])
-
-                    return 'Mismatched UserStats'
+                    
+                    # TODO Commented out this line and added pass to ignore the error message
+                    # return 'Mismatched UserStats'
+                    pass
 
             except UserDailyStats.DoesNotExist: pass
 
-            stats_ = UserDailyStats(
-                name_phone=u_name_phone,
-                group_id=group_id,
-                chat_file_id=chat_file_id,
-                stats_date=cur_day_details['date_'],
-                most_active_hr=us_count['hr'],
-                emojis=us['emojis'],
-                no_messages=us['no_messages'],
-                no_images=us['no_images'],
-                no_links=us['no_links']
-            )
-            stats_.full_clean()
-            stats_.save()
+            # TODO: (Done) Put this block under try and catch to help process daily log messages on early error files
+            try:
+                stats_ = UserDailyStats(
+                    name_phone=u_name_phone,
+                    group_id=group_id,
+                    chat_file_id=chat_file_id,
+                    stats_date=cur_day_details['date_'],
+                    most_active_hr=us_count['hr'],
+                    emojis=us['emojis'],
+                    no_messages=us['no_messages'],
+                    no_images=us['no_images'],
+                    no_links=us['no_links']
+                )
+                stats_.full_clean()
+                stats_.save()
+            except:
+                stats_ = UserDailyStats.objects.get(name_phone=u_name_phone, group_id=group_id, stats_date=cur_day_details['date_'])
+               
 
             for mssg in us['messages']:
                 ml = MessageLog(

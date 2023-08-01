@@ -13,6 +13,7 @@ from string import punctuation
 from nltk.probability import FreqDist
 import pandas as pd
 from wordcloud import WordCloud
+import traceback
 
 msgHistory = MessageHistory()
 
@@ -65,11 +66,11 @@ class Chart:
         return True
 
     
-    def wordCloud(group_id):
+    def wordCloud(chat_file_id):
         nltk.download('punkt')
         nltk.download('stopwords')
 
-        qs = MessageLog.objects.filter(chat_file=group_id).values_list('message')
+        qs = MessageLog.objects.filter(chat_file=chat_file_id).values_list('message')
 
         # Creating a pandas dataframe out of the returned results
         df = df = pd.DataFrame(qs, columns=['message'])
@@ -115,6 +116,7 @@ class Chart:
         try:
             wordcloud = WordCloud(width=1800, height=1000, max_font_size=200, background_color="white").generate(cleaned_tokens_mm)
         except ValueError:
+            traceback.print_exc()
             # ValueError("We need at least 1 word to plot a word cloud, got 0")
             wordcloud = WordCloud(width=1800, height=1000, max_font_size=200, background_color="white").generate(cleaned_tokens_mm + " None")
 
