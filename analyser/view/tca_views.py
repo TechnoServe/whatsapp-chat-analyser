@@ -128,7 +128,7 @@ def determine_user_links(request):
             {'type': 'link', 'icon': '<i class="fi fi-users"></i>', 'href': '/advisor_assignment', 'link_title': 'Advisor Assignment', 'allowed_users': ['data_manager', 'system_admin'] }
         ]},
 
-        {'type': 'link', 'href': 'https://drive.google.com/drive/u/2/folders/1LPyG58hCMnMd6m9touobHPUXCPGfmD6a', 'icon': '<i class="fi fi-layers"></i>', 'link_title': 'Upload', 'allowed_users': ['business_advisor', 'business_counselor', 'program_manager']}, 
+        # {'type': 'link', 'href': 'https://drive.google.com/drive/u/2/folders/1LPyG58hCMnMd6m9touobHPUXCPGfmD6a', 'icon': '<i class="fi fi-layers"></i>', 'link_title': 'Upload', 'allowed_users': ['business_advisor', 'business_counselor', 'program_manager']}, 
         
         {'type': 'link', 'href': '/assigned_counselors', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'Assigned Counselors', 'allowed_users': ['business_advisor']}, 
         {'type': 'link', 'href': '/whatsapp_groups_ba', 'icon': '<i class="fi fi-users"></i>', 'link_title': 'WhatsApp Groups', 'allowed_users': ['business_advisor']}, 

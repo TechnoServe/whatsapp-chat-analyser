@@ -66,8 +66,8 @@ class Analyser():
 
     def process_uploaded_files(self):
         """ 1. Get all the chats uploaded to the google drive
-         2. Check if the file is already processed
-         3. If not processed
+            2. Check if the file is already processed
+            3. If not processed
            a. Check if the group name is changed. File title should match the group name from the first line
            b. Save the file to the DB
            c. Process the file saving the message from the bottom"""
