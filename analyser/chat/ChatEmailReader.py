@@ -47,7 +47,7 @@ class ChatEmailReader:
         message_ids = message_ids.split()
 
         # TODO: Delete this (for testing)
-        message_ids = [399]
+        # message_ids = [399]
 
         for i in message_ids:
             # fetch the email message by ID

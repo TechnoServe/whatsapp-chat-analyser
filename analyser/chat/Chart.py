@@ -2,6 +2,7 @@ from turtle import color
 import matplotlib.pyplot as plt
 from datetime import datetime
 
+from matplotlib.ticker import MaxNLocator
 from numpy import average
 from analyser.models import MessageLog
 from analyser.chat.MessageHistory import MessageHistory
@@ -50,16 +51,22 @@ class Chart:
 
         # plt.title('Active Days', fontsize=48, fontweight='bold')
 
-        plt.xlabel('Date',fontsize=6, color="#bfbfbf", labelpad=5)
+        plt.xlabel('Date', color="#bfbfbf", labelpad=20)
         plt.ylabel('Messages Count', fontsize=10,color="#bfbfbf", labelpad=20)      
 
         dates = data['dates']
         dates = [datetime.strptime(date, '%Y-%m-%d') for date in dates]
-
+ 
         messages = data['messages']
 
         plt.bar(dates, messages, color='#00b0af')
-        plt.xticks(rotation=80, fontsize=6)
+        plt.xticks(rotation=80, fontsize=8)
+
+        # Automatically set the number of x-axis ticks for better spacing
+        plt.gca().xaxis.set_major_locator(MaxNLocator(integer=True, nbins=34))
+
+        # Automatically adjust the layout for better spacing
+        plt.tight_layout()
 
         plt.savefig("analyser/templates/jinja2/pdf_templates/active_days.png")
         plt.clf()
@@ -156,12 +163,13 @@ class Chart:
             else:
                 col.append('red')
 
+        plt.bar(range(emotions_len), emotions_list,color = col)
 
-       
-        plt.bar(range(len(emotions)), emotions_list,color = col)
+        labels = [word.capitalize() for word in list(emotions.keys())]
+        plt.xticks(range(emotions_len), labels)
+        plt.xticks(rotation=80)
 
-        plt.xticks(range(len(emotions)), list(emotions.keys()))
-        plt.xticks(rotation=90)
+        plt.tight_layout()
 
         plt.savefig("analyser/templates/jinja2/pdf_templates/emotions.png")
         plt.close('all')
@@ -190,6 +198,8 @@ class Chart:
 
         # plt.bar(range(len(sentiment)), list(sentiment.values()))
         plt.xticks(range(len(sentiment)), list(sentiment.keys()))
+       
+        plt.tight_layout()
 
         plt.savefig("analyser/templates/jinja2/pdf_templates/sentiment.png")
         plt.close('all')

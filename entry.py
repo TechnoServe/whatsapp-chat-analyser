@@ -16,14 +16,14 @@ from analyser.chat.Chart import Chart
 from analyser.analyser import Analyser
 import traceback
 
-ReadEmails.processEmail()
+# ReadEmails.processEmail()
 
-# analyser = Analyser()
+analyser = Analyser()
 
-# whatsap_file_id = 462
-# item = WhatsAppChatFile.objects.values("id", "google_id", "title", "group_id").get(
-#     id=whatsap_file_id
-# )
+whatsap_file_id = 498
+item = WhatsAppChatFile.objects.values("id", "google_id", "title", "group_id").get(
+    id=whatsap_file_id
+)
 
 """
 Process all pending chats
@@ -49,5 +49,24 @@ Process a certain pending chat
 #     print(f"Error processing chat here {item}")
 #     traceback.print_exc()
 
+# 
+Chart.wordCloud(whatsap_file_id)
+# Chart.activeDaysChart(whatsap_file_id)
 
-# Chart.wordCloud(whatsap_file_id)
+def debugDates(group_id):
+
+    params = {}
+    params["stats"] = analyser.fetch_group_meta(group_id, None)
+
+    activeDaysChart = {
+        "dates": params["stats"]["active_dates"]["dates"],
+        "messages": params["stats"]["active_dates"]["messages"],
+    }
+
+    Chart.activeDaysChart(activeDaysChart)
+
+group_id = 15
+debugDates(group_id)
+
+Chart.emotionsGraph(group_id)
+Chart.sentimentGraph(group_id)
