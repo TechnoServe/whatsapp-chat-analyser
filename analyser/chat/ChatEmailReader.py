@@ -45,7 +45,7 @@ class ChatEmailReader:
         # data returned is in bytes hence we have to convert it to string
         message_ids = str(data[0], "UTF8")
         message_ids = message_ids.split()
-    
+
         # TODO: Delete this (for testing)
         message_ids = [399]
 
@@ -129,25 +129,31 @@ class ChatEmailReader:
                                         print("Met an error while uploading files")
                                         traceback.print_exc()
 
-
                                     # Process pending chats
                                     try:
                                         analyser.process_pending_chats()
                                     except:
-                                        print("Met an error while processing pending charts")
+                                        print(
+                                            "Met an error while processing pending charts"
+                                        )
                                         traceback.print_exc()
 
                                     # get uploaded file id
-                                    chat_file = WhatsAppChatFile.objects.filter(
-                                        title=filename
-                                    ).values_list("group_id", "title", "id")
+                                    # TODO (Done) it was getting old uploaded files which some were not processed successfuly, which was causing missing log messages while generating word cloud
+                                    # ISSUE (Fixed) Daily Stats were saved for file 482, while wordcloud was getting, word cloud for 418
+                                    # Based on the latest it was saved (Logic being if were processing a certain unread message, the probability is that it is the last)
+                                    chat_file = (
+                                        WhatsAppChatFile.objects.filter(title=filename)
+                                        .values_list("group_id", "title", "id")
+                                        .latest()
+                                    )
 
                                     # Get group ID
                                     self.getPDF(
-                                        chat_file[0][0],
-                                        chat_file[0][1],
-                                        chat_file[0][2],
-                                        senderEmail,
+                                        group_id=chat_file[0],
+                                        fileName=chat_file[1],
+                                        chat_file_id=chat_file[2],
+                                        to=senderEmail,
                                     )
                     else:
                         # extract content type of email
