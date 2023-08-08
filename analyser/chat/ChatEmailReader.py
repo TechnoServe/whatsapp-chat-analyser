@@ -145,7 +145,7 @@ class ChatEmailReader:
                                     chat_file = (
                                         WhatsAppChatFile.objects.filter(title=filename)
                                         .values_list("group_id", "title", "id")
-                                        .latest()
+                                        .latest('datetime_created')
                                     )
 
                                     # Get group ID
