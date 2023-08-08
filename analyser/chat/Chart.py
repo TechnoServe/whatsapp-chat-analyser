@@ -69,10 +69,13 @@ class Chart:
 
     
     def wordCloud(chat_file_id):
+        print(f"word cloud for {chat_file_id}")
+
         nltk.download('punkt')
         nltk.download('stopwords')
 
         qs = MessageLog.objects.filter(chat_file=chat_file_id).values_list('message')
+        print(f"messages len {len(qs)}")
 
         # Creating a pandas dataframe out of the returned results
         df = df = pd.DataFrame(qs, columns=['message'])
@@ -112,6 +115,7 @@ class Chart:
                 filteredDict[key] = value
 
         cleaned_tokens_mm = ' '.join(filteredDict)
+        print(f"cleaned_tokens_mm {len(cleaned_tokens_mm)}")
         # 
         # TODO (Done) Added try and catch
         # If the chat is so short that it is only having stop words after they are removed the messages stay empty, and wordcloud gives an error
