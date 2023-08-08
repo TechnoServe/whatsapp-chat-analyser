@@ -155,7 +155,7 @@ class DBService:
                 # we have a duplicate stat from another file... ignore it for noww
                 # TODO: Commented out this and added two lines to help process early error files
                 # return 'Duplicate GroupStats'
-                print('Duplicate GroupStats')
+                # print('Duplicate GroupStats')
                 pass
             else:
                 # we have a mismatch.... so lets email the admins
@@ -193,7 +193,7 @@ class DBService:
                 notify.send_sentry_message(stats_mismatch_comments, 'info', [{'tag': 'saved_stats', 'value': sgs_data}, {'tag':'new_stats', 'value': json.dumps(current_stats, indent=3)}])
 
                 # TODO: Commented out this below line to help process error earlier on some files
-                print('Mismatched GroupStats')
+                # print('Mismatched GroupStats')
 
         # the stats dont exist which is good
         except GroupDailyStats.DoesNotExist: 
@@ -216,7 +216,7 @@ class DBService:
             grp_stats.save()
             
             # TODO Added this line
-            print(f"Group stats saved {str(grp_stats)}")
+            # print(f"Group stats saved {str(grp_stats)}")
         
         except:
             pass
@@ -264,7 +264,7 @@ class DBService:
                     
                     # TODO Commented out this line and added pass to ignore the error message
                     # return 'Mismatched UserStats'
-                    print('Mismatched UserStats')
+                    # print('Mismatched UserStats')
                     pass
 
             except UserDailyStats.DoesNotExist: pass
@@ -284,11 +284,11 @@ class DBService:
                 )
                 stats_.full_clean()
                 stats_.save()
-                print("Saved stats_")
+                # print("Saved stats_")
 
             except:
                 stats_ = UserDailyStats.objects.get(name_phone=u_name_phone, group_id=group_id, stats_date=cur_day_details['date_'])
-                print(f"Got stats_ {stats_}")
+                # print(f"Got stats_ {stats_}")
                
 
             for mssg in us['messages']:
@@ -300,7 +300,7 @@ class DBService:
                 )
                 ml.full_clean()
                 ml.save()
-                print("Saved log message")
+                # print("Saved log message")
 
                 # raise Exception('tarn tramps %s ' % json.dumps(cur_day_details))
 
