@@ -264,6 +264,7 @@ class DBService:
                     
                     # TODO Commented out this line and added pass to ignore the error message
                     # return 'Mismatched UserStats'
+                    print('Mismatched UserStats')
                     pass
 
             except UserDailyStats.DoesNotExist: pass
@@ -283,8 +284,11 @@ class DBService:
                 )
                 stats_.full_clean()
                 stats_.save()
+                print("Saved stats_")
+
             except:
                 stats_ = UserDailyStats.objects.get(name_phone=u_name_phone, group_id=group_id, stats_date=cur_day_details['date_'])
+                print(f"Got stats_ {stats_}")
                
 
             for mssg in us['messages']:
@@ -296,6 +300,7 @@ class DBService:
                 )
                 ml.full_clean()
                 ml.save()
+                print("Saved log message")
 
                 # raise Exception('tarn tramps %s ' % json.dumps(cur_day_details))
 
