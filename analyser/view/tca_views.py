@@ -857,17 +857,13 @@ def edit_objects(request, d_type):
 @login_required(login_url='/login')
 def delete_objects(request, d_type):
     params = get_basic_info(request)
-
     try:
         pk_id = my_hashids.decode(request.POST.get('object_id'))[0]
 
         if d_type == 'delete_user':
             user = User.objects.filter(id=pk_id).get()
             user.delete()
-
             return JsonResponse({'error': False, 'message': 'The user has been deleted successfully'})
-
-
     except Exception as e:
         if settings.DEBUG: terminal.tprint(str(e), 'fail')
         sentry_sdk.capture_exception(e)

@@ -88,6 +88,7 @@ urlpatterns = [
     
     # download file
     re_path(r'^download_file$', views.download_file, name='download_file'),
+    re_path(r'^resend_report$', views.resend_report, name='resend_report'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

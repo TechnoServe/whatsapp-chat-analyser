@@ -8,6 +8,7 @@ run:
 # Make migrations and implement them for all installed apps
 # py manage.py makemigrations
 migrate:
+	py manage.py makemigrations
 	py manage.py migrate
 
 # Check SQL commands to be run by a certain migration script

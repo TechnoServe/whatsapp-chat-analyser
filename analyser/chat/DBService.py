@@ -38,9 +38,9 @@ class DBService:
                 filters = Q(group__group_name__icontains=request.POST['search[value]']) | Q(title__icontains=request.POST['search[value]'])
 
 
-            all_items_ = WhatsAppChatFile.objects.select_related('group').filter(filters).values('id', 'google_id', 'web_content_link', 'title', 'datetime_created', 'filesize', 'status', 'comments', group_name=F('group__group_name')).order_by('-datetime_created').all()[start:start+length_]
+            all_items_ = WhatsAppChatFile.objects.select_related('group').filter(filters).values('id', 'google_id', 'web_content_link', 'title', 'datetime_created', 'filesize', 'status', 'email', group_name=F('group__group_name')).order_by('-datetime_created').all()[start:start+length_]
 
-            all_filtered_items = WhatsAppChatFile.objects.select_related('group').filter(filters).values('id', 'google_id', 'web_content_link', 'title', 'datetime_created', 'filesize', 'status', 'comments', group_name=F('group__group_name')).order_by('-datetime_created').all()
+            all_filtered_items = WhatsAppChatFile.objects.select_related('group').filter(filters).values('id', 'google_id', 'web_content_link', 'title', 'datetime_created', 'filesize', 'status', 'email', group_name=F('group__group_name')).order_by('-datetime_created').all()
 
             all_items = list(all_items_)
             

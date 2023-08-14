@@ -346,7 +346,7 @@ Analyser.prototype.initiateFilesRepo = function(){
             {"data": "datetime_created", "targets": 3 },
             {"data": "filesize", "targets": 4 },
             {"data": "status", "targets": 5 },
-            {"data": "comments", "targets": 6, "sWidth": "25%" },
+            {"data": "email", "targets": 6, "sWidth": "25%" },
             {
                 "data": "actions",
                 "targets": 7, 

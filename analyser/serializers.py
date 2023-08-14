@@ -1,6 +1,15 @@
 from django.conf import settings
 
-from .models import Personnel, WhatsAppGroup, WhatsAppChatFile, GroupDailyStats, UserDailyStats, AdvisorManagerAssignment, CounselorAdvisorAssignment, MessageLog
+from .models import (
+    Personnel,
+    WhatsAppGroup,
+    WhatsAppChatFile,
+    GroupDailyStats,
+    UserDailyStats,
+    AdvisorManagerAssignment,
+    CounselorAdvisorAssignment,
+    MessageLog,
+)
 from rest_framework import serializers
 from hashids import Hashids
 
@@ -14,28 +23,39 @@ class BaseSerializer(serializers.ModelSerializer):
         try:
             return my_hashids.encode(obj.id)
         except AttributeError:
-            return my_hashids.encode(obj['id'])
+            return my_hashids.encode(obj["id"])
 
 
 class BaseSerializerDict(serializers.ModelSerializer):
     pk_id = serializers.SerializerMethodField()
 
     def get_pk_id(self, obj):
-        return my_hashids.encode(obj['id'])
+        return my_hashids.encode(obj["id"])
 
 
 class PersonnelSerializer(BaseSerializer):
     class Meta:
         model = Personnel
-        fields = ["pk_id", "last_login", "is_superuser", "username", "first_name", "last_name", "email", "is_active", "designation", "nickname", "tel"]
+        fields = [
+            "pk_id",
+            "last_login",
+            "is_superuser",
+            "username",
+            "first_name",
+            "last_name",
+            "email",
+            "is_active",
+            "designation",
+            "nickname",
+            "tel",
+        ]
         depth = 1
 
 
 class WhatsAppGroupSerializer(BaseSerializer):
-
     class Meta:
         model = WhatsAppGroup
-        fields = ('pk_id', 'group_name', 'datetime_created', 'created_by')
+        fields = ("pk_id", "group_name", "datetime_created", "created_by")
         depth = 1
 
 
@@ -44,7 +64,18 @@ class WhatsAppChatFileSerializer(BaseSerializer):
 
     class Meta:
         model = WhatsAppChatFile
-        fields = ('pk_id', 'google_id', 'group', 'web_content_link', 'title', 'datetime_created', 'filesize', 'status', 'comments')
+        fields = (
+            "pk_id",
+            "google_id",
+            "group",
+            "web_content_link",
+            "title",
+            "datetime_created",
+            "filesize",
+            "status",
+            "comments",
+            "email",
+        )
         depth = 1
 
 
@@ -54,7 +85,18 @@ class GroupDailyStatsSerializer(BaseSerializer):
 
     class Meta:
         model = GroupDailyStats
-        fields = ('pk_id', 'stats_date', 'new_users', 'left_users', 'most_active_hr', 'emojis', 'filesize', 'no_messages', 'no_images', 'no_links')
+        fields = (
+            "pk_id",
+            "stats_date",
+            "new_users",
+            "left_users",
+            "most_active_hr",
+            "emojis",
+            "filesize",
+            "no_messages",
+            "no_images",
+            "no_links",
+        )
         depth = 1
 
 
@@ -64,23 +106,40 @@ class UserDailyStatsSerializer(BaseSerializer):
 
     class Meta:
         model = UserDailyStats
-        fields = ('pk_id', 'group', 'chat_file', 'name_phone', 'stats_date', 'most_active_hr', 'emojis', 'no_messages', 'no_images', 'no_links')
+        fields = (
+            "pk_id",
+            "group",
+            "chat_file",
+            "name_phone",
+            "stats_date",
+            "most_active_hr",
+            "emojis",
+            "no_messages",
+            "no_images",
+            "no_links",
+        )
         depth = 1
+
 
 class CounselorAdvisorAssignmentSerializer(BaseSerializer):
     counselor = PersonnelSerializer()
+
     class Meta:
         model = CounselorAdvisorAssignment
-        fields = ['advisor', 'counselor']
+        fields = ["advisor", "counselor"]
+
 
 class AdvisorManagerAssignmentSerializer(BaseSerializer):
     advisor = PersonnelSerializer()
+
     class Meta:
         model = AdvisorManagerAssignment
-        fields = ['advisor', 'manager']
+        fields = ["advisor", "manager"]
+
 
 class MessageLogSerializer(BaseSerializer):
     user = UserDailyStatsSerializer()
+
     class Meta:
         model = MessageLog
-        fields = ['message', 'datetime_sent', 'user']
+        fields = ["message", "datetime_sent", "user"]

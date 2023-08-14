@@ -145,8 +145,18 @@ class ChatEmailReader:
                                     chat_file = (
                                         WhatsAppChatFile.objects.filter(title=filename)
                                         .values_list("group_id", "title", "id")
-                                        .latest('datetime_created')
+                                        .latest("datetime_created")
                                     )
+                                    # TODO (Done)
+                                    # When we are about to send the user the report we save the email for future resending
+                                    # Implemented it this way because there was no easy way to associate a chatfile id with an email
+                                    try:
+                                        file_id = chat_file[2]
+                                        file = WhatsAppChatFile.objects.get(pk=file_id)
+                                        file.email = senderEmail
+                                        file.save()
+                                    except Exception as e:
+                                        traceback.print_exc()
 
                                     # Get group ID
                                     self.getPDF(

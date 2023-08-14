@@ -76,7 +76,9 @@ class WhatsAppChatFile(TimeModel):
     datetime_created = models.DateTimeField(auto_now_add=False, null=False, blank=False)
     filesize = models.IntegerField(null=False, blank=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, null=True, blank=True)
-    comments = models.CharField(max_length=2000, null=True, blank=True)
+    comments = models.CharField(max_length=2000, null=True, blank=True) 
+    # Added email field, to be used when resending the report
+    email =  models.EmailField(max_length=200, null= True, blank=True)
 
 
 class GroupDailyStats(TimeModel):
