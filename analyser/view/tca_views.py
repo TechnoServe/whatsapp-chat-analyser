@@ -35,6 +35,9 @@ from analyser.serializers import PersonnelSerializer, WhatsAppGroupSerializer, W
 from analyser.chat.MessageHistory import MessageHistory
 # NLP Related Imports
 from analyser.nlp.WordCloud import WordCloud
+from analyser.chat.UploadFile import UploadFile
+import traceback
+from analyser.chat.ChatEmailReader import ChatEmailReader
 
 terminal = Terminal()
 sentry_sdk.init(settings.SENTRY_DSN)
@@ -835,24 +838,43 @@ def add_user(request):
 
 @login_required(login_url='/login')
 def edit_objects(request, d_type):
-    
     params = get_basic_info(request)
+    if request.session['cu_issuperuser'] or request.session['designation'] == 'system_admin':
+        try:
+            edited_user = __edit_user__(request)
+            return JsonResponse(edited_user)
+        except DataError as e:
+            if settings.DEBUG: terminal.tprint('%s (%s)' % (str(e), type(e)), 'fail')
+            sentry_sdk.capture_exception(e)
+            return JsonResponse({'error': True, 'message': 'Please check the entered data'})
 
-    try:
-        pk_id = my_hashids.decode(request.POST.get('object_id'))[0]
-        
+        except Exception as e:
+            if settings.DEBUG: terminal.tprint('%s (%s)' % (str(e), type(e)), 'fail')
+            sentry_sdk.capture_exception(e)
+            return JsonResponse({'error': True, 'message': 'There was an error while updating the database'})            
+    else:
+        return JsonResponse({'error': False, 'message': "Sorry, you don't have the necessary permissions to perform this action."})
+    
 
-    except DataError as e:
-        transaction.rollback();
-        if settings.DEBUG: terminal.tprint('%s (%s)' % (str(e), type(e)), 'fail')
-        sentry_sdk.capture_exception(e)
-        return JsonResponse({'error': True, 'message': 'Please check the entered data'})
-
-    except Exception as e:
-        if settings.DEBUG: terminal.tprint('%s (%s)' % (str(e), type(e)), 'fail')
-        sentry_sdk.capture_exception(e)
-        return JsonResponse({'error': True, 'message': 'There was an error while updating the database'})
-
+def __edit_user__(request):    
+    pk_id = my_hashids.decode(request.POST.get('object_id'))[0] 
+    username=request.POST.get('username')
+    designation=request.POST.get('designation')
+    tel=request.POST.get('tel')
+    email=request.POST.get('email')
+    first_name=request.POST.get('first_name')
+    last_name=request.POST.get('surname')
+    edited_user = User.objects.get(id=pk_id)
+    edited_user.nickname = username
+    edited_user.username = username
+    edited_user.designation = designation
+    edited_user.tel = tel
+    edited_user.email = email
+    edited_user.first_name = first_name
+    edited_user.last_name = last_name
+    edited_user.full_clean()
+    edited_user.save()
+    return edited_user
 
 @login_required(login_url='/login')
 def delete_objects(request, d_type):
@@ -973,3 +995,71 @@ def process_new_chats(request):
         if settings.DEBUG: terminal.tprint(str(e), 'fail')
         sentry_sdk.capture_exception(e)
         return HttpResponse(json.dumps({'error': True, 'message': 'There was an error while processing the new files. Check your email.'}))
+
+
+@login_required(login_url='/login')
+def upload_file(request):
+    # get the details of the logged in user
+    user = User.objects.get(pk=request.user.id)
+    user_email = user.email
+    # Read the sent file
+    # Upload it to temp folder
+    # Upload it to google drive
+    # Delete from the temp folder
+    # Delete from the temp folder
+    # Continue check Check from drive files that are not processed
+    analyser = Analyser()
+    uploadFile = UploadFile()
+    reader = ChatEmailReader()
+
+    folder_name = "tmpfiles"
+
+    filename = ""
+    if not os.path.isdir(folder_name):
+        # make a folder for this email (named after the subject)
+        os.mkdir(folder_name)
+    filepath = os.path.join(folder_name, filename)
+
+    # download attachment and save it
+    open(filepath, "wb").write(file_content)
+
+    # Upload new chat to google drive
+    uploadFile.upload(filename)
+
+    # Process uploaded files
+    try:
+        analyser.process_uploaded_files()
+    except:
+        print("Met an error while uploading files")
+        traceback.print_exc()
+
+    # Process pending chats
+    try:
+        analyser.process_pending_chats()
+    except:
+        print(
+            "Met an error while processing pending charts"
+        )
+        traceback.print_exc()
+
+    chat_file = (
+        WhatsAppChatFile.objects.filter(title=filename)
+        .values_list("group_id", "title", "id")
+        .latest("datetime_created")
+    )
+
+    try:
+        file_id = chat_file[2]
+        file = WhatsAppChatFile.objects.get(pk=file_id)
+        file.email = user_email
+        file.save()
+    except Exception as e:
+        traceback.print_exc()
+
+    # Get group ID
+    reader.__getPDF__(
+        group_id=chat_file[0],
+        fileName=chat_file[1],
+        chat_file_id=chat_file[2],
+        to=user_email,
+    )

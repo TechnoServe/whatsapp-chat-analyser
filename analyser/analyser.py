@@ -190,8 +190,6 @@ class Analyser():
     
     #Download the chat file
     def download_file(self, file_id, file_name):
-       
-
         print('Downloading the file %s' % file_name)
         self.authenticate()
         file = self.drive.CreateFile({'id': file_id})

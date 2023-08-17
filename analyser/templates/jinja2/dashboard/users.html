@@ -156,6 +156,95 @@
   </div>
 </div>
 
+{% comment %} Edit User Modal {% endcomment %}
+<div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit user</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form name='eidt_user'>
+          <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
+          {% comment %} for user id that is being edited {% endcomment %}
+          <input type='hidden' name='id'>
+
+          <div class="form-row">
+            <div class="col">
+              
+              <div class="form-group form-inline">
+                <label for="first_name">First Name</label>
+                <input type="text" class="form-control form-control-sm" name='first_name' id="edit_first_name" placeholder="First Name" required>
+              </div>
+
+            </div>
+            <div class="col">
+              
+              <div class="form-group form-inline">
+                <label for="surname">Surname</label>
+                <input type="text" class="form-control form-control-sm" id="edit_surname" name='surname' placeholder="Surname" required>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col">
+              
+              <div class="form-group form-inline">
+                <label for="username">Username</label>
+                <input type="text" class="form-control form-control-sm" id="edit_username" name='username' placeholder="Username" required>
+              </div>
+
+            </div>
+            <div class="col">
+
+              <div class="form-group form-inline">
+                <label for="email">Email</label>
+                <input type="text" class="form-control form-control-sm" id="edit_email" name='email' placeholder="Email" required>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="col">
+              
+              <div class="form-group form-inline">
+                <label for="tel">Telephone</label>
+                <input type="text" class="form-control form-control-sm" id="edit_tel" name='tel' placeholder="+254 720 123456" required>
+              </div>
+
+            </div>
+            <div class="col">
+
+              <div class="form-group">
+                <label for="designation">Designation</label>
+                
+                <select class="form-control-sm form-control" id="edit_designation" name="designation" required>
+                  <option selected>Choose...</option>
+                  {% for ut in user_types %}
+                    <option value="{{ ut[0] }}">{{ ut[1] }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger btn-sm" data-dismiss="modal">Cancel</button>
+        <button id='confirm_edit_save' type="button" class="btn btn-outline-success btn-sm">Save User Edits</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} End of edit user modal {% endcomment %}
 {% endblock %}
 
 {% block javascript %}

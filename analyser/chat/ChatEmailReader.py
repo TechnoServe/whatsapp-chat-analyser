@@ -138,33 +138,11 @@ class ChatEmailReader:
                                         )
                                         traceback.print_exc()
 
-                                    # get uploaded file id
-                                    # TODO (Done) it was getting old uploaded files which some were not processed successfuly, which was causing missing log messages while generating word cloud
-                                    # ISSUE (Fixed) Daily Stats were saved for file 482, while wordcloud was getting, word cloud for 418
-                                    # Based on the latest it was saved (Logic being if were processing a certain unread message, the probability is that it is the last)
-                                    chat_file = (
-                                        WhatsAppChatFile.objects.filter(title=filename)
-                                        .values_list("group_id", "title", "id")
-                                        .latest("datetime_created")
+                                    # Send report of file name to provided email 
+                                    self.report_file(
+                                        filename=filename, senderEmail=senderEmail
                                     )
-                                    # TODO (Done)
-                                    # When we are about to send the user the report we save the email for future resending
-                                    # Implemented it this way because there was no easy way to associate a chatfile id with an email
-                                    try:
-                                        file_id = chat_file[2]
-                                        file = WhatsAppChatFile.objects.get(pk=file_id)
-                                        file.email = senderEmail
-                                        file.save()
-                                    except Exception as e:
-                                        traceback.print_exc()
 
-                                    # Get group ID
-                                    self.getPDF(
-                                        group_id=chat_file[0],
-                                        fileName=chat_file[1],
-                                        chat_file_id=chat_file[2],
-                                        to=senderEmail,
-                                    )
                     else:
                         # extract content type of email
                         content_type = msg.get_content_type()
@@ -178,11 +156,40 @@ class ChatEmailReader:
         imap.logout()
         time.sleep(1)
 
+    def report_file(self, filename, senderEmail):
+        # get uploaded file id
+        # TODO (Done) it was getting old uploaded files which some were not processed successfuly, which was causing missing log messages while generating word cloud
+        # ISSUE (Fixed) Daily Stats were saved for file 482, while wordcloud was getting, word cloud for 418
+        # Based on the latest it was saved (Logic being if were processing a certain unread message, the probability is that it is the last)
+        chat_file = (
+            WhatsAppChatFile.objects.filter(title=filename)
+            .values_list("group_id", "title", "id")
+            .latest("datetime_created")
+        )
+        # TODO (Done)
+        # When we are about to send the user the report we save the email for future resending
+        # Implemented it this way because there was no easy way to associate a chatfile id with an email
+        try:
+            file_id = chat_file[2]
+            file = WhatsAppChatFile.objects.get(pk=file_id)
+            file.email = senderEmail
+            file.save()
+        except Exception as e:
+            traceback.print_exc()
+
+        # Get group ID
+        self.__getPDF__(
+            group_id=chat_file[0],
+            fileName=chat_file[1],
+            chat_file_id=chat_file[2],
+            to=senderEmail,
+        )
+
     def initiateInfiniteLoop(self):
         while True:
             self.readEmail()
 
-    def getPDF(self, group_id, fileName, chat_file_id, to):
+    def __getPDF__(self, group_id, fileName, chat_file_id, to):
         analyser = Analyser()
         wordCloud = WordCloud()
 
