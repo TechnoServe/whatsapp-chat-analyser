@@ -143,3 +143,7 @@ class MessageLogSerializer(BaseSerializer):
     class Meta:
         model = MessageLog
         fields = ["message", "datetime_sent", "user"]
+
+
+class TextFileSerializer(serializers.Serializer):
+    file = serializers.CharField()

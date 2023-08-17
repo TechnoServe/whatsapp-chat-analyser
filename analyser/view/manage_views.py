@@ -358,7 +358,7 @@ def determine_user_links(request):
                 },
             ],
         },
-        # {'type': 'link', 'href': 'https://drive.google.com/drive/u/2/folders/1LPyG58hCMnMd6m9touobHPUXCPGfmD6a', 'icon': '<i class="fi fi-layers"></i>', 'link_title': 'Upload', 'allowed_users': ['business_advisor', 'business_counselor', 'program_manager']},
+        {'type': 'button', 'id': 'open-picker', 'href': '#', 'icon': '<i class="fi fi-layers"></i>', 'link_title': 'Upload', 'allowed_users': ['business_advisor', 'business_counselor', 'program_manager']},
         {
             "type": "link",
             "href": "/assigned_counselors",

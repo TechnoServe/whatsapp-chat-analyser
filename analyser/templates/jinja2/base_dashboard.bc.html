@@ -226,6 +226,10 @@
                                             </ul>
                                         {% endif %}
                                     </li>
+                                {% elif link.type == 'button' %}
+                                    <li class="nav-item {{ 'active' if link.is_active == true else '' }}">
+                                        <a id="{{link.id}}" class="nav-link js-ajax" href="{{ link.href }}" style="font-size: 14px;font-weight: 400;">{{ link['icon']|safe if 'icon' in link else '' }}  <span id="link_title">{{ link.link_title }}</span></a>
+                                    </li>
                                 {% endif %}
                             {% endfor %}
 
