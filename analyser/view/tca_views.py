@@ -47,7 +47,7 @@ from analyser.serializers import (
     WhatsAppGroupSerializer,
     WhatsAppChatFileSerializer,
     UserDailyStatsSerializer,
-    TextFileSerializer
+    TextFileSerializer,
 )
 
 from rest_framework.response import Response
@@ -202,7 +202,32 @@ def determine_user_links(request):
                 },
             ],
         },
-        {'type': 'button', 'id': 'open-picker', 'href': '#', 'icon': '<i class="fi fi-layers"></i>', 'link_title': 'Upload', 'allowed_users': ['business_advisor', 'business_counselor', 'program_manager']},
+        {
+            "type": "link",
+            "href": "#",
+            "icon": '<i class="fi fi-layers"></i>',
+            "link_title": "Upload",
+            "allowed_users": [
+                "business_advisor",
+                "business_counselor",
+                "program_manager",
+            ],
+            "items": [
+                {
+                    "type": "button",
+                    "id": "open-local-picker",
+                    "href": "#",
+                    "icon": '<i class="fi fi-smart-devices"></i>',
+                    "link_title": "From PC",
+                    "allowed_users": [
+                        "business_advisor",
+                        "business_counselor",
+                        "program_manager",
+                    ],
+                },
+                # fi-cloud-upload
+            ],
+        },
         {
             "type": "link",
             "href": "/assigned_counselors",
@@ -1413,15 +1438,13 @@ def process_new_chats(request):
         )
 
 
-
-
 @login_required(login_url="/login")
 @csrf_exempt
 def upload_file(request):
     # get the details of the logged in user
     user = User.objects.get(pk=request.user.id)
     user_email = user.email
-    
+
     analyser = Analyser()
     uploadFile = UploadFile()
     reader = ChatEmailReader()
@@ -1432,8 +1455,8 @@ def upload_file(request):
     # Delete from the temp folder
     # Continue check Check from drive files that are not processed
     # if not valid respond immediately
-    file_content = request.FILES.get('file')
-    file_name = request.POST.get('name')
+    file_content = request.FILES.get("file")
+    file_name =  file_content.name
 
     if not file_content or not file_name:
         raise ValueError("File and name missing")
@@ -1447,7 +1470,7 @@ def upload_file(request):
 
     # download attachment and save it
     with open(filepath, "wb") as destination:
-         for chunk in file_content.chunks():
+        for chunk in file_content.chunks():
             destination.write(chunk)
 
     # Upload new chat to google drive
@@ -1469,6 +1492,5 @@ def upload_file(request):
 
     # Report the uploaded PDF
     reader.report_file(filename=file_name, senderEmail=user_email)
-    
-    return JsonResponse({ "status": "SUccessfully analyzed"})
- 
+
+    return JsonResponse({"status": "Successfully analyzed"})

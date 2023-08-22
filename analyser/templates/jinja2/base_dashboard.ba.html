@@ -211,17 +211,23 @@
                                         {% if 'items' in link %}
                                             <ul class='nav flex-column'>
                                             {% for item_ in link['items'] %}
-                                                <li class="nav-item {{ 'active' if item_.is_active == true else '' }}">
-                                                    <a class="nav-link js-ajax" href="{{ item_.href }}">{{ item_.link_title }}</a>
-                                                </li>
+
+                                                {% if link.type == 'link' %}
+                                                    <li class="nav-item {{ 'active' if item_.is_active == true else '' }}">
+                                                        <a class="nav-link js-ajax" href="{{ item_.href }}">{{ item_.link_title }}</a>
+                                                    </li>
+                                                
+                                                {% elif item_.type == 'button' %}
+                                                    <li class="nav-item {{ 'active' if link.is_active == true else '' }}">
+                                                        <a id="{{item_.id}}" class="nav-link js-ajax" href="{{ item_.href }}" style="font-size: 14px;font-weight: 400;">{{ item_['icon']|safe if 'icon' in item_ else '' }}  <span id="link_title">{{ item_.link_title }}</span></a>
+                                                    </li>
+                                                {% endif %}
+
                                             {% endfor %}
                                             </ul>
                                         {% endif %}
                                     </li>
-                                {% elif link.type == 'button' %}
-                                    <li class="nav-item {{ 'active' if link.is_active == true else '' }}">
-                                        <a id="{{link.id}}" class="nav-link js-ajax" href="{{ link.href }}" style="font-size: 14px;font-weight: 400;">{{ link['icon']|safe if 'icon' in link else '' }}  <span id="link_title">{{ link.link_title }}</span></a>
-                                    </li>
+                                    
                                 {% endif %}
                             {% endfor %}
 

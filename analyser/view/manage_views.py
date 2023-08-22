@@ -358,7 +358,32 @@ def determine_user_links(request):
                 },
             ],
         },
-        {'type': 'button', 'id': 'open-picker', 'href': '#', 'icon': '<i class="fi fi-layers"></i>', 'link_title': 'Upload', 'allowed_users': ['business_advisor', 'business_counselor', 'program_manager']},
+        {
+            "type": "link",
+            "href": "#",
+            "icon": '<i class="fi fi-layers"></i>',
+            "link_title": "Upload",
+            "allowed_users": [
+                "business_advisor",
+                "business_counselor",
+                "program_manager",
+            ],
+            "items": [
+                {
+                    "type": "button",
+                    "id": "open-local-picker",
+                    "href": "#",
+                    "icon": '<i class="fi fi-smart-devices"></i>',
+                    "link_title": "From PC",
+                    "allowed_users": [
+                        "business_advisor",
+                        "business_counselor",
+                        "program_manager",
+                    ],
+                },
+                # fi-cloud-upload
+            ],
+        },
         {
             "type": "link",
             "href": "/assigned_counselors",

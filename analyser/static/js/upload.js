@@ -94,7 +94,7 @@ function download_file(fileId) {
       responseType: "blob",
     },
     success: function (data) {
-      console.log('Got file data from google ', data)
+      console.log("Got file data from google ", data);
       // send the file to backend
       sendFileId(data);
     },
@@ -111,7 +111,6 @@ function download_file(fileId) {
 function sendFileId(blob) {
   var formData = new FormData();
   formData.append("file", blob);
-  formData.append("name", fileName);
   $.ajax({
     type: "POST",
     url: window.location.origin + "/upload_file",
@@ -119,14 +118,57 @@ function sendFileId(blob) {
     contentType: false,
     processData: false,
     success: function (response) {
-      console.log("Upload successful", response);
+      $.notify(
+        { message: "Successfully processed, check your email inbox." },
+        { type: "success" }
+      );
     },
     error: function (xhr, status, error) {
-      console.error("Upload failed", error);
+      $.notify(
+        { message: "Couldn't process the uploaded file, " + error.message },
+        { type: "danger" }
+      );
     },
   });
 }
+
+/**
+ *
+ * Local file upload handlers
+ */
+function appendInvisibleInput() {
+  /**Listen to the invisible file uploader */
+  $("#local-file-picker").off();
+  $("#local-file-picker").on("change", function () {
+    let selectedFile = $(this).prop("files")[0];
+    if (selectedFile && selectedFile.name.endsWith(".txt")) {
+      console.log("Selected .txt file:", selectedFile);
+      sendFileId(selectedFile);
+      // Handle the selected file here
+    } else {
+      console.log("Please select a valid .txt file.");
+    }
+  });
+  $("#local-file-picker").click();
+}
+
+function appendInvisibleFileInput() {
+  let fileInput = $(
+    '<input type="file" id="local-file-picker" style="display: none;">'
+  );
+  $("body").append(fileInput);
+}
+
 /**
  * Listen to button click and attach createPicker
  */
-document.getElementById("open-picker").addEventListener("click", createPicker);
+appendInvisibleFileInput();
+let driverPicker = document.getElementById("open-drive-picker");
+if (driverPicker) {
+  driverPicker.addEventListener("click", createPicker);
+}
+
+let localPicker = document.getElementById("open-local-picker");
+if (localPicker) {
+  localPicker.addEventListener("click", appendInvisibleInput);
+}

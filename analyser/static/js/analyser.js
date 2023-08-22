@@ -299,6 +299,10 @@ Analyser.prototype.initiateSysUsers = function (event) {
           data: ajax_data,
           error: analyser.communicationError,
           success: function (data) {
+            $.notify(
+              { message: "Successfully edited user." },
+              { type: "success" }
+            );
             analyser.endShowProcessing();
             $("#editUser").modal("hide");
             analyser.button_settings["user"]["table"].ajax.reload(null, false);
