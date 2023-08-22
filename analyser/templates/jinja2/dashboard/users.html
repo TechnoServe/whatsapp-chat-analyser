@@ -156,7 +156,6 @@
   </div>
 </div>
 
-{% comment %} Edit User Modal {% endcomment %}
 <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -167,10 +166,9 @@
         </button>
       </div>
       <div class="modal-body">
-        <form name='eidt_user'>
+        <form name='edit_user'>
           <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'>
-          {% comment %} for user id that is being edited {% endcomment %}
-          <input type='hidden' name='id'>
+          <input type='hidden' name='user_id' id='edit_user_id'>
 
           <div class="form-row">
             <div class="col">
@@ -244,7 +242,6 @@
   </div>
 </div>
 
-{% comment %} End of edit user modal {% endcomment %}
 {% endblock %}
 
 {% block javascript %}

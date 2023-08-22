@@ -303,6 +303,8 @@
     <!-- <script type='text/javascript' src="{{ static('node_modules/highcharts/highcharts.js') }}"></script> -->
 
     <script type="text/javascript" src="{{ static('js/Analyser.bc.js') }}"></script>
+    <script type="text/javascript" src="{{ static('js/upload.js') }}"></script>
+
     <!-- <script>
         function openNav() {
         document.getElementById("aside-main").style.width = "64px";
@@ -324,6 +326,8 @@
 
         }
     </script> -->
+    <script async defer src="https://apis.google.com/js/api.js" onload="onApiLoad()"></script>
+    <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
     
     {% block javascript %}
     {% endblock %}

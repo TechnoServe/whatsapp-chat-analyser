@@ -26,10 +26,13 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.urls import resolve, reverse
 from hashids import Hashids
-
+from django.views.decorators.csrf import csrf_exempt
 from jinja2 import Template
 
 import requests
+from rest_framework import serializers
+from rest_framework.request import Request
+from rest_framework.decorators import api_view
 from analyser.models import (
     Personnel,
     WhatsAppGroup,
@@ -1166,6 +1169,7 @@ def add_user(request):
 
 @login_required(login_url="/login")
 def edit_objects(request, d_type):
+    print(request.POST)
     params = get_basic_info(request)
     if (
         request.session["cu_issuperuser"]
@@ -1202,7 +1206,7 @@ def edit_objects(request, d_type):
 
 
 def __edit_user__(request):
-    pk_id = my_hashids.decode(request.POST.get("object_id"))[0]
+    pk_id = my_hashids.decode(request.POST.get("user_id"))[0]
     username = request.POST.get("username")
     designation = request.POST.get("designation")
     tel = request.POST.get("tel")
@@ -1210,6 +1214,11 @@ def __edit_user__(request):
     first_name = request.POST.get("first_name")
     last_name = request.POST.get("surname")
     edited_user = User.objects.get(id=pk_id)
+
+    print("Edited User")
+    print(edited_user)
+    print(edited_user.email)
+    print(email)
     edited_user.nickname = username
     edited_user.username = username
     edited_user.designation = designation
@@ -1219,7 +1228,15 @@ def __edit_user__(request):
     edited_user.last_name = last_name
     edited_user.full_clean()
     edited_user.save()
-    return edited_user
+    return {
+        "username": edited_user.username,
+        "username": edited_user.username,
+        "designation": edited_user.designation,
+        "tel": edited_user.tel,
+        "email": edited_user.email,
+        "first_name": edited_user.first_name,
+        "last_name": edited_user.last_name,
+    }
 
 
 @login_required(login_url="/login")
@@ -1397,55 +1414,44 @@ def process_new_chats(request):
 
 
 
-def __download_file__(request):
-        # if not valid respond immediately
-    if not serializer.is_valid():
-        return Response(serializer.errors, status=400)
-    file_id = serializer.validated_data['file']
-    # Download file from Google Drive
-    # 
-    serializer = TextFileSerializer(data=request.data)
-     # Set your API key or OAuth 2.0 credentials
-    api_key = os.environ.get('GCP_UPLOAD_API_KEY')  # Replace with your API key or OAuth 2.0 credentials
-    # Construct the URL
-    url = f"https://www.googleapis.com/drive/v3/files/{file_id}?alt=media&mimeType=text/plain&key={api_key}"
-    # Make a GET request to download the file
-    response = requests.get(url)
-    blob = response.content.decode("utf-8")  # Decode the blob using UTF-8 encoding
-    print(blob)
-    return blob
 
 @login_required(login_url="/login")
+@csrf_exempt
 def upload_file(request):
-    analyser = Analyser()
-    uploadFile = UploadFile()
-    reader = ChatEmailReader()
     # get the details of the logged in user
     user = User.objects.get(pk=request.user.id)
     user_email = user.email
+    
+    analyser = Analyser()
+    uploadFile = UploadFile()
+    reader = ChatEmailReader()
     # Read the sent file
     # Upload it to temp folder
     # Upload it to google drive
     # Delete from the temp folder
     # Delete from the temp folder
     # Continue check Check from drive files that are not processed
-    uploaded_file = __download_file__(request=request)
-    file_content = uploaded_file.read().decode('utf-8')  # Read file content
-    filename = uploaded_file.name 
+    # if not valid respond immediately
+    file_content = request.FILES.get('file')
+    file_name = request.POST.get('name')
 
-    return
+    if not file_content or not file_name:
+        raise ValueError("File and name missing")
 
     folder_name = "tmpfiles"
     if not os.path.isdir(folder_name):
         # make a folder for this email (named after the subject)
         os.mkdir(folder_name)
-    filepath = os.path.join(folder_name, filename)
+    print(file_name)
+    filepath = os.path.join(folder_name, file_name)
 
     # download attachment and save it
-    open(filepath, "wb").write(file_content)
+    with open(filepath, "wb") as destination:
+         for chunk in file_content.chunks():
+            destination.write(chunk)
 
     # Upload new chat to google drive
-    uploadFile.upload(filename)
+    uploadFile.upload(file_name)
 
     # Process uploaded files
     try:
@@ -1462,4 +1468,7 @@ def upload_file(request):
         traceback.print_exc()
 
     # Report the uploaded PDF
-    reader.report_file(filename=filename, senderEmail=user_email)
+    reader.report_file(filename=file_name, senderEmail=user_email)
+    
+    return JsonResponse({ "status": "SUccessfully analyzed"})
+ 

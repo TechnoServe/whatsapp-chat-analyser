@@ -146,4 +146,4 @@ class MessageLogSerializer(BaseSerializer):
 
 
 class TextFileSerializer(serializers.Serializer):
-    file = serializers.CharField()
+    file = serializers.CharField(max_length=100)

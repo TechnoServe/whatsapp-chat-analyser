@@ -240,7 +240,9 @@ class ChatEmailReader:
         msg = MIMEMultipart()
         txt = MIMEText("Kindly find attached, a copy of the generated report.")
 
-        msg["Subject"] = "Chat Analysis for " + " " + self.tmp_subjectname
+        analysis_for = self.tmp_subjectname if self.tmp_subjectname else pdf_filename
+
+        msg["Subject"] = "Chat Analysis for " + " " + analysis_for
         msg["From"] = sender
         msg["To"] = ", ".join(targets)
 
