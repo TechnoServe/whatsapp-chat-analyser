@@ -590,13 +590,13 @@ def resend_report(request):
         smtp_ssl_port = 465
         username = os.environ["CHAT_BOT_EMAIL"]
         password = os.environ["CHAT_BOT_PASSWORD"]
-        tmp_subjectname = ""
+
         sender = username
         targets = [file.email]
         msg = MIMEMultipart()
         txt = MIMEText("Kindly find attached, a copy of the generated report.")
 
-        msg["Subject"] = "Chat Analysis for " + " " + tmp_subjectname
+        msg["Subject"] = "Chat Analysis for " + " " + file.title
         msg["From"] = sender
         msg["To"] = ", ".join(targets)
 
