@@ -19,6 +19,8 @@ from email.mime.multipart import MIMEMultipart
 
 from analyser.chat.Chart import Chart
 import traceback
+from django.core.cache import cache
+from django.db import transaction, connection
 
 analyser = Analyser()
 uploadFile = UploadFile()
@@ -174,6 +176,7 @@ class ChatEmailReader:
             file = WhatsAppChatFile.objects.get(pk=file_id)
             file.email = senderEmail
             file.save()
+            transaction.commit() # Adding this because changes were not being saved
         except Exception as e:
             traceback.print_exc()
 
