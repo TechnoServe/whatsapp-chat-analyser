@@ -8,5 +8,5 @@ ALLOWED_HOSTS = ['*']
 DEBUG = True
 ENV_ROLE = 'dev'
 DEFAULT_PORT = 9033
-# ADMIN_EMAILS = ['wangoru.kihara@badili.co.ke']
-ADMIN_EMAILS = ['developer.sambou@gmail.com']
+
+ADMIN_EMAILS = ['nniyomahoro@tns.org', 'smbonyumuhire@tns.org']

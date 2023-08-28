@@ -21,6 +21,7 @@ from analyser.chat.Chart import Chart
 import traceback
 from django.core.cache import cache
 from django.db import transaction, connection
+from django.http import HttpResponse, JsonResponse
 
 analyser = Analyser()
 uploadFile = UploadFile()
@@ -128,7 +129,9 @@ class ChatEmailReader:
                                     try:
                                         analyser.process_uploaded_files()
                                     except:
-                                        print("Met an error while uploading files")
+                                        print(
+                                            "Met an error while process_uploaded_files files"
+                                        )
                                         traceback.print_exc()
 
                                     # Process pending chats
@@ -136,11 +139,11 @@ class ChatEmailReader:
                                         analyser.process_pending_chats()
                                     except:
                                         print(
-                                            "Met an error while processing pending charts"
+                                            "Met an error while process_pending_chats"
                                         )
                                         traceback.print_exc()
 
-                                    # Send report of file name to provided email 
+                                    # Send report of file name to provided email
                                     self.report_file(
                                         filename=filename, senderEmail=senderEmail
                                     )
@@ -158,16 +161,27 @@ class ChatEmailReader:
         imap.logout()
         time.sleep(1)
 
-    def report_file(self, filename, senderEmail):
+    def report_file(self, filename, senderEmail) -> JsonResponse:
         # get uploaded file id
         # TODO (Done) it was getting old uploaded files which some were not processed successfuly, which was causing missing log messages while generating word cloud
         # ISSUE (Fixed) Daily Stats were saved for file 482, while wordcloud was getting, word cloud for 418
         # Based on the latest it was saved (Logic being if were processing a certain unread message, the probability is that it is the last)
-        chat_file = (
-            WhatsAppChatFile.objects.filter(title=filename)
-            .values_list("group_id", "title", "id")
-            .latest("datetime_created")
-        )
+
+        print(f"Reporting Chat file_name {filename}")
+        try:
+            chat_file = (
+                WhatsAppChatFile.objects.filter(title=filename)
+                .values_list("group_id", "title", "id")
+                .latest("datetime_created")
+            )
+        except:
+            return JsonResponse(
+                {
+                    "status": "Error analyzing the file",
+                    "error": True,
+                },
+                status=400,
+            )
         # TODO (Done)
         # When we are about to send the user the report we save the email for future resending
         # Implemented it this way because there was no easy way to associate a chatfile id with an email
@@ -176,9 +190,17 @@ class ChatEmailReader:
             file = WhatsAppChatFile.objects.get(pk=file_id)
             file.email = senderEmail
             file.save()
-            transaction.commit() # Adding this because changes were not being saved
+            transaction.commit()  # Adding this because changes were not being saved
+
         except Exception as e:
             traceback.print_exc()
+            return JsonResponse(
+                {
+                    "message": "Error analyzing the file",
+                    "error": True,
+                },
+                status=400,
+            )
 
         # Get group ID
         self.__getPDF__(
@@ -187,6 +209,7 @@ class ChatEmailReader:
             chat_file_id=chat_file[2],
             to=senderEmail,
         )
+        return JsonResponse({"message": "File analyzed successfully"})
 
     def initiateInfiniteLoop(self):
         while True:

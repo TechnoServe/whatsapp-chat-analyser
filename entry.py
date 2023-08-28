@@ -20,10 +20,18 @@ import traceback
 
 analyser = Analyser()
 
-whatsap_file_id = 498
-item = WhatsAppChatFile.objects.values("id", "google_id", "title", "group_id").get(
-    id=whatsap_file_id
-)
+# 
+file_name  = "WhatsApp Chat with FormaçãoOHOLO -C2-Miriam_FILE.txt"
+fh = analyser.__read_file_with_auto_encoding__('tmpfiles/%s' % file_name)
+first_line = fh.readline().strip()
+second_line = fh.readline().strip()
+print(first_line)
+print(second_line)
+print(fh)
+# whatsap_file_id = 498
+# item = WhatsAppChatFile.objects.values("id", "google_id", "title", "group_id").get(
+#     id=whatsap_file_id
+# )
 
 """
 Process all pending chats
@@ -50,23 +58,23 @@ Process a certain pending chat
 #     traceback.print_exc()
 
 # 
-Chart.wordCloud(whatsap_file_id)
-# Chart.activeDaysChart(whatsap_file_id)
+# Chart.wordCloud(whatsap_file_id)
+# # Chart.activeDaysChart(whatsap_file_id)
 
-def debugDates(group_id):
+# def debugDates(group_id):
 
-    params = {}
-    params["stats"] = analyser.fetch_group_meta(group_id, None)
+#     params = {}
+#     params["stats"] = analyser.fetch_group_meta(group_id, None)
 
-    activeDaysChart = {
-        "dates": params["stats"]["active_dates"]["dates"],
-        "messages": params["stats"]["active_dates"]["messages"],
-    }
+#     activeDaysChart = {
+#         "dates": params["stats"]["active_dates"]["dates"],
+#         "messages": params["stats"]["active_dates"]["messages"],
+#     }
 
-    Chart.activeDaysChart(activeDaysChart)
+#     Chart.activeDaysChart(activeDaysChart)
 
-group_id = 15
-debugDates(group_id)
+# group_id = 15
+# debugDates(group_id)
 
-Chart.emotionsGraph(group_id)
-Chart.sentimentGraph(group_id)
+# Chart.emotionsGraph(group_id)
+# Chart.sentimentGraph(group_id)

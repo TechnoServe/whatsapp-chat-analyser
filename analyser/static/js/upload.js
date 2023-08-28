@@ -139,7 +139,7 @@ function sendFileId(blob) {
 function appendInvisibleInput() {
   /**Listen to the invisible file uploader */
   $("#local-file-picker").off();
-  $("#local-file-picker").on("change", function () {
+  $("#local-file-picker").on("input", function () {
     let selectedFile = $(this).prop("files")[0];
     if (selectedFile && selectedFile.name.endsWith(".txt")) {
       console.log("Selected .txt file:", selectedFile);

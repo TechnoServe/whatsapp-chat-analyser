@@ -1491,6 +1491,4 @@ def upload_file(request):
         traceback.print_exc()
 
     # Report the uploaded PDF
-    reader.report_file(filename=file_name, senderEmail=user_email)
-
-    return JsonResponse({"status": "Successfully analyzed"})
+    return reader.report_file(filename=file_name, senderEmail=user_email)
