@@ -8,11 +8,12 @@ from django.contrib.auth import get_user_model
 if __name__ == '__main__':
 
     if 'DJANGO_ADMIN_USERNAME' in os.environ:
-        print ("Using the PRODUCTION settings")
+        print(os.environ['DJANGO_ADMIN_USERNAME'])
+        print ("Using the PRODUCTION settings manage.py")
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "analyser.settings.production")
         from analyser.settings.production import *
     else:
-        print ("Using the DEVELOPMENT settings")
+        print ("Using the DEVELOPMENT settings manage.py")
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "analyser.settings.development")
         from analyser.settings.development import *
 
