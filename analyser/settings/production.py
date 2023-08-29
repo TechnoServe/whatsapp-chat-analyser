@@ -24,7 +24,7 @@ STATICFILES_DIRS = [
 ]
 
 STATIC_PATH = os.path.abspath(os.path.join(os.path.dirname('../'), 'static'))
-ADMIN_EMAILS = ['nniyomahoro@tns.org', 'smbonyumuhire@tns.org']
+ADMIN_EMAILS = ['nniyomahoro@tns.org']
 
 # The default port to serve the application from
 DEFAULT_PORT = 9037
