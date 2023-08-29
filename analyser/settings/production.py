@@ -14,6 +14,10 @@ if USE_S3 == 'False':
     # STATIC_ROOT = '/opt/tafiti/static/'
     STATIC_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static'))
 
+# Added 
+STATIC_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static'))
+STATIC_URL  = '/static/'
+
 STATICFILES_DIRS = [
     # '/opt/tafiti/analyser/static/'
     os.path.abspath(os.path.join(os.path.dirname(__file__), 'static'))
