@@ -623,7 +623,7 @@ Analyser.prototype.initiateFilesRepo = function () {
             "reprocess_file",
             row.pk_id
           );
-          if (row.email !== null && row.email.length > 0) return resend_btn;
+          if (row.email !== null && row.email.length > 0 && row.status == "processed") return resend_btn;
           else return resend_disabled_btn;
         },
       },

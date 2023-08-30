@@ -22,6 +22,7 @@ import traceback
 from django.core.cache import cache
 from django.db import transaction, connection
 from django.http import HttpResponse, JsonResponse
+from analyser.chat.Utilities import Utilities
 
 analyser = Analyser()
 uploadFile = UploadFile()
@@ -32,6 +33,7 @@ class ChatEmailReader:
         self.username = os.environ["CHAT_BOT_EMAIL"]
         self.password = os.environ["CHAT_BOT_PASSWORD"]
         self.tmp_subjectname = ""
+
 
     def readEmail(self):
         print("STARTED READING EMAILS")
@@ -104,6 +106,9 @@ class ChatEmailReader:
                                 # download attachment
                                 filename = part.get_filename()
                                 if filename:
+
+
+                                    filename = Utilities.clean_file_name(filename)
                                     # folder_name = clean(subject)
 
                                     # Download file

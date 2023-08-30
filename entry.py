@@ -14,20 +14,29 @@ from analyser.models import WhatsAppChatFile
 from analyser.cronjobs import ReadEmails
 from analyser.chat.Chart import Chart
 from analyser.analyser import Analyser
+from analyser.chat.Utilities import Utilities
 import traceback
 
+old_file_name = '=?UTF-8?Q?WhatsApp_Chat_with_Formac=CC=A7a=CC=83oOHOLO=5FC2=5FErica=2Etxt?='
+file_name = Utilities.clean_file_name(old_file_name)
+print("BEFORE\n")
+print(old_file_name)
+print("GOT THIS\n")
+print(file_name)
+print("AGAIN THIS\n")
+print(Utilities.clean_file_name(file_name))
 # ReadEmails.processEmail()
 
-analyser = Analyser()
+# analyser = Analyser()
 
 # 
-file_name  = "WhatsApp Chat with FormaçãoOHOLO -C2-Miriam_FILE.txt"
-fh = analyser.__read_file_with_auto_encoding__('tmpfiles/%s' % file_name)
-first_line = fh.readline().strip()
-second_line = fh.readline().strip()
-print(first_line)
-print(second_line)
-print(fh)
+# file_name  = "WhatsApp Chat with FormaçãoOHOLO -C2-Miriam_FILE.txt"
+# fh = analyser.__read_file_with_auto_encoding__('tmpfiles/%s' % file_name)
+# first_line = fh.readline().strip()
+# second_line = fh.readline().strip()
+# print(first_line)
+# print(second_line)
+# print(fh)
 # whatsap_file_id = 498
 # item = WhatsAppChatFile.objects.values("id", "google_id", "title", "group_id").get(
 #     id=whatsap_file_id
