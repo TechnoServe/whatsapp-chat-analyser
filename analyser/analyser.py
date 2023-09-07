@@ -61,7 +61,7 @@ class Analyser:
                 {
                     "google_id": file["id"],
                     "web_content_link": file["webContentLink"],
-                    "title": file["title"],
+                    "title": Utilities.clean_file_name(file["title"]),
                     "datetime_created": file["createdDate"],
                     "filesize": file["fileSize"],
                 }
@@ -189,14 +189,14 @@ class Analyser:
             file = WhatsAppChatFile.objects.get(google_id=chat["google_id"])
             file.status = status_
             file.save()
-
             return file
+
         except WhatsAppChatFile.DoesNotExist:
             chat_file = WhatsAppChatFile(
                 group=group,
                 google_id=chat["google_id"],
                 web_content_link=chat["web_content_link"],
-                title=chat["title"],
+                title=Utilities.clean_file_name(chat["title"]),
                 datetime_created=chat["datetime_created"],
                 filesize=chat["filesize"],
                 status=status_,
@@ -369,7 +369,7 @@ class Analyser:
     def process_chat(self, chat_file, date_format):
         try:
             google_id = chat_file["google_id"]
-            filename = chat_file["title"]
+            filename = Utilities.clean_file_name(chat_file["title"])
             chat_id = chat_file["id"]
             group_id = chat_file["group_id"]
 
