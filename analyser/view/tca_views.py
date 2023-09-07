@@ -1420,6 +1420,7 @@ def process_new_chats(request):
     try:
         params = get_basic_info(request)
         analyser = Analyser()
+        analyser.process_uploaded_files()
         analyser.process_pending_chats()
         info_message = "The processing has completed successfully"
 

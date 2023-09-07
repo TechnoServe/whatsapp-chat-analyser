@@ -94,7 +94,10 @@ class Analyser:
             except Exception as e:
                 # traceback.print_exc()
                 chat_name = chat["title"]
-                print(f"Error processing chat process_uploaded_files {chat_name} {e}")
+                if settings.DEBUG:
+                    print(
+                        f"Error processing chat process_uploaded_files {chat_name} {e}"
+                    )
                 # continue
 
     def pre_process_chatfile(self, chat):
@@ -199,7 +202,10 @@ class Analyser:
                 status=status_,
                 comments=self.chat_file_comments,
             )
-            print(f"Saved File {chat_file.title}")
+
+            if settings.DEBUG:
+                print(f"Saved File {chat_file.title}")
+
             chat_file.full_clean()
             chat_file.save()
 
@@ -226,7 +232,10 @@ class Analyser:
     # Download the chat file
     def download_file(self, file_id, file_name):
         file_name = Utilities.clean_file_name(file_name)
-        print("Downloading the file %s" % file_name)
+
+        if settings.DEBUG:
+            print("Downloading the file %s" % file_name)
+
         self.authenticate()
         file = self.drive.CreateFile({"id": file_id})
 
@@ -251,7 +260,7 @@ class Analyser:
         group_attr = re.findall(
             group_creator_regex, group_name_line, re.IGNORECASE | re.UNICODE
         )
-        return group_attr
+        return group_attr, group_name_line
 
     def extract_group_attr_from_firstline(self, file_id, file_name):
         """
@@ -262,32 +271,32 @@ class Analyser:
 
         file = self.__read_file_with_auto_encoding__("tmpfiles/%s" % file_name)
         print("File read ")
-        group_attr = self.__get_group_attr__(file)
+        (group_attr, group_name_line) = self.__get_group_attr__(file)
 
-        # if len(group_attr) == 0 or len(group_attr[0]) != 3:
-        #     self.chat_file_comments = (
-        #         "The first line from the WhatsApp chat '%s' (%s) is corrupt as I couldn't extract the group creator and the group name from the line '%s'. I have skipped processing this file"
-        #         % (file_name, file_id, group_name_line)
-        #     )
-        #     email_settings = {
-        #         "template": "emails/general-email.html",
-        #         "subject": "[%s] Corrupted first line of WhatsApp Chat"
-        #         % settings.SITE_NAME,
-        #         "sender_email": settings.SENDER_EMAIL,
-        #         "recipient_email": settings.ADMIN_EMAILS,
-        #         "use_queue": getattr(settings, "QUEUE_EMAILS", False),
-        #         "title": "Corrupt first line",
-        #         "message": self.chat_file_comments,
-        #     }
-        #     notify = Notification()
+        if len(group_attr) == 0 or len(group_attr[0]) != 3:
+            self.chat_file_comments = (
+                "The first line from the WhatsApp chat '%s' (%s) is corrupt as I couldn't extract the group creator and the group name from the line '%s'. I have skipped processing this file"
+                % (file_name, file_id, group_name_line)
+            )
+            email_settings = {
+                "template": "emails/general-email.html",
+                "subject": "[%s] Corrupted first line of WhatsApp Chat"
+                % settings.SITE_NAME,
+                "sender_email": settings.SENDER_EMAIL,
+                "recipient_email": settings.ADMIN_EMAILS,
+                "use_queue": getattr(settings, "QUEUE_EMAILS", False),
+                "title": "Corrupt first line",
+                "message": self.chat_file_comments,
+            }
+            notify = Notification()
 
-        #     if settings.DEBUG:
-        #         notify.send_sentry_message(self.chat_file_comments, "info")
+            if settings.DEBUG:
+                notify.send_sentry_message(self.chat_file_comments, "info")
 
-        #     notify.send_email(email_settings)
+            notify.send_email(email_settings)
 
-        #     fh.close()
-        #     return None, None, None
+            file.close()
+            return None, None, None
 
         file.close()
         return group_attr[0]
@@ -326,13 +335,15 @@ class Analyser:
                         print(f"Error processing chat as else {item}")
                 except Exception:
                     # TODO: Changed this
-                    traceback.print_exc()
-                    print(f"Error processing chat here {item}")
+                    if settings.DEBUG:
+                        traceback.print_exc()
+                        print(f"Error processing chat here {item}")
 
         except Exception as e:
             # TODO : Changed this
-            print("Error processing pending chat items")
-            traceback.print_exc()
+            if settings.DEBUG:
+                print("Error processing pending chat items")
+                traceback.print_exc()
             # if settings.DEBUG: terminal.tprint(str(e), 'fail')
             # sentry_sdk.capture_exception(e)
             # raise
@@ -620,7 +631,9 @@ class Analyser:
                 )
                 if status_ not in all_statuses:
                     all_statuses.append(status_)
-            print(f"Daily cur_day_backup Stats were saved for {chat_file['id']}")
+
+            if settings.DEBUG:
+                print(f"Daily cur_day_backup Stats were saved for {chat_file['id']}")
 
             if len(self.cur_file_messages) != 0:
                 email_settings = {
@@ -640,7 +653,9 @@ class Analyser:
                 # else: notify.send_email(email_settings)
 
             # print(group_name_changes)
-            print("Lines in %s = %d" % (filename, i))
+            if settings.DEBUG:
+                print("Lines in %s = %d" % (filename, i))
+
             self.save_group_name_changes(group_name_changes, chat_file["group_id"])
             # update this file that it is processed
             chat_file = WhatsAppChatFile.objects.get(id=chat_file["id"])
@@ -654,8 +669,9 @@ class Analyser:
             transaction.rollback()
 
         except Exception as e:
-            traceback.print_exc()
-            print(f"There was an error while processing the chat {chat_file}")
+            if settings.DEBUG:
+                traceback.print_exc()
+                print(f"There was an error while processing the chat {chat_file}")
             transaction.rollback()
             if settings.DEBUG:
                 terminal.tprint(str(e), "fail")

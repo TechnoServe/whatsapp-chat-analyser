@@ -23,6 +23,7 @@ from django.core.cache import cache
 from django.db import transaction, connection
 from django.http import HttpResponse, JsonResponse
 from analyser.chat.Utilities import Utilities
+from django.conf import settings
 
 analyser = Analyser()
 uploadFile = UploadFile()
@@ -74,10 +75,12 @@ class ChatEmailReader:
                     # Extract sender email
                     senderEmail = email.utils.parseaddr(From)[1]
 
-                    print("Sender email = " + senderEmail)
-                    print("Subject:", subject)
                     self.tmp_subjectname = subject
-                    print("From:", From)
+
+                    if settings.DEBUG:
+                        print("Sender email = " + senderEmail)
+                        print("Subject:", subject)
+                        print("From:", From)
 
                     # Validate the source of an email address (from tns.org and tnslabs.org only)
                     if not senderEmail.endswith(("tns.org", "tnslabs.org")):
