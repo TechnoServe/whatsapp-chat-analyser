@@ -8,7 +8,7 @@ url_regex = r"(?i)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^
 msg_line_regex = r'^(\d{1,2}\/\d{1,2}\/\d{2,4},\s\d{1,2}:\d{1,2}(?:\s[ap]m)?)\s+\-\s+([a-z\d\-\s\+\'\.,\/\(\)\@_]+):\s(.+)'
 
 intro_regex = r'^\d{1,2}\/\d{1,2}\/\d{2,4},\s\d{1,2}\:\d{1,2}(?:\s[ap]m)?\s\-\s(Messages to this group are .+|Messages and calls are end-to-end encrypted.+)'
-group_creator_regex = r'^(\d{1,2}\/\d{1,2}\/\d{2,4},\s\d{1,2}\:\d{1,2}(?:\s[ap]m)?)\s\-\s([a-z\d\-\s\+\'\.,\/\(\)\@_]+)\screated\sgroup\s"(.+)"$'
+group_creator_regex = r'^(\d{1,2}\/\d{1,2}\/\d{2,4},\s\d{1,2}\:\d{1,2}(?:\s[ap]m)?)\s\-\s([\p{L}\d\-\s\+\'\.,\/\(\)\@_]+)\screated\sgroup\s"(.+)"$'
 
 user_add_regex = r'^(\d{1,2}\/\d{1,2}\/\d{2,4},\s\d{1,2}\:\d{1,2}(?: [ap]m)?)\s\-\s((?:(?:[a-z\d\-\s\+\'\.,\/\(\)\@_]+\sadded\s.+)?\s)|(?:[a-z\d\-\s\+\'\.,\/\(\)\@_]+\sjoined\susing\s(?:your\sinvite|this\sgroup\'s\sinvite\slink))|(?:[a-z\d\-\s\+\'\.,\/\(\)\@_]+was\sadded)|You\sadded\s[a-z\d\-\s\+\'\.,\/\(\)\@_]+|You\swere\sadded)|[a-z\d\-\s\+\'\.,\/\(\)\@_]+\sadded\syou'
 

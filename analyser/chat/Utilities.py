@@ -21,9 +21,9 @@ sentry_sdk.init(settings.SENTRY_DSN)
 class Utilities:
     def clean_file_name(filename: str) -> str:
         """
-        # A FIX fior below issue on latino emails:
-        # =?UTF-8?Q?WhatsApp_Chat_with_Formac=CC=A7a=CC=83oOHOLO=5FC2=5FErica=2Etxt?=
-        # Should be WhatsApp Chat with FormaçãoOHOLO -C2-Miriam (4).txt
+         A FIX fior below issue on latino emails:
+        * =?UTF-8?Q?WhatsApp_Chat_with_Formac=CC=A7a=CC=83oOHOLO=5FC2=5FErica=2Etxt?=
+        * Should be WhatsApp Chat with FormaçãoOHOLO -C2-Miriam (4).txt
 
         """
         decoded_parts = email.header.decode_header(filename)

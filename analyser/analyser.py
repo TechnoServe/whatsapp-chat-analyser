@@ -1,44 +1,23 @@
-import re
+# import re
+import regex as re
 import sentry_sdk
 import os.path
-import emoji
-import json
-import pandas as pd
 import traceback
-from django.db import transaction, connection
-from django.db.models import (
-    Q,
-    Sum,
-    Count,
-    IntegerField,
-    Min,
-    Max,
-    Avg,
-    F,
-    CharField,
-    functions,
-)
+from django.db import transaction
 from django.conf import settings
 
 # from pydrive.auth import GoogleAuth
 # from pydrive.drive import GoogleDrive
 from hashids import Hashids
-from datetime import datetime
 from tzlocal import get_localzone
 import chardet
 
 from analyser.models import (
-    Personnel,
     WhatsAppGroup,
     WhatsAppChatFile,
-    GroupDailyStats,
-    UserDailyStats,
-    MessageLog,
-    GroupNameChanges,
-    STATUS_CHOICES,
 )
-from analyser.serializers import GroupDailyStatsSerializer
 from analyser.common_tasks import Notification, Terminal
+from io import TextIOWrapper
 
 # Import regex constants
 from analyser.chat.constants import *
@@ -110,13 +89,13 @@ class Analyser:
                 ]:
                     if os.path.exists("tmpfiles/%s" % chat["title"]):
                         os.remove("tmpfiles/%s" % chat["title"])
-                    continue  # nothing to do with this chat file
+                    # continue  # nothing to do with this chat file
 
             except Exception as e:
                 # traceback.print_exc()
                 chat_name = chat["title"]
                 print(f"Error processing chat process_uploaded_files {chat_name} {e}")
-                continue
+                # continue
 
     def pre_process_chatfile(self, chat):
         """given a chat object, this function preprocess it by fetching/creating a whatsapp group object
@@ -153,7 +132,7 @@ class Analyser:
 
                 if settings.DEBUG:
                     notify.send_sentry_message(self.chat_file_comments, "info")
-                
+
                 notify.send_email(email_settings)
                 self.save_chat_file(chat, "failed_preprocessing")
 
@@ -231,7 +210,9 @@ class Analyser:
         # The file name should be like 'WhatsApp Chat with SMART DUKA WINNERS.txt' where SMART DUKA WINNERS is the group name
         try:
             name = re.findall(
-                "^WhatsApp\s+Chat\s+with\s+(.+)\.txt$", filename, re.IGNORECASE
+                "^WhatsApp\s+Chat\s+with\s+(.+)\.txt$",
+                filename,
+                re.IGNORECASE | re.UNICODE,
             )
             if len(name) == 0:
                 # Group name extraction from the file fails.... so get the name from the first line
@@ -244,6 +225,7 @@ class Analyser:
 
     # Download the chat file
     def download_file(self, file_id, file_name):
+        file_name = Utilities.clean_file_name(file_name)
         print("Downloading the file %s" % file_name)
         self.authenticate()
         file = self.drive.CreateFile({"id": file_id})
@@ -254,48 +236,60 @@ class Analyser:
 
         file.GetContentFile("tmpfiles/%s" % file_name, "text/plain")
 
-    def extract_group_attr_from_firstline(self, file_id, file_name):
-        if not os.path.exists("tmpfiles/%s" % file_name):
-            self.download_file(file_id, file_name)
+    def __get_group_attr__(self, file: TextIOWrapper):
+        """
+        Given file returns attributes
+        get the first line and check whether we have something like '3/17/20, 9:38 PM - Rachel Tns created group "SMART DUKA WINNERS"'
+        """
+        first_line = file.readline().strip()
+        second_line = file.readline().strip()
 
-        fh = self.__read_file_with_auto_encoding__("tmpfiles/%s" % file_name)
-        print("File read ")
-        # get the first line and check whether we have something like '3/17/20, 9:38 PM - Rachel Tns created group "SMART DUKA WINNERS"'
-        first_line = fh.readline().strip()
-        second_line = fh.readline().strip()
-        fh.close()
-
-        if re.match(intro_regex, first_line, re.IGNORECASE):
+        if re.match(intro_regex, first_line, re.IGNORECASE | re.UNICODE):
             group_name_line = second_line
         else:
             group_name_line = first_line
+        group_attr = re.findall(
+            group_creator_regex, group_name_line, re.IGNORECASE | re.UNICODE
+        )
+        return group_attr
 
-        group_attr = re.findall(group_creator_regex, group_name_line, re.IGNORECASE)
+    def extract_group_attr_from_firstline(self, file_id, file_name):
+        """
+        Extracts the group attributes and if failed reports to the admin
+        """
+        if not os.path.exists("tmpfiles/%s" % file_name):
+            self.download_file(file_id, file_name)
 
-        if len(group_attr) == 0 or len(group_attr[0]) != 3:
-            self.chat_file_comments = (
-                "The first line from the WhatsApp chat '%s' (%s) is corrupt as I couldn't extract the group creator and the group name from the line '%s'. I have skipped processing this file"
-                % (file_name, file_id, group_name_line)
-            )
-            email_settings = {
-                "template": "emails/general-email.html",
-                "subject": "[%s] Corrupted first line of WhatsApp Chat"
-                % settings.SITE_NAME,
-                "sender_email": settings.SENDER_EMAIL,
-                "recipient_email": settings.ADMIN_EMAILS,
-                "use_queue": getattr(settings, "QUEUE_EMAILS", False),
-                "title": "Corrupt first line",
-                "message": self.chat_file_comments,
-            }
-            notify = Notification()
+        file = self.__read_file_with_auto_encoding__("tmpfiles/%s" % file_name)
+        print("File read ")
+        group_attr = self.__get_group_attr__(file)
 
-            if settings.DEBUG:
-                notify.send_sentry_message(self.chat_file_comments, "info")
-            
-            notify.send_email(email_settings)
+        # if len(group_attr) == 0 or len(group_attr[0]) != 3:
+        #     self.chat_file_comments = (
+        #         "The first line from the WhatsApp chat '%s' (%s) is corrupt as I couldn't extract the group creator and the group name from the line '%s'. I have skipped processing this file"
+        #         % (file_name, file_id, group_name_line)
+        #     )
+        #     email_settings = {
+        #         "template": "emails/general-email.html",
+        #         "subject": "[%s] Corrupted first line of WhatsApp Chat"
+        #         % settings.SITE_NAME,
+        #         "sender_email": settings.SENDER_EMAIL,
+        #         "recipient_email": settings.ADMIN_EMAILS,
+        #         "use_queue": getattr(settings, "QUEUE_EMAILS", False),
+        #         "title": "Corrupt first line",
+        #         "message": self.chat_file_comments,
+        #     }
+        #     notify = Notification()
 
-            return None, None, None
+        #     if settings.DEBUG:
+        #         notify.send_sentry_message(self.chat_file_comments, "info")
 
+        #     notify.send_email(email_settings)
+
+        #     fh.close()
+        #     return None, None, None
+
+        file.close()
         return group_attr[0]
 
     # get group information
@@ -396,13 +390,13 @@ class Analyser:
                 line_ = line_.strip()
 
                 if found_creator == False and re.match(
-                    intro_regex, line_, re.IGNORECASE
+                    intro_regex, line_, re.IGNORECASE | re.UNICODE
                 ):
                     found_creator = True
                     continue
 
                 if found_disclaimer == False and re.match(
-                    group_creator_regex, line_, re.IGNORECASE
+                    group_creator_regex, line_, re.IGNORECASE | re.UNICODE
                 ):
                     found_disclaimer = True
                     continue
@@ -410,9 +404,15 @@ class Analyser:
                 is_ok = False
 
                 # extract the date of the message
-                if re.findall("^\d{1,2}\/\d{1,2}\/\d{1,2}", line_, re.IGNORECASE):
+                if re.findall(
+                    "^\d{1,2}\/\d{1,2}\/\d{1,2}",
+                    line_,
+                    re.IGNORECASE | re.UNICODE,
+                ):
                     # we have some date...
-                    cur_line_parts = re.findall(msg_line_regex, line_, re.IGNORECASE)
+                    cur_line_parts = re.findall(
+                        msg_line_regex, line_, re.IGNORECASE | re.UNICODE
+                    )
 
                     # TODO: Changed this make sure you debug it back
                     try:
@@ -431,10 +431,16 @@ class Analyser:
                         # we have a message starting with a date but not really a message
                         # check if its a group name change
                         if len(
-                            re.findall(group_name_change_regex, line_, re.IGNORECASE)
+                            re.findall(
+                                group_name_change_regex,
+                                line_,
+                                re.IGNORECASE | re.UNICODE,
+                            )
                         ):
                             name_changes = re.findall(
-                                group_name_change_regex, line_, re.IGNORECASE
+                                group_name_change_regex,
+                                line_,
+                                re.IGNORECASE | re.UNICODE,
                             )[0]
                             mssg_date = self.extract_date_from_message(
                                 line_, date_format
@@ -658,7 +664,7 @@ class Analyser:
 
         try:
             fh.close()
-        except: 
+        except:
             pass
 
     def emoji_list(self, text):
@@ -673,12 +679,15 @@ class Analyser:
         removed_user = False
 
         # check for links, emojis and images
-        if len(re.findall("\<Media omitted\>", message, re.IGNORECASE)) != 0:
+        if (
+            len(re.findall("\<Media omitted\>", message, re.IGNORECASE | re.UNICODE))
+            != 0
+        ):
             has_image = True
-        elif len(re.findall(url_regex, message, re.IGNORECASE)) != 0:
+        elif len(re.findall(url_regex, message, re.IGNORECASE | re.UNICODE)) != 0:
             has_link = True
-        elif len(re.findall(user_add_regex, message, re.IGNORECASE)) != 0:
-            user_added = re.findall(user_add_regex, message, re.IGNORECASE)
+        elif len(re.findall(user_add_regex, message, re.IGNORECASE | re.UNICODE)) != 0:
+            user_added = re.findall(user_add_regex, message, re.IGNORECASE | re.UNICODE)
             if (
                 len(user_added) == 1
                 and len(user_added[0]) == 2
@@ -694,13 +703,20 @@ class Analyser:
                     raise
 
                 is_event = True
-        elif len(re.findall(user_left_regex, message, re.IGNORECASE)) != 0:
-            user_lefted = re.findall(user_left_regex, message, re.IGNORECASE)
+        elif len(re.findall(user_left_regex, message, re.IGNORECASE | re.UNICODE)) != 0:
+            user_lefted = re.findall(
+                user_left_regex, message, re.IGNORECASE | re.UNICODE
+            )
             if len(user_lefted) == 1 and len(user_lefted[0]) == 3:
                 user_left = True
                 is_event = True
-        elif len(re.findall(removed_users_regex, message, re.IGNORECASE)) != 0:
-            user_removed = re.findall(removed_users_regex, message, re.IGNORECASE)
+        elif (
+            len(re.findall(removed_users_regex, message, re.IGNORECASE | re.UNICODE))
+            != 0
+        ):
+            user_removed = re.findall(
+                removed_users_regex, message, re.IGNORECASE | re.UNICODE
+            )
             if len(user_removed) == 1 and len(user_removed[0]) == 3:
                 removed_user = True
                 is_event = True

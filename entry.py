@@ -17,7 +17,9 @@ from analyser.analyser import Analyser
 from analyser.chat.Utilities import Utilities
 import traceback
 
-old_file_name = '=?UTF-8?Q?WhatsApp_Chat_with_Formac=CC=A7a=CC=83oOHOLO=5FC2=5FErica=2Etxt?='
+old_file_name = (
+    "=?UTF-8?Q?WhatsApp_Chat_with_Formac=CC=A7a=CC=83oOHOLO=5FC2=5FErica=2Etxt?="
+)
 file_name = Utilities.clean_file_name(old_file_name)
 print("BEFORE\n")
 print(old_file_name)
@@ -25,17 +27,47 @@ print("GOT THIS\n")
 print(file_name)
 print("AGAIN THIS\n")
 print(Utilities.clean_file_name(file_name))
+
+with open(
+    "tmpfiles/WhatsApp Chat with FormaçãoOHOLO_C2_Erica.txt", "r", encoding="utf-8"
+) as file:
+    print(file.readline())
+
+# with open(file_name, "w") as p:
+#     p.write("Sample mannnn")
 # ReadEmails.processEmail()
 
-# analyser = Analyser()
+analyser = Analyser()
 
-# 
-# file_name  = "WhatsApp Chat with FormaçãoOHOLO -C2-Miriam_FILE.txt"
-# fh = analyser.__read_file_with_auto_encoding__('tmpfiles/%s' % file_name)
-# first_line = fh.readline().strip()
-# second_line = fh.readline().strip()
-# print(first_line)
-# print(second_line)
+#
+file_name = "WhatsApp Chat with FormaçãoOHOLO_C2_Erica.txt"
+group_name = analyser.extract_group_name_from_filename(file_name)
+print(f"GROUP NAME {group_name}")
+
+
+# Testing group attributes function
+# file_name = "WhatsApp Chat with FormaçãoOHOLO -C2-Miriam (1).txt"
+# print(
+#     '1/30/23, 09:25 - Érica Muarramuassa created group "Treinamento OHOLO"'.encode(
+#         "utf-8"
+#     ).decode("ASCII")
+# )
+file = analyser.__read_file_with_auto_encoding__("tmpfiles/%s" % file_name)
+grp_attr = analyser.__get_group_attr__(file)
+print(grp_attr)
+
+# for line in fh:
+#     try:
+#         cur_date = analyser.extract_date_from_message(line, "%d/%m")
+#     except ValueError as e:
+#         if str(e) == "Possible Wrong Date Format":
+#             cur_date = analyser.extract_date_from_message(line, "%m/%d")
+#         else:
+#             print("It is a different kind of error 💀💀")
+#     except Exception:
+#         print("Error reformatting the date 💀💀")
+#     print(cur_date)
+
 # print(fh)
 # whatsap_file_id = 498
 # item = WhatsAppChatFile.objects.values("id", "google_id", "title", "group_id").get(
@@ -66,7 +98,7 @@ Process a certain pending chat
 #     print(f"Error processing chat here {item}")
 #     traceback.print_exc()
 
-# 
+#
 # Chart.wordCloud(whatsap_file_id)
 # # Chart.activeDaysChart(whatsap_file_id)
 
