@@ -29,6 +29,9 @@ from hashids import Hashids
 from django.views.decorators.csrf import csrf_exempt
 from jinja2 import Template
 
+# Import Utilities
+from analyser.chat.Utilities import Utilities
+
 import requests
 from rest_framework import serializers
 from rest_framework.request import Request
@@ -1458,7 +1461,7 @@ def upload_file(request):
     # Continue check Check from drive files that are not processed
     # if not valid respond immediately
     file_content = request.FILES.get("file")
-    file_name =  file_content.name
+    file_name = Utilities.clean_file_name(file_content.name)
 
     if not file_content or not file_name:
         raise ValueError("File and name missing")

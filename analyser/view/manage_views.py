@@ -21,6 +21,10 @@ from django_registration.backends.activation.views import (
     RegistrationView,
     ActivationView,
 )
+
+# Import Utilities
+from analyser.chat.Utilities import Utilities
+
 from django.shortcuts import render, redirect
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
@@ -542,12 +546,13 @@ def searchGroupChatByDate(request):
 
 # Download file endpoint
 def download_file(request):
-    msg = request.GET.get("filename")
+    file_name = request.GET.get("filename")
     # Define Django project base directory
     BASE_DIR = os.getcwd()
 
     # Define text file name
-    filename = msg.replace(".txt", ".pdf")
+    filename = file_name.replace(".txt", ".pdf")
+    file_name = Utilities.clean_file_name(filename)
 
     # Define the full file path
     filepath = BASE_DIR + "/pdfFiles/" + filename
@@ -601,7 +606,10 @@ def resend_report(request):
         msg["To"] = ", ".join(targets)
 
         msg.attach(txt)
-        pdf_filename = file.title.replace(".txt", ".pdf")
+
+        file_name = Utilities.clean_file_name(file.title)
+
+        pdf_filename = file_name.replace(".txt", ".pdf")
         filepath = "pdfFiles/" + pdf_filename
         with open(filepath, "rb") as f:
             pdf = MIMEImage(f.read(), _subtype="pdf")
