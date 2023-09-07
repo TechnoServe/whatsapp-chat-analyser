@@ -1,7 +1,7 @@
 import sentry_sdk
 from datetime import datetime
 from tzlocal import get_localzone
-import re
+import regex as re
 
 
 from analyser.chat.constants import *
@@ -46,7 +46,7 @@ class Utilities:
                     re.findall(
                         "^\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2}\s[ap]m",
                         message,
-                        re.IGNORECASE,
+                        re.IGNORECASE | re.UNICODE,
                     )
                 )
                 != 0
@@ -54,7 +54,7 @@ class Utilities:
                 date_part = re.findall(
                     "^(\d{1,2}\/\d{1,2}\/\d{2}, \d{1,2}:\d{1,2}\s[ap]m)",
                     message,
-                    re.IGNORECASE,
+                    re.IGNORECASE | re.UNICODE,
                 )[0]
                 mssg_date = datetime.strptime(date_part, date_format + "/%y, %I:%M %p")
 
@@ -63,7 +63,7 @@ class Utilities:
                     re.findall(
                         "^\d{1,2}\/\d{1,2}\/\d{4}, \d{1,2}:\d{1,2}\s[ap]m",
                         message,
-                        re.IGNORECASE,
+                        re.IGNORECASE | re.UNICODE,
                     )
                 )
                 != 0
@@ -71,33 +71,41 @@ class Utilities:
                 date_part = re.findall(
                     "^(\d{1,2}\/\d{1,2}\/\d{4}, \d{1,2}:\d{1,2}\s[ap]m)",
                     message,
-                    re.IGNORECASE,
+                    re.IGNORECASE | re.UNICODE,
                 )[0]
                 mssg_date = datetime.strptime(date_part, date_format + "/%Y, %I:%M %p")
 
             elif (
                 len(
                     re.findall(
-                        "^\d{1,2}\/\d{1,2}\/\d{2}, \d{2}:\d{2}", message, re.IGNORECASE
+                        "^\d{1,2}\/\d{1,2}\/\d{2}, \d{2}:\d{2}",
+                        message,
+                        re.IGNORECASE | re.UNICODE,
                     )
                 )
                 != 0
             ):
                 date_part = re.findall(
-                    "^(\d{1,2}\/\d{1,2}\/\d{2}, \d{2}:\d{2})", message, re.IGNORECASE
+                    "^(\d{1,2}\/\d{1,2}\/\d{2}, \d{2}:\d{2})",
+                    message,
+                    re.IGNORECASE | re.UNICODE,
                 )[0]
                 mssg_date = datetime.strptime(date_part, date_format + "/%y, %H:%M")
 
             elif (
                 len(
                     re.findall(
-                        "^\d{1,2}\/\d{1,2}\/\d{4}, \d{2}:\d{2}", message, re.IGNORECASE
+                        "^\d{1,2}\/\d{1,2}\/\d{4}, \d{2}:\d{2}",
+                        message,
+                        re.IGNORECASE | re.UNICODE,
                     )
                 )
                 != 0
             ):
                 date_part = re.findall(
-                    "^(\d{1,2}\/\d{1,2}\/\d{4}, \d{2}:\d{2})", message, re.IGNORECASE
+                    "^(\d{1,2}\/\d{1,2}\/\d{4}, \d{2}:\d{2})",
+                    message,
+                    re.IGNORECASE | re.UNICODE,
                 )[0]
                 mssg_date = datetime.strptime(date_part, date_format + "/%Y, %H:%M")
 
@@ -164,9 +172,11 @@ class Utilities:
 
     def process_dated_non_message(chat_mssg):
         reformatted = None
-        user_added = re.findall(user_add_regex, chat_mssg, re.IGNORECASE)
-        user_lefted = re.findall(user_left_regex, chat_mssg, re.IGNORECASE)
-        user_removed = re.findall(removed_users_regex, chat_mssg, re.IGNORECASE)
+        user_added = re.findall(user_add_regex, chat_mssg, re.IGNORECASE | re.UNICODE)
+        user_lefted = re.findall(user_left_regex, chat_mssg, re.IGNORECASE | re.UNICODE)
+        user_removed = re.findall(
+            removed_users_regex, chat_mssg, re.IGNORECASE | re.UNICODE
+        )
 
         if len(user_added) == 1 and len(user_added[0]) == 2 and user_added[0][1] != "":
             # mimick a message
@@ -184,13 +194,21 @@ class Utilities:
             dummy = user_removed[0]
             reformatted = (dummy[0], dummy[1], chat_mssg)
 
-        elif len(re.findall(send_mssg_settings_regex, chat_mssg, re.IGNORECASE)):
+        elif len(
+            re.findall(send_mssg_settings_regex, chat_mssg, re.IGNORECASE | re.UNICODE)
+        ):
             return -1
-        elif len(re.findall(grp_icon_regex, chat_mssg, re.IGNORECASE)):
+        elif len(re.findall(grp_icon_regex, chat_mssg, re.IGNORECASE | re.UNICODE)):
             return -1
-        elif len(re.findall(security_code_change_regex, chat_mssg, re.IGNORECASE)):
+        elif len(
+            re.findall(
+                security_code_change_regex, chat_mssg, re.IGNORECASE | re.UNICODE
+            )
+        ):
             return -1
-        elif len(re.findall(number_change_regex, chat_mssg, re.IGNORECASE)):
+        elif len(
+            re.findall(number_change_regex, chat_mssg, re.IGNORECASE | re.UNICODE)
+        ):
             return -1
 
         else:
@@ -198,7 +216,7 @@ class Utilities:
                 terminal.tprint(
                     "I don't know how to process the message: '%s'" % chat_mssg, "warn"
                 )
-            # if len(re.findall('added', chat_mssg, re.IGNORECASE)) != 0:
+            # if len(re.findall('added', chat_mssg, re.IGNORECASE | re.UNICODE)) != 0:
             # print(chat_mssg.strip())
             # print(user_added)
 

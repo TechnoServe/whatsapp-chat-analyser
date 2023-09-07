@@ -1,4 +1,8 @@
-# This is a testing file for tanalys
+# This is a testing file
+# Didn't have enough time to setup testing e.t.c, will do that later,
+# I run it with
+########   nodemon --exec pipenv run python entry.py   #######
+# nodemon to detect any changes and speed up testing
 
 import django
 import os
@@ -8,6 +12,7 @@ django.setup()
 
 from analyser.models import WhatsAppChatFile
 
+import regex as re
 
 # This file is used
 # For Debugging on Dev version
@@ -16,6 +21,7 @@ from analyser.chat.Chart import Chart
 from analyser.analyser import Analyser
 from analyser.chat.Utilities import Utilities
 import traceback
+from analyser.chat.constants import *
 
 old_file_name = (
     "=?UTF-8?Q?WhatsApp_Chat_with_Formac=CC=A7a=CC=83oOHOLO=5FC2=5FErica=2Etxt?="
@@ -56,6 +62,23 @@ file = analyser.__read_file_with_auto_encoding__("tmpfiles/%s" % file_name)
 grp_attr = analyser.__get_group_attr__(file)
 print(grp_attr)
 
+print("MESSAGE ANALYSE with UNICODE")
+lines = [
+    "5/31/23, 07:17 - Érica Muarramuassa: IMG-20230531-WA0010.jpg (file attached)",
+    "6/4/23, 13:35 - Érica Muarramuassa: Yu😍😍😍",
+    "6/17/23, 13:48 - Eleutéria Acides: Assim tugo que aprederam durante 4 meses não foi útil 😞",
+    "6/18/23, 19:11 - Érica Muarramuassa: Carlota Bene 2023.vcf (file attached)",
+    "1/30/23, 12:01 - Érica Muarramuassa: Bom dia Mana Eleuteria. Bem vinda a nossa turma das Manas do OHOLO",
+    '2/2/23, 16:14 - Érica Muarramuassa changed the group name from "Treinamento OHOLO" to "FormaçãoOHOLO_C2_Erica"',
+    "2/2/23, 16:55 - Érica Muarramuassa added +258 84 377 7302",
+    "2/2/23, 16:57 - Érica Muarramuassa: Boa tarde minhas manas como estão?",
+]
+for line in lines:
+    msg = analyser.process_dated_non_message(line)
+    anals = analyser.process_chat_message(line)
+    print(anals)
+    msg = re.findall(msg_line_regex, line, re.IGNORECASE | re.UNICODE)
+    print(msg)
 # for line in fh:
 #     try:
 #         cur_date = analyser.extract_date_from_message(line, "%d/%m")
