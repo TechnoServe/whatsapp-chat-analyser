@@ -23,32 +23,50 @@ from analyser.chat.Utilities import Utilities
 import traceback
 from analyser.chat.constants import *
 
-old_file_name = (
-    "=?UTF-8?Q?WhatsApp_Chat_with_Formac=CC=A7a=CC=83oOHOLO=5FC2=5FErica=2Etxt?="
-)
-file_name = Utilities.clean_file_name(old_file_name)
-print("BEFORE\n")
-print(old_file_name)
-print("GOT THIS\n")
-print(file_name)
-print("AGAIN THIS\n")
-print(Utilities.clean_file_name(file_name))
 
-with open(
-    "tmpfiles/WhatsApp Chat with FormaçãoOHOLO_C2_Erica.txt", "r", encoding="utf-8"
-) as file:
-    print(file.readline())
+def try_analyse():
+    analyser = Analyser()
+    try:
+        analyser.process_uploaded_files()
+    except:
+        print("Met an error while uploading files")
+        traceback.print_exc()
 
-# with open(file_name, "w") as p:
-#     p.write("Sample mannnn")
-# ReadEmails.processEmail()
+    # Process pending chats
+    try:
+        analyser.process_pending_chats()
+    except:
+        print("Met an error while processing pending charts")
+        traceback.print_exc()
 
-analyser = Analyser()
 
-#
-file_name = "WhatsApp Chat with FormaçãoOHOLO_C2_Erica.txt"
-group_name = analyser.extract_group_name_from_filename(file_name)
-print(f"GROUP NAME {group_name}")
+try_analyse()
+# old_file_name = (
+#     "=?UTF-8?Q?WhatsApp_Chat_with_Formac=CC=A7a=CC=83oOHOLO=5FC2=5FErica=2Etxt?="
+# )
+# file_name = Utilities.clean_file_name(old_file_name)
+# print("BEFORE\n")
+# print(old_file_name)
+# print("GOT THIS\n")
+# print(file_name)
+# print("AGAIN THIS\n")
+# print(Utilities.clean_file_name(file_name))
+
+# with open(
+#     "tmpfiles/WhatsApp Chat with FormaçãoOHOLO_C2_Erica.txt", "r", encoding="utf-8"
+# ) as file:
+#     print(file.readline())
+
+# # with open(file_name, "w") as p:
+# #     p.write("Sample mannnn")
+# # ReadEmails.processEmail()
+
+# analyser = Analyser()
+
+# #
+# file_name = "WhatsApp Chat with FormaçãoOHOLO_C2_Erica.txt"
+# group_name = analyser.extract_group_name_from_filename(file_name)
+# print(f"GROUP NAME {group_name}")
 
 
 # Testing group attributes function
