@@ -24,6 +24,11 @@ from django.db import transaction, connection
 from django.http import HttpResponse, JsonResponse
 from analyser.chat.Utilities import Utilities
 from django.conf import settings
+from analyser.models import MessageLog
+from analyser.chat.MessageHistory import MessageHistory
+from langdetect import detect
+
+msgHistory = MessageHistory()
 
 analyser = Analyser()
 uploadFile = UploadFile()
@@ -34,7 +39,6 @@ class ChatEmailReader:
         self.username = os.environ["CHAT_BOT_EMAIL"]
         self.password = os.environ["CHAT_BOT_PASSWORD"]
         self.tmp_subjectname = ""
-
 
     def readEmail(self):
         print("STARTED READING EMAILS")
@@ -109,8 +113,6 @@ class ChatEmailReader:
                                 # download attachment
                                 filename = part.get_filename()
                                 if filename:
-
-
                                     filename = Utilities.clean_file_name(filename)
                                     # folder_name = clean(subject)
 
@@ -223,6 +225,19 @@ class ChatEmailReader:
         while True:
             self.readEmail()
 
+    def __is_english__(self, chat_file_id):
+        """
+        For special languages no need for sentiment analysis
+        """
+        try:
+            qs = MessageLog.objects.filter(chat_file=chat_file_id).values_list("message")[
+                :300
+            ]
+            msgs = " ".join([m[0] for m in qs.all()])
+            return detect(msgs) == "en"  # We only do sentiment when english
+        except:
+            return True
+
     def __getPDF__(self, group_id, fileName, chat_file_id, to):
         analyser = Analyser()
         wordCloud = WordCloud()
@@ -234,11 +249,13 @@ class ChatEmailReader:
         params["stats"].pop("name_changes")
         params["group_id"] = group_id
 
-        pdfFile = fileName.replace(".txt", ".pdf")
-        params["fileName"] = pdfFile
+        pdfFile_name = fileName.replace(".txt", ".pdf")
+        params["fileName"] = pdfFile_name
         params["s_date"] = "2021-09-10"
         params["e_date"] = "2021-10-11"
 
+        # Added
+        params["stats"]["show_sentiment"] = self.__is_english__(chat_file_id)
         chartData = [
             params["stats"]["images_count"],
             params["stats"]["messages_count"],
@@ -261,7 +278,7 @@ class ChatEmailReader:
 
         pdf = HtmlToPdf.generatePDF("pdf_templates/group_stats.html", params)
 
-        self.sendEmail(pdfFile, to)
+        self.sendEmail(pdfFile_name, to)
 
     def sendEmail(self, pdf_filename, to):
         smtp_ssl_host = "smtp.gmail.com"

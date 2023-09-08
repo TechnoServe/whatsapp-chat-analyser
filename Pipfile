@@ -33,6 +33,8 @@ reportlab= "*"
 xhtml2pdf= "*"
 cairocffi = "*"
 chardet = "*"
+pyenchant = "*"
+langdetect = "*"
 
 [dev-packages]
 
